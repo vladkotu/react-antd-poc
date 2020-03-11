@@ -19,34 +19,21 @@ function Devcards() {
 
   const getItems = async () => setAccounts(await fetchAccounts(3))
 
-  const updateItem = async item => {
-    try {
-      await editAccount(item)
-      setEditing(null)
-    } catch (ere) {
-      console.error(ere)
+  function commonActions(action) {
+    return async item => {
+      try {
+        await action(item)
+        await getItems()
+        setEditing(null)
+      } catch (err) {
+        console.error(err)
+      }
     }
   }
 
-  const addItem = async item => {
-    try {
-      await addAccount(item)
-      await getItems()
-      setEditing(null)
-    } catch (err) {
-      console.error(err)
-    }
-  }
-
-  const removeItem = async item => {
-    try {
-      await removeAccount(item.accNo)
-      await getItems()
-      setEditing(null)
-    } catch (err) {
-      console.error(err)
-    }
-  }
+  const updateItem = commonActions(editAccount)
+  const addItem = commonActions(addAccount)
+  const removeItem = commonActions(removeAccount)
 
   useEffect(() => {
     getItems()
