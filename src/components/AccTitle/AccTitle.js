@@ -13,4 +13,12 @@ function AccTitle({ accNo, category, vatPercent, vatCategoryS, accName }) {
   )
 }
 
+AccTitle.propTypes = {
+  accNo: PropTypes.number,
+  vatPercent: PropTypes.number,
+  vatCategoryS: PropTypes.string,
+  category: PropTypes.string,
+  accName: PropTypes.string,
+}
+
 export default AccTitle
