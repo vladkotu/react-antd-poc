@@ -18,9 +18,9 @@ const schema = {
   comment: { static: null },
 }
 
-export const getAccounts = n => {
+export const fetchAccounts = n => {
   return mocker()
     .schema('acc', schema, n)
     .build()
-    .then(({acc}) => acc)
+    .then(({ acc }) => acc)
 }

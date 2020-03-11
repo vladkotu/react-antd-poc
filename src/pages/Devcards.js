@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from 'react'
 import { Card, List, Typography } from 'antd'
-import { AddingLink } from '../components'
-import { getAccounts } from '../api/accounts'
+import { AddingLink, AccTitle } from '../components'
+import { fetchAccounts } from '../api/accounts'
 
 function Devcards() {
   const [accounts, setAccounts] = useState([])
   useEffect(() => {
-    async function fetchAccounts() {
-      setAccounts(await getAccounts(3))
+    async function _getAccounts() {
+      setAccounts(await fetchAccounts(3))
     }
-    fetchAccounts()
+    _getAccounts()
   }, [])
 
   return (
@@ -26,7 +26,7 @@ function Devcards() {
           dataSource={accounts}
           renderItem={acc => (
             <List.Item>
-              <Typography.Text>{acc.accName}</Typography.Text>
+              <AccTitle {...acc}></AccTitle>
             </List.Item>
           )}
         />
