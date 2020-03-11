@@ -1,5 +1,5 @@
 import React from 'react'
-import { Form, Input, InputNumber, Button, Radio, Checkbox, Layout } from 'antd'
+import { Form, Input, InputNumber, Button, Radio } from 'antd'
 import './styles.css'
 
 const layout = {
