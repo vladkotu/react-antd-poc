@@ -18,9 +18,37 @@ const schema = {
   comment: { static: null },
 }
 
+// localStorage.removeItem('accounts')
+const items = () => JSON.parse(localStorage.getItem('accounts'))
+const store = ix => localStorage.setItem('accounts', JSON.stringify(ix))
+let apiCache = items()
+
 export const fetchAccounts = n => {
-  return mocker()
-    .schema('acc', schema, n)
-    .build()
-    .then(({ acc }) => acc)
+  if (apiCache) return apiCache
+  else
+    return mocker()
+      .schema('acc', schema, n)
+      .build()
+      .then(({ acc }) => {
+        store(acc)
+        return acc
+      })
+}
+
+export const removeAccount = remNo => {
+  store(items().filter(({ accNo }) => remNo !== accNo))
+  return Promise.resolve(items())
+}
+
+export const addAccount = acc => {
+  store([acc, ...items()])
+  return Promise.resolve(items())
+}
+
+export const editAccount = acc => {
+  const as = items()
+  const idx = as.findIndex(a => a.accNo === acc.accNo)
+  as[idx] = acc
+  store(as)
+  return Promise.resolve(items())
 }
