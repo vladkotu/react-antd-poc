@@ -2,7 +2,8 @@ import React from 'react'
 import { Layout } from 'antd'
 import logo from './images/logo.svg'
 import './App.css'
-import ProfilePage from './pages/Profile'
+// import ProfilePage from './pages/Profile'
+import Kitchen from './pages/Devcards'
 
 const { Header, Footer, Content } = Layout
 
@@ -15,7 +16,9 @@ function App() {
           <h1>Test React Feature Collections</h1>
         </Header>
         <Content className='App-content'>
-          <ProfilePage></ProfilePage>
+          {/* <ProfilePage></ProfilePage> */}
+          <Kitchen></Kitchen>
+
         </Content>
         <Footer>@ Footer</Footer>
       </Layout>
