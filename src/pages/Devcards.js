@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
-import { Card, List, Typography } from 'antd'
-import { AddingLink, AccTitle } from '../components'
+import { Card, List } from 'antd'
+import { Link, AccTitle } from '../components'
 import { fetchAccounts } from '../api/accounts'
 
 function Devcards() {
@@ -17,9 +17,9 @@ function Devcards() {
       <Card
         title='Accounts'
         extra={
-          <AddingLink onClick={() => console.log('expand')}>
+          <Link add onClick={() => console.log('expand')}>
             New account
-          </AddingLink>
+          </Link>
         }
       >
         <List
@@ -27,6 +27,9 @@ function Devcards() {
           renderItem={acc => (
             <List.Item>
               <AccTitle {...acc}></AccTitle>
+              <Link edit onClick={() => console.log('edit')}>
+                Edit
+              </Link>
             </List.Item>
           )}
         />
