@@ -2,11 +2,11 @@ import mocker from 'mocker-data-generator'
 import f from 'faker'
 
 const schema = {
-  accNo: { faker: 'finance.account' },
+  accNo: { faker: 'random.number({"min": 10, "max": 100})' },
   category: {
     function: () => f.random.arrayElement(['Sales', 'Purchase']),
   },
-  vatPercent: { faker: 'random.number' },
+  vatPercent: { faker: 'random.number({"min": 1, "max": 100})' },
   vatCategoryS: {
     function: function() {
       return this.object.category.substr(0, 1)
