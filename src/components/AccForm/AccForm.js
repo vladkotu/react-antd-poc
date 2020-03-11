@@ -28,51 +28,58 @@ const max = n => ({
   message: `Maximum length should be ${n} symbol${n === 1 ? '' : 's'}`,
 })
 
-const fields = {
-  accNo: {
+const fields = [
+  {
     name: 'accNo',
     label: 'Account Number',
     rules: [required(), number(1, 1000)],
+    children: <InputNumber />,
   },
 
-  category: {
+  {
     name: 'category',
     label: 'Category',
     rules: [required()],
+    children: (
+      <Radio.Group defaultValue='Sales'>
+        <Radio.Button value='Sales'>Sales</Radio.Button>
+        <Radio.Button value='Purchase'>Purchase</Radio.Button>
+      </Radio.Group>
+    ),
   },
 
-  vatCategoryS: {
-    name: 'vatCategoryS',
-    label: 'Vat Category Code',
-  },
-
-  vatPercent: {
+  {
     name: 'vatPercent',
     label: 'Vat Percentage',
     rules: [required(), number(1, 100)],
+    children: <InputNumber />,
   },
 
-  accName: {
+  {
     name: 'accName',
     label: 'Account Name',
     rules: [min(2), max(100)],
+    children: <Input />,
   },
 
-  extRevenuClass: {
+  {
     name: 'extRevenuClass',
     label: 'External Revenue Class',
+    children: <Input />,
   },
 
-  extTaxCode: {
+  {
     name: 'extTaxCode',
     label: 'External Tax Code',
+    children: <Input />,
   },
 
-  comment: {
+  {
     name: 'comment',
     label: 'Comment',
+    children: <Input.TextArea />,
   },
-}
+]
 
 function AccForm({ onCancel, onFinish, onRemove, account = {} }) {
   function handleFilishSuccess(values) {
@@ -94,36 +101,11 @@ function AccForm({ onCancel, onFinish, onRemove, account = {} }) {
         <InputNumber />
       </Form.Item>
 
-      <Form.Item {...fields.accNo}>
-        <InputNumber />
-      </Form.Item>
-
-      <Form.Item {...fields.category}>
-        <Radio.Group defaultValue='Sales'>
-          <Radio.Button value='Sales'>Sales</Radio.Button>
-          <Radio.Button value='Purchase'>Purchase</Radio.Button>
-        </Radio.Group>
-      </Form.Item>
-
-      <Form.Item {...fields.vatPercent}>
-        <InputNumber />
-      </Form.Item>
-
-      <Form.Item {...fields.accName}>
-        <Input />
-      </Form.Item>
-
-      <Form.Item {...fields.extRevenuClass}>
-        <Input />
-      </Form.Item>
-
-      <Form.Item {...fields.extTaxCode}>
-        <Input />
-      </Form.Item>
-
-      <Form.Item {...fields.comment}>
-        <Input.TextArea />
-      </Form.Item>
+      {fields.map(({ children, ...fieldProps }) => (
+        <Form.Item key={fieldProps.name} {...fieldProps}>
+          {children}
+        </Form.Item>
+      ))}
 
       <Form.Item {...tailLayout}>
         <Button type='primary' htmlType='submit'>
