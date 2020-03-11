@@ -1,0 +1,11 @@
+.AccForm-layout .ant-form-item{
+  margin-bottom: 10px;
+}
+
+.AccForm-layout .ant-form-item .ant-form-item-label{
+  padding-bottom: 0px;
+}
+
+.AccForm-layout .ant-btn{
+  margin-right: 8px;
+}

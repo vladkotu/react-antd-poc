@@ -21,10 +21,10 @@ const schema = {
 // localStorage.removeItem('accounts')
 const items = () => JSON.parse(localStorage.getItem('accounts'))
 const store = ix => localStorage.setItem('accounts', JSON.stringify(ix))
-let apiCache = items()
 
 export const fetchAccounts = n => {
-  if (apiCache) return apiCache
+  const as = items()
+  if (as && as.length) return as
   else
     return mocker()
       .schema('acc', schema, n)
