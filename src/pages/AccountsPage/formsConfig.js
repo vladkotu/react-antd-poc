@@ -1,5 +1,6 @@
 import React from 'react'
 import { InputNumber, Input, Radio } from 'antd'
+import { BOOKEE, DEFACC, CONTRA } from '../../constants'
 
 const required = () => ({ required: true, message: 'This field is required' })
 const number = (min, max) => ({
@@ -18,7 +19,7 @@ const max = n => ({
   message: `Maximum length should be ${n} symbol${n === 1 ? '' : 's'}`,
 })
 
-export const bookkeepingFields = [
+const bookkeepingFields = [
   {
     name: 'accNo',
     label: 'Account Number',
@@ -71,7 +72,13 @@ export const bookkeepingFields = [
   },
 ]
 
-export const defaultFields = bookkeepingFields.slice(
+const defaultFields = bookkeepingFields.slice(
   0,
   bookkeepingFields.length - 3
 )
+
+export default {
+  [BOOKEE]: bookkeepingFields,
+  [DEFACC]: defaultFields,
+  [CONTRA]: defaultFields
+}

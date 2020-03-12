@@ -6,7 +6,7 @@ import './styles.css'
 function EditableList({
   title,
   headActionTitle,
-  formFields,
+  formFields = [],
   currentItem,
   items,
   setCurrentItem,

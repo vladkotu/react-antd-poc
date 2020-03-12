@@ -13,6 +13,4 @@ const schema = {
   lname: { faker: 'name.lastName' },
 }
 
-export default {
-  contractors: makeFakeApi('contractors', schema),
-}
+export default makeFakeApi('contractors', schema)

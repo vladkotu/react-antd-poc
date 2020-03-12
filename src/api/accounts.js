@@ -1,5 +1,6 @@
 import f from 'faker'
 import { makeFakeApi } from '../utils'
+import { BOOKEE, DEFACC } from '../constants'
 
 const schema = {
   id: { faker: 'random.number({"min": 10, "max": 100})' },
@@ -20,6 +21,6 @@ const schema = {
 }
 
 export default {
-  bookkeepingAccounts: makeFakeApi('bookkeepingAccounts', schema),
-  defaultAccounts: makeFakeApi('defaultAccounts', schema),
+  [BOOKEE]: makeFakeApi('bookkeepingAccounts', schema),
+  [DEFACC]: makeFakeApi('defaultAccounts', schema),
 }
