@@ -1,9 +1,9 @@
 import React from 'react'
-import { Layout } from 'antd'
+import { Layout, Menu } from 'antd'
 import logo from './images/logo.svg'
 import './App.css'
 // import ProfilePage from './pages/Profile'
-import Kitchen from './pages/Devcards'
+import AccountsPage from './pages/AccountsPage'
 
 const { Header, Footer, Content } = Layout
 
@@ -15,11 +15,7 @@ function App() {
           <img src={logo} className='App-logo' alt='logo' />
           <h1>Test React Feature Collections</h1>
         </Header>
-        <Content className='App-content'>
-          {/* <ProfilePage></ProfilePage> */}
-          <Kitchen></Kitchen>
-
-        </Content>
+        <AccountsPage />
         <Footer>@ Footer</Footer>
       </Layout>
     </div>

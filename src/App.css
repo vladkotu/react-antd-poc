@@ -16,6 +16,11 @@
   min-height: 100vh;
 }
 
+.App-layout .ant-menu {
+  padding: 0 50px;
+  margin: 0;
+}
+
 .App-content {
   padding: 24px 50px;
   margin: 0;
