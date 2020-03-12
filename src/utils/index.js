@@ -1,3 +1,5 @@
+import f from 'faker'
+
 export const preventAndCall = (f, ...args) => ev => {
   ev.preventDefault()
   return f.call(null, ...args)
