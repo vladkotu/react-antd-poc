@@ -5,10 +5,18 @@ import accountsApi from '../../api/accounts'
 import contractorsApi from '../../api/contractors'
 import { preventAndCall } from '../../utils'
 import useEditableList from '../../hooks/useEditableList'
-import { EditableList } from '../../components'
+import { EditableList, titles } from '../../components'
 import formsConfig from './formsConfig'
 
 const { Content } = Layout
+const { AccTitle, ContractorTitle } = titles
+
+function handleFilishSuccess(values) {
+  if (!values.errorFields) {
+    values.vatCategoryS = values.category[0].toUpperCase()
+    return values
+  }
+}
 
 function Accounts() {
   const [currentNav, setNav] = useState(BOOKEE)
@@ -19,18 +27,24 @@ function Accounts() {
       headActionTitle: 'Add account',
       ...useEditableList(accountsApi[BOOKEE]),
       formFields: formsConfig[BOOKEE],
+      onBeforeSubmit: handleFilishSuccess,
+      itemTitleComponent: item => <AccTitle {...item}></AccTitle>,
     },
+
     [DEFACC]: {
       title: 'Default Accounts',
       headActionTitle: 'Add account',
       ...useEditableList(accountsApi[DEFACC]),
       formFields: formsConfig[DEFACC],
+      itemTitleComponent: item => <AccTitle {...item}></AccTitle>,
     },
+
     [CONTRA]: {
       title: 'Contractors',
       headActionTitle: 'Add contractor',
       ...useEditableList(contractorsApi),
       formFields: formsConfig[CONTRA],
+      itemTitleComponent: item => <ContractorTitle {...item}></ContractorTitle>,
     },
   }
 

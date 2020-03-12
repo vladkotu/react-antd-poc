@@ -6,9 +6,12 @@ import './styles.css'
 function EditableList({
   title,
   headActionTitle,
-  formFields = [],
   currentItem,
   items,
+  formFields = [],
+  itemTitleComponent = () => null,
+
+  onBeforeSubmit = v => v,
   setCurrentItem,
   addItem,
   updateItem,
@@ -38,7 +41,8 @@ function EditableList({
           renderItem={item => (
             <List.Item>
               <Row>
-                <AccTitle {...item}></AccTitle>
+                {/* <AccTitle {...item}></AccTitle> */}
+                {itemTitleComponent(item)}
                 <Link edit onClick={() => setCurrentItem(item.id)}>
                   Edit
                 </Link>
@@ -49,7 +53,7 @@ function EditableList({
                   onRemove={removeItem}
                   item={item}
                   onCancel={() => setCurrentItem(null)}
-                  onFinish={updateItem}
+                  onFinish={v => updateItem(onBeforeSubmit(v))}
                 />
               )}
             </List.Item>

@@ -12,12 +12,12 @@ const tailLayout = {
 }
 
 function AccForm({ onCancel, onFinish, onRemove, item = {}, fields }) {
-  function handleFilishSuccess(values) {
-    if (!values.errorFields) {
-      values.vatCategoryS = values.category[0].toUpperCase()
-      onFinish(values)
-    }
-  }
+  // function handleFilishSuccess(values) {
+  //   if (!values.errorFields) {
+  //     values.vatCategoryS = values.category[0].toUpperCase()
+  //     onFinish(values)
+  //   }
+  // }
 
   return (
     <Form
@@ -25,7 +25,7 @@ function AccForm({ onCancel, onFinish, onRemove, item = {}, fields }) {
       {...layout}
       name='acc-form'
       initialValues={item}
-      onFinish={handleFilishSuccess}
+      onFinish={onFinish}
     >
       <Form.Item name='id' style={{ display: 'none' }}>
         <InputNumber />

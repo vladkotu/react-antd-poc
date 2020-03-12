@@ -8,7 +8,10 @@ function AccTitle({ accNo, category, vatPercent, vatCategoryS, accName }) {
   return (
     <Text>
       <Text strong>{accNo}</Text>
-      {` - ${category} - ${vatPercent}% (${vatCategoryS}) - ${accName} `}
+      <Text>
+        - {category} - {vatPercent}% {vatCategoryS && `(${vatCategoryS})`}-{' '}
+        {accName}
+      </Text>
     </Text>
   )
 }
@@ -21,4 +24,12 @@ AccTitle.propTypes = {
   accName: PropTypes.string,
 }
 
-export default AccTitle
+function ContractorTitle({ id, role, salary, fname, lname }) {
+  return (
+    <Text>
+      {fname} {lname} [{role}], {salary} $
+    </Text>
+  )
+}
+
+export default { AccTitle, ContractorTitle }
