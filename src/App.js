@@ -1,11 +1,10 @@
 import React from 'react'
-import { Layout, Menu } from 'antd'
+import { Layout } from 'antd'
 import logo from './images/logo.svg'
 import './App.css'
-// import ProfilePage from './pages/Profile'
 import AccountsPage from './pages/AccountsPage/AccountsPage'
 
-const { Header, Footer, Content } = Layout
+const { Header, Footer } = Layout
 
 function App() {
   return (

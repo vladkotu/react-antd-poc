@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { Layout, Menu } from 'antd'
-import { Form, Input, InputNumber, Button, Radio } from 'antd'
 import { bookkeepingFields, defaultFields } from './formsConfig'
-import * as api from '../../api/accounts'
+import api from '../../api/accounts'
+import { preventAndCall } from '../../utils'
 import useEditableList from '../../hooks/useEditableList'
 import { EditableList } from '../../components'
 
@@ -14,30 +14,19 @@ const navigation = {
 }
 
 function Accounts() {
-  const defNav = navigation.bookkeeping.key
-  const [currentNav, setNav] = useState(defNav)
-  const [
-    [currentItem, items],
-    [setCurrentItem],
-    [addItem, , updateItem, removeItem],
-  ] = useEditableList(api)
-
-  const commonEditableProps = {
-    currentItem,
-    items,
-    setCurrentItem,
-    addItem,
-    updateItem,
-    removeItem,
-    headActionTitle: 'Add account',
-  }
+  const [currentNav, setNav] = useState(navigation.bookkeeping.key)
+  const bookkeepingProps = useEditableList(api.bookkeepingAccounts)
+  const defaultAccProps = useEditableList(api.defaultAccounts)
 
   return (
     <>
-      <Menu mode='horizontal' defaultSelectedKeys={[defNav]}>
+      <Menu
+        mode='horizontal'
+        defaultSelectedKeys={[navigation.bookkeeping.key]}
+      >
         {Object.values(navigation).map(({ title, key }) => (
           <Menu.Item key={key}>
-            <a onClick={() => setNav(key)} href='#'>
+            <a onClick={preventAndCall(setNav, key)} href='/#'>
               {title}
             </a>
           </Menu.Item>
@@ -47,17 +36,19 @@ function Accounts() {
       <Content className='App-content'>
         {currentNav === navigation.bookkeeping.key && (
           <EditableList
-            {...commonEditableProps}
-            title='Bookkeeping Accounts'
+            title={'Bookkeeping Accounts '}
+            headActionTitle='Add account'
             formFields={bookkeepingFields}
+            {...bookkeepingProps}
           ></EditableList>
         )}
 
         {currentNav === navigation.defaultAccs.key && (
           <EditableList
-            {...commonEditableProps}
-            title='Default Accounts'
+            title={`Default Accounts (${bookkeepingProps.items.length})`}
+            headActionTitle='Add account'
             formFields={defaultFields}
+            {...defaultAccProps}
           ></EditableList>
         )}
       </Content>

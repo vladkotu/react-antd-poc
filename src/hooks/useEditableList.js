@@ -38,16 +38,16 @@ function useEditableList(api) {
     getItems()
   }, [])
 
-  return [
-    [currentItem, items],
-    [setCurrentItem, setItems],
-    [
-      commonActions(addItem),
-      getItems,
-      commonActions(updateItem),
-      commonActions(removeItem),
-    ],
-  ]
+  return {
+    currentItem,
+    items,
+    setCurrentItem,
+    setItems,
+    getItems,
+    addItem: commonActions(addItem),
+    updateItem: commonActions(updateItem),
+    removeItem: commonActions(removeItem),
+  }
 }
 
 export default useEditableList

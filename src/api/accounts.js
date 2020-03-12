@@ -1,16 +1,6 @@
 import mocker from 'mocker-data-generator'
 import f from 'faker'
-
-const randomId = (from, to, exclude = [], retries = 10) => {
-  const id = f.random.number({ min: from, max: to })
-  if (-1 === exclude.indexOf(id)) {
-    return id
-  } else if (0 === retries) {
-    return undefined
-  } else {
-    randomId(from, to, exclude, --retries)
-  }
-}
+import { randomNumBut } from '../utils'
 
 const schema = {
   id: { faker: 'random.number({"min": 10, "max": 100})' },
@@ -31,42 +21,57 @@ const schema = {
 }
 
 // localStorage.removeItem('accounts')
-const getItems = () => JSON.parse(localStorage.getItem('accounts'))
-const storeItems = ix => localStorage.setItem('accounts', JSON.stringify(ix))
+const getItems = ctx => JSON.parse(localStorage.getItem(ctx))
+const storeItems = (ctx, ix) => localStorage.setItem(ctx, JSON.stringify(ix))
 
-export const fetchItems = (n = 3) => {
-  const accounts = getItems()
+const makeFetchItems = ctx => (n = 3) => {
+  const accounts = getItems(ctx)
   if (accounts && accounts.length) return accounts
   else
     return mocker()
       .schema('acc', schema, n)
       .build()
       .then(({ acc }) => {
-        storeItems(acc)
+        storeItems(ctx, acc)
         return acc
       })
 }
 
-export const removeItem = account => {
-  storeItems(getItems().filter(({ id }) => account.id !== id))
-  return Promise.resolve(getItems())
+const makeRemoveItem = ctx => account => {
+  storeItems(
+    ctx,
+    getItems(ctx).filter(({ id }) => account.id !== id)
+  )
+  return Promise.resolve(getItems(ctx))
 }
 
-export const addItem = acc => {
-  const currentItems = getItems()
-  acc.id = randomId(
+const makeAddItem = ctx => acc => {
+  const currentItems = getItems(ctx)
+  acc.id = randomNumBut(
     10,
     1000,
     currentItems.map(i => i.id)
   )
-  storeItems([acc, ...currentItems])
-  return Promise.resolve(getItems())
+  storeItems(ctx, [acc, ...currentItems])
+  return Promise.resolve(getItems(ctx))
 }
 
-export const updateItem = acc => {
-  const accounts = getItems()
+const makeUpdateItem = ctx => acc => {
+  const accounts = getItems(ctx)
   const idx = accounts.findIndex(a => a.id === acc.id)
   accounts[idx] = acc
-  storeItems(accounts)
-  return Promise.resolve(getItems())
+  storeItems(ctx, accounts)
+  return Promise.resolve(getItems(ctx))
+}
+
+const makeApi = ctx => ({
+  addItem: makeAddItem(ctx),
+  fetchItems: makeFetchItems(ctx),
+  updateItem: makeUpdateItem(ctx),
+  removeItem: makeRemoveItem(ctx),
+})
+
+export default {
+  bookkeepingAccounts: makeApi('bookkeepingAccounts'),
+  defaultAccounts: makeApi('defaultAccounts'),
 }
