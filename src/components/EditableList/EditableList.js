@@ -1,17 +1,19 @@
 import React from 'react'
 import { Row, Card, List } from 'antd'
-import { Link, AccTitle, AccForm } from '../components'
-import useEditableList from '../hooks/useEditableList'
-import * as api from '../api/accounts'
+import { Link, AccTitle, AccForm } from '../'
 import './styles.css'
 
-function Devcards({ title, headActionTitle, formFields }) {
-  const [
-    [currentItem, items],
-    [setCurrentItem],
-    [addItem, , updateItem, removeItem],
-  ] = useEditableList(api)
-
+function EditableList({
+  title,
+  headActionTitle,
+  formFields,
+  currentItem,
+  items,
+  setCurrentItem,
+  addItem,
+  updateItem,
+  removeItem,
+}) {
   const cardProps = {
     title,
     extra: headActionTitle ? (
@@ -57,4 +59,4 @@ function Devcards({ title, headActionTitle, formFields }) {
     </div>
   )
 }
-export default Devcards
+export default EditableList
