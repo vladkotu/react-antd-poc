@@ -1,72 +1,52 @@
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 import { Row, Card, List } from 'antd'
 import { Link, AccTitle, AccForm } from '../components'
-import {
-  fetchAccounts,
-  removeAccount,
-  addAccount,
-  editAccount,
-} from '../api/accounts'
+import useEditableList from '../hooks/useEditableList'
+import * as api from '../api/accounts'
 import './styles.css'
 
-function accontByAccNo(accounts, targetNo) {
-  return accounts.find(({ accNo }) => accNo === targetNo)
-}
+function Devcards({ title, headActionTitle, formFields }) {
+  const [
+    [currentItem, items],
+    [setCurrentItem],
+    [addItem, , updateItem, removeItem],
+  ] = useEditableList(api)
 
-function Devcards() {
-  const [editingNo, setEditing] = useState(null)
-  const [accounts, setAccounts] = useState([])
-
-  const getItems = async () => setAccounts(await fetchAccounts(3))
-
-  function commonActions(action) {
-    return async item => {
-      try {
-        await action(item)
-        await getItems()
-        setEditing(null)
-      } catch (err) {
-        console.error(err)
-      }
-    }
+  const cardProps = {
+    title,
+    extra: headActionTitle ? (
+      <Link add onClick={() => setCurrentItem(0)}>
+        {headActionTitle}
+      </Link>
+    ) : null,
   }
 
-  const updateItem = commonActions(editAccount)
-  const addItem = commonActions(addAccount)
-  const removeItem = commonActions(removeAccount)
-
-  useEffect(() => {
-    getItems()
-  }, [])
-
   return (
-    <div className='Acc'>
-      <Card
-        title='Accounts'
-        extra={
-          <Link add onClick={() => setEditing(0)}>
-            New account
-          </Link>
-        }
-      >
-        {0 === editingNo && (
-          <AccForm onCancel={() => setEditing(null)} onFinish={addItem} />
+    <div className='EditableList'>
+      <Card {...cardProps}>
+        {0 === currentItem && (
+          <AccForm
+            fields={formFields}
+            onCancel={() => setCurrentItem(null)}
+            onFinish={addItem}
+          />
         )}
         <List
-          dataSource={accounts}
-          renderItem={acc => (
+          dataSource={items}
+          renderItem={item => (
             <List.Item>
               <Row>
-                <AccTitle {...acc}></AccTitle>
-                <Link edit onClick={() => setEditing(acc.accNo)}>
+                <AccTitle {...item}></AccTitle>
+                <Link edit onClick={() => setCurrentItem(item.id)}>
                   Edit
                 </Link>
               </Row>
-              {editingNo === acc.accNo && (
+              {currentItem === item.id && (
                 <AccForm
+                  fields={formFields}
                   onRemove={removeItem}
-                  account={accontByAccNo(accounts, acc.accNo)}
-                  onCancel={() => setEditing(null)}
+                  item={item}
+                  onCancel={() => setCurrentItem(null)}
                   onFinish={updateItem}
                 />
               )}

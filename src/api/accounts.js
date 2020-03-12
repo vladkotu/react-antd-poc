@@ -1,6 +1,17 @@
 import mocker from 'mocker-data-generator'
 import f from 'faker'
 
+const randomId = (from, to, exclude = [], retries = 10) => {
+  const id = f.random.number({ min: from, max: to })
+  if (-1 === exclude.indexOf(id)) {
+    return id
+  } else if (0 === retries) {
+    return undefined
+  } else {
+    randomId(from, to, exclude, --retries)
+  }
+}
+
 const schema = {
   id: { faker: 'random.number({"min": 10, "max": 100})' },
   accNo: { faker: 'random.number({"min": 10, "max": 100})' },
@@ -23,7 +34,7 @@ const schema = {
 const getItems = () => JSON.parse(localStorage.getItem('accounts'))
 const storeItems = ix => localStorage.setItem('accounts', JSON.stringify(ix))
 
-export const fetchAccounts = n => {
+export const fetchItems = (n = 3) => {
   const accounts = getItems()
   if (accounts && accounts.length) return accounts
   else
@@ -36,23 +47,12 @@ export const fetchAccounts = n => {
       })
 }
 
-export const removeAccount = account => {
+export const removeItem = account => {
   storeItems(getItems().filter(({ id }) => account.id !== id))
   return Promise.resolve(getItems())
 }
 
-const randomId = (from, to, exclude = [], retries = 10) => {
-  const id = f.random.number({ min: from, max: to })
-  if (-1 === exclude.indexOf(id)) {
-    return id
-  } else if (0 === retries) {
-    return undefined
-  } else {
-    randomId(from, to, exclude, --retries)
-  }
-}
-
-export const addAccount = acc => {
+export const addItem = acc => {
   const currentItems = getItems()
   acc.id = randomId(
     10,
@@ -63,7 +63,7 @@ export const addAccount = acc => {
   return Promise.resolve(getItems())
 }
 
-export const editAccount = acc => {
+export const updateItem = acc => {
   const accounts = getItems()
   const idx = accounts.findIndex(a => a.id === acc.id)
   accounts[idx] = acc
