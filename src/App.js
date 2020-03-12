@@ -3,7 +3,7 @@ import { Layout, Menu } from 'antd'
 import logo from './images/logo.svg'
 import './App.css'
 // import ProfilePage from './pages/Profile'
-import AccountsPage from './pages/AccountsPage'
+import AccountsPage from './pages/AccountsPage/AccountsPage'
 
 const { Header, Footer, Content } = Layout
 
