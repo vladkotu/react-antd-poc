@@ -11,17 +11,10 @@ const tailLayout = {
   wrapperCol: { xs: { span: 16, offset: 0 }, sm: { span: 16, offset: 8 } },
 }
 
-function AccForm({ onCancel, onFinish, onRemove, item = {}, fields }) {
-  // function handleFilishSuccess(values) {
-  //   if (!values.errorFields) {
-  //     values.vatCategoryS = values.category[0].toUpperCase()
-  //     onFinish(values)
-  //   }
-  // }
-
+function ItemForm({ onCancel, onFinish, onRemove, item = {}, fields }) {
   return (
     <Form
-      className='AccForm-layout'
+      className='ItemForm-layout'
       {...layout}
       name='acc-form'
       initialValues={item}
@@ -48,4 +41,4 @@ function AccForm({ onCancel, onFinish, onRemove, item = {}, fields }) {
   )
 }
 
-export default AccForm
+export default ItemForm

@@ -1,6 +1,6 @@
 import React from 'react'
 import { Row, Card, List } from 'antd'
-import { Link, AccTitle, AccForm } from '../'
+import { Link, AccTitle, ItemForm } from '../'
 import './styles.css'
 
 function EditableList({
@@ -30,7 +30,7 @@ function EditableList({
     <div className='EditableList'>
       <Card {...cardProps}>
         {0 === currentItem && (
-          <AccForm
+          <ItemForm
             fields={formFields}
             onCancel={() => setCurrentItem(null)}
             onFinish={addItem}
@@ -41,14 +41,13 @@ function EditableList({
           renderItem={item => (
             <List.Item>
               <Row>
-                {/* <AccTitle {...item}></AccTitle> */}
                 {itemTitleComponent(item)}
                 <Link edit onClick={() => setCurrentItem(item.id)}>
                   Edit
                 </Link>
               </Row>
               {currentItem === item.id && (
-                <AccForm
+                <ItemForm
                   fields={formFields}
                   onRemove={removeItem}
                   item={item}
