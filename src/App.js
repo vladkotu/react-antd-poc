@@ -8,16 +8,14 @@ const { Header, Footer } = Layout
 
 function App() {
   return (
-    <div>
-      <Layout className='App-layout'>
-        <Header className='App-header'>
-          <img src={logo} className='App-logo' alt='logo' />
-          <h1>Test React Feature Collections</h1>
-        </Header>
-        <AccountsPage />
-        <Footer>@ Footer</Footer>
-      </Layout>
-    </div>
+    <Layout className='App-layout'>
+      <Header className='App-header'>
+        <img src={logo} className='App-logo' alt='React test project logo' />
+        <h1>React Test Project</h1>
+      </Header>
+      <AccountsPage />
+      <Footer>@ Footer</Footer>
+    </Layout>
   )
 }
 

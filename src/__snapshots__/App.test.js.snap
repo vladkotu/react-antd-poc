@@ -1,0 +1,28 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders header, footer and accounts page 1`] = `
+<section
+  class="ant-layout App-layout"
+>
+  <header
+    class="ant-layout-header App-header"
+  >
+    <img
+      alt="React test project logo"
+      class="App-logo"
+      src="logo.svg"
+    />
+    <h1>
+      React Test Project
+    </h1>
+  </header>
+  <div>
+    Account Page
+  </div>
+  <footer
+    class="ant-layout-footer"
+  >
+    @ Footer
+  </footer>
+</section>
+`;
