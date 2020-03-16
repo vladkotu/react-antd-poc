@@ -29,7 +29,7 @@ export const makeFetchItems = (ctx, schema) => (n = 3) => {
     return mocker()
       .schema(ctx, schema, n)
       .build()
-      .then((data) => {
+      .then(data => {
         storeItems(ctx, data[ctx])
         return data[ctx]
       })

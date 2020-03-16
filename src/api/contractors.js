@@ -1,4 +1,3 @@
-import mocker from 'mocker-data-generator'
 import f from 'faker'
 import { makeFakeApi } from '../utils'
 

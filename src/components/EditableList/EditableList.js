@@ -1,6 +1,6 @@
 import React from 'react'
 import { Row, Card, List } from 'antd'
-import { Link, AccTitle, ItemForm } from '../'
+import { Link, ItemForm } from '../'
 import './styles.css'
 
 function EditableList({
