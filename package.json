@@ -7,6 +7,7 @@
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
     "antd": "^4.0.2",
+    "eslint-plugin-jest": "^23.8.2",
     "faker": "^4.1.0",
     "mocker-data-generator": "^2.6.6",
     "react": "^16.13.0",
@@ -19,6 +20,7 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "format-js": "prettier-eslint --write $PWD/'src/**/*.js'",
+    "lint-js": "eslint src/**/*.js",
     "format-css": "prettier-eslint \"src/**/*.css\""
   },
   "browserslist": {
