@@ -1,0 +1,25 @@
+
+** Available Scripts
+
+In the project directory, you can run:
+
+*** `yarn start`
+
+Runs the app in the development mode.<br />
+Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+
+*** `yarn test`
+
+Launches the test runner in the interactive watch mode.
+
+** TODO [5/7] list:
+   1. [X] Use React Hooks for state management
+   2. [X] Use [[https://ant.design/components/button/][Ant Design]]  components library
+   3. [X] Implement reusable Editable list component for admin dashboard
+   4. [ ] Sass styling
+   5. [X] Mock api calls but keep storage persistent
+   6. [X] Fake data with faker.js
+   7. [ ] Cover with tests
+
+
+   
