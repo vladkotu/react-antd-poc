@@ -48,9 +48,9 @@ function EditableList({
               </Row>
               {currentItem === item.id && (
                 <ItemForm
+                  currentItem={item}
                   fields={formFields}
                   onRemove={removeItem}
-                  item={item}
                   onCancel={() => setCurrentItem(null)}
                   onFinish={v => updateItem(onBeforeSubmit(v))}
                 />

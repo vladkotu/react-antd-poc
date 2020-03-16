@@ -8,16 +8,24 @@ const layout = {
 }
 
 const tailLayout = {
-  wrapperCol: { xs: { span: 16, offset: 0 }, sm: { span: 16, offset: 8 } },
+  wrapperCol: { xs: { span: 16, offset: 0 }, sm: { span: 24, offset: 0 } },
 }
 
-function ItemForm({ onCancel, onFinish, onRemove, item = {}, fields }) {
+function ItemForm({
+  name,
+  currentItem = {},
+  fields,
+  onCancel,
+  onFinish,
+  onRemove,
+}) {
+  const formName = name ? name : `item-form-${currentItem.id || 'no-name'}`
   return (
     <Form
       className='ItemForm-layout'
       {...layout}
-      name='acc-form'
-      initialValues={item}
+      name={formName}
+      initialValues={currentItem}
       onFinish={onFinish}
     >
       <Form.Item name='id' style={{ display: 'none' }}>
@@ -35,7 +43,9 @@ function ItemForm({ onCancel, onFinish, onRemove, item = {}, fields }) {
           Save Changes
         </Button>
         <Button onClick={onCancel}>Cancel</Button>
-        {onRemove && <Button onClick={() => onRemove(item)}>Remove</Button>}
+        {onRemove && currentItem && (
+          <Button onClick={() => onRemove(currentItem)}>Remove</Button>
+        )}
       </Form.Item>
     </Form>
   )
