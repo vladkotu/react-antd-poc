@@ -1,9 +1,9 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`ItemForm renders hidden id input field 1`] = `
+exports[`ItemForm empty form renders hidden id input field that stores item id 1`] = `
 <form
   class="ant-form ant-form-horizontal ItemForm-layout"
-  id="test-form"
+  id="empty-test-form"
 >
   <div
     class="ant-row ant-form-item"
@@ -25,9 +25,9 @@ exports[`ItemForm renders hidden id input field 1`] = `
               class="ant-input-number-handler-wrap"
             >
               <span
-                aria-disabled="false"
+                aria-disabled="true"
                 aria-label="Increase Value"
-                class="ant-input-number-handler ant-input-number-handler-up "
+                class="ant-input-number-handler ant-input-number-handler-up ant-input-number-handler-up-disabled"
                 role="button"
                 unselectable="unselectable"
               >
@@ -53,9 +53,9 @@ exports[`ItemForm renders hidden id input field 1`] = `
                 </span>
               </span>
               <span
-                aria-disabled="false"
+                aria-disabled="true"
                 aria-label="Decrease Value"
-                class="ant-input-number-handler ant-input-number-handler-down "
+                class="ant-input-number-handler ant-input-number-handler-down ant-input-number-handler-down-disabled"
                 role="button"
                 unselectable="unselectable"
               >
@@ -86,13 +86,14 @@ exports[`ItemForm renders hidden id input field 1`] = `
             >
               <input
                 aria-valuemin="-9007199254740991"
+                aria-valuenow="testId"
                 autocomplete="off"
                 class="ant-input-number-input"
-                id="test-form_id"
+                id="empty-test-form_id"
                 min="-9007199254740991"
                 role="spinbutton"
                 step="1"
-                value=""
+                value="testId"
               />
             </div>
           </div>
@@ -126,6 +127,14 @@ exports[`ItemForm renders hidden id input field 1`] = `
           >
             <span>
               Cancel
+            </span>
+          </button>
+          <button
+            class="ant-btn"
+            type="button"
+          >
+            <span>
+              Remove
             </span>
           </button>
         </div>
