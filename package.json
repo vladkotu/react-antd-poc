@@ -3,9 +3,11 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node ./server.js",
     "lint": "eslint server.js server/**/*.js",
-    "format": "prettier-eslint --write $PWD/'server/**/*.js'"
+    "format": "prettier-eslint --write $PWD/'server/**/*.js'",
+    "client": "cd client && yarn start",
+    "server": "PORT=5000 nodemon ./server.js",
+    "dev": "concurrently --kill-others-on-fail \"yarn server\" \"yarn client\""
   },
   "dependencies": {
     "cookie-parser": "~1.4.4",
@@ -14,9 +16,11 @@
     "morgan": "~1.9.1"
   },
   "devDependencies": {
+    "concurrently": "^5.1.0",
     "eslint": "^6.8.0",
     "eslint-config-prettier": "^6.10.0",
     "eslint-plugin-prettier": "^3.1.2",
+    "nodemon": "^2.0.2",
     "prettier": "^1.19.1",
     "prettier-eslint": "^9.0.1",
     "prettier-eslint-cli": "^5.0.0"
