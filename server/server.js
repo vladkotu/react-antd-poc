@@ -6,12 +6,15 @@ import express from 'express';
 import path from 'path';
 import cookieParser from 'cookie-parser';
 import logger from 'morgan';
+import pretty from 'express-prettify'
+
 import indexRouter from './routes/index';
 
 const debug = debugF('server:server');
 const port = normalizePort(process.env.PORT || '3000');
 const app = express();
 
+app.use(pretty({ query: 'pretty' }));
 app.use(logger('dev'))
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))

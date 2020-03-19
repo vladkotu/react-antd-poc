@@ -32,23 +32,79 @@ const fakeApis = {
 const allowedTypes = Object.keys(fakeApis)
 const allowedTypesStr = allowedTypes.map(s => `'${s}'`).join(', ')
 
-router.get('/', async (req, res, next) => {
+router.use(function checkAccountType(req, res, next) {
   const type = req.query.accountType
+  if (!type) {
+    return next()
+  }
   if (!allowedTypes.includes(type)) {
-    res.status(400).json({
-      error: {
-        msg: `'accountType' param should have one of ${allowedTypesStr} values`,
-      },
+    const err = new Error(
+      `'accountType' param should have one of ${allowedTypesStr} values`
+    )
+    err.statusCode = 400
+    return next(err)
+  }
+  return next()
+})
+
+router.post('/', async (req, res, next) => {
+  try {
+    const type = req.query.type
+    const item = await fakeApis[type].addItem(req.body)
+    res.send(item)
+  } catch (err) {
+    next(err)
+  }
+})
+
+router.get('/', async (req, res, next) => {
+  try {
+    const {
+      query: { type, limit = 5 },
+    } = req
+    const items = await fakeApis[type].fetchItems(5)
+    res.send({
+      count: items.length,
+      limit,
+      items: items.slice(0, limit),
     })
-  } else {
-    try {
-      res.send({
-        type: type,
-        items: await fakeApis[type].fetchItems(5),
-      })
-    } catch (err) {
-      next(err)
-    }
+  } catch (err) {
+    next(err)
+  }
+})
+
+router.get('/:id', async (req, res, next) => {
+  try {
+    const {
+      query: { type },
+    } = req
+    const items = await fakeApis[type].fetchItems()
+    const item = items.find(i => i.id === parseInt(req.params.id, 10))
+    res.send(item)
+  } catch (err) {
+    next(err)
+  }
+})
+
+router.put('/:id', async (req, res, next) => {
+  try {
+    const type = req.query.type
+    const id = parseInt(req.params.id, 10)
+    const item = await fakeApis[type].updateItem({ id, ...req.body })
+    res.send(item)
+  } catch (err) {
+    next(err)
+  }
+})
+
+router.delete('/:id', async (req, res, next) => {
+  try {
+    const type = req.query.type
+    const id = parseInt(req.params.id, 10)
+    await fakeApis[type].removeItem({ id, ...req.body })
+    res.send({ ok: true })
+  } catch (err) {
+    next(err)
   }
 })
 

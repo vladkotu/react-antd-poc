@@ -30,8 +30,10 @@ export const makeFetchItems = (ctx, schema) => async (n = 3) => {
 }
 
 export const makeRemoveItem = ctx => async item => {
-  await storeItems(ctx, await getItems(ctx).filter(({ id }) => item.id !== id))
-  return await getItems(ctx)
+  await storeItems(
+    ctx,
+    (await getItems(ctx)).filter(({ id }) => item.id !== id)
+  )
 }
 
 export const makeAddItem = ctx => async acc => {
@@ -42,15 +44,16 @@ export const makeAddItem = ctx => async acc => {
     currentItems.map(i => i.id)
   )
   await storeItems(ctx, [acc, ...currentItems])
-  return await getItems(ctx)
+  return acc
 }
 
 export const makeUpdateItem = ctx => async acc => {
   const items = await getItems(ctx)
   const idx = items.findIndex(a => a.id === acc.id)
-  items[idx] = acc
+  const item = { ...items[idx], ...acc }
+  items[idx] = item
   await storeItems(ctx, items)
-  return await getItems(ctx)
+  return item
 }
 
 export const makeFakeApi = (ctx, schema) => ({

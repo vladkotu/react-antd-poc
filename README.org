@@ -23,3 +23,125 @@ Launches the test runner in the interactive watch mode.
 
 
    
+** API docs
+
+*** Accounts
+    :PROPERTIES:
+    :header-args: :var API="http://localhost:5000/api"
+    :END:
+    All accounts tested for "bookkeeping" type
+**** [C] Create account
+  #+NAME: create-account 
+  #+begin_src sh :results verbatim
+    curl -X POST -vs "${API}/accounts?type=bookkeeping&pretty" \
+         -H 'Content-Type: application/json' \
+         -d '{ "accNo": 111, "category": "Purchase", "vatPercent": 11, "vatCategoryS": "P", "accName": "One one one" }'
+ #+end_src
+
+ #+RESULTS: create-account
+ : {
+ :   "accNo": 111,
+ :   "category": "Purchase",
+ :   "vatPercent": 11,
+ :   "vatCategoryS": "P",
+ :   "accName": "One one one",
+ :   "id": 968
+ : }
+
+**** [R1] Get all accounts 
+   #+NAME: get-all-boo-accounts 
+   #+begin_src sh :results verbatim
+     curl -vsi "${API}/accounts?type=bookkeeping&pretty&limit=2"
+  #+end_src
+
+  #+RESULTS: get-all-boo-accounts
+  #+begin_example
+  HTTP/1.1 200 OK
+  X-Powered-By: Express
+  Content-Type: application/json; charset=utf-8
+  Content-Length: 462
+  ETag: W/"1ce-53pljYKpmW/QIkcNvkL9YUeiaDw"
+  Date: Thu, 19 Mar 2020 15:30:04 GMT
+  Connection: keep-alive
+  
+  {
+    "count": 6,
+    "limit": "2",
+    "items": [
+      {
+        "accNo": 111,
+        "category": "Purchase",
+        "vatPercent": 111,
+        "vatCategoryS": "P",
+        "accName": "One One One",
+        "id": 968
+      },
+      {
+        "id": 15,
+        "accNo": 98,
+        "category": "Sales",
+        "vatPercent": 55,
+        "vatCategoryS": "S",
+        "accName": "Senior generate calculate",
+        "extRevenuClass": null,
+        "extTaxCode": null,
+        "comment": null
+      }
+    ]
+  }
+  #+end_example
+
+**** [R2] Get single account  
+   #+NAME: get-one-boo-accounts 
+   #+begin_src sh :results verbatim
+     curl -vsi "${API}/accounts/968/?type=bookkeeping&pretty"
+  #+end_src
+
+  #+RESULTS: get-one-boo-accounts
+  #+begin_example
+  HTTP/1.1 200 OK
+  X-Powered-By: Express
+  Content-Type: application/json; charset=utf-8
+  Content-Length: 128
+  ETag: W/"80-/zcS/dOXmo/QZGY78nkBimKf6d4"
+  Date: Thu, 19 Mar 2020 15:23:48 GMT
+  Connection: keep-alive
+  
+  {
+    "accNo": 111,
+    "category": "Purchase",
+    "vatPercent": 11,
+    "vatCategoryS": "P",
+    "accName": "One one one",
+    "id": 968
+  }
+  #+end_example
+
+**** [U] Update account
+  #+NAME: update-account 
+  #+begin_src sh :results verbatim
+    curl -X PUT -vs "${API}/accounts/968/?type=bookkeeping&pretty" \
+         -H 'Content-Type: application/json' \
+         -d '{ "vatPercent": 111, "accName": "One One One" }'
+ #+end_src
+
+ #+RESULTS: update-account
+ : {
+ :   "accNo": 111,
+ :   "category": "Purchase",
+ :   "vatPercent": 111,
+ :   "vatCategoryS": "P",
+ :   "accName": "One One One",
+ :   "id": 968
+ : }
+
+**** [D] Delete account
+  #+NAME: delete-account 
+  #+begin_src sh :results verbatim
+    curl -X DELETE -vs "${API}/accounts/968/?type=bookkeeping&pretty"
+ #+end_src
+
+ #+RESULTS: delete-account
+ : {
+ :   "ok": true
+ : }

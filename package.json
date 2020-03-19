@@ -39,6 +39,7 @@
     "cookie-parser": "~1.4.4",
     "debug": "~2.6.9",
     "express": "~4.16.1",
+    "express-prettify": "^0.1.1",
     "faker": "^4.1.0",
     "mocker-data-generator": "^2.6.6",
     "morgan": "~1.9.1",
