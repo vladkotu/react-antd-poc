@@ -14,7 +14,14 @@
   },
   "babel": {
     "presets": [
-      "@babel/preset-env"
+      [
+        "@babel/preset-env",
+        {
+          "targets": {
+            "esmodules": true
+          }
+        }
+      ]
     ]
   },
   "nodemonConfig": {
@@ -32,7 +39,10 @@
     "cookie-parser": "~1.4.4",
     "debug": "~2.6.9",
     "express": "~4.16.1",
-    "morgan": "~1.9.1"
+    "faker": "^4.1.0",
+    "mocker-data-generator": "^2.6.6",
+    "morgan": "~1.9.1",
+    "node-persist": "^3.0.5"
   },
   "devDependencies": {
     "@babel/cli": "^7.8.4",
