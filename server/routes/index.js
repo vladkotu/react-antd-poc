@@ -1,5 +1,5 @@
 import express from 'express';
-var router = express.Router()
+const router = express.Router();
 import usersRouter from './users';
 import accountsRouter from './accounts';
 
