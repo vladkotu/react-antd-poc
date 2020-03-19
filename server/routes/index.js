@@ -1,9 +1,9 @@
-var express = require('express')
+import express from 'express';
 var router = express.Router()
-var usersRouter = require('./users')
-var accountsRouter = require('./accounts')
+import usersRouter from './users';
+import accountsRouter from './accounts';
 
 router.use('/users', usersRouter)
 router.use('/accounts', accountsRouter)
 
-module.exports = router
+export default router;

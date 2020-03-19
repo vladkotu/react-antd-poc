@@ -1,12 +1,12 @@
 #!/usr/bin/env node
 
 var debug = require('debug')('server:server')
-var http = require('http')
-var express = require('express')
-var path = require('path')
-var cookieParser = require('cookie-parser')
-var logger = require('morgan')
-var indexRouter = require('./server/routes/index')
+import http from 'http';
+import express from 'express';
+import path from 'path';
+import cookieParser from 'cookie-parser';
+import logger from 'morgan';
+import indexRouter from './server/routes/index';
 
 var port = normalizePort(process.env.PORT || '3000')
 var app = express()
