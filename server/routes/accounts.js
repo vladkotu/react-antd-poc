@@ -1,5 +1,6 @@
 import express from 'express'
 import f from 'faker'
+import { checkSchema, validationResult } from 'express-validator'
 import * as utils from '../utils'
 
 const router = express.Router()
@@ -32,6 +33,14 @@ const fakeApis = {
 const allowedTypes = Object.keys(fakeApis)
 const allowedTypesStr = allowedTypes.map(s => `'${s}'`).join(', ')
 
+const checkErrors = (req, res, next) => {
+  const errors = validationResult(req)
+  if (!errors.isEmpty()) {
+    return res.status(422).json({ errors: errors.array() })
+  }
+  next()
+}
+
 router.use(function checkAccountType(req, res, next) {
   const type = req.query.accountType
   if (!type) {
@@ -47,15 +56,33 @@ router.use(function checkAccountType(req, res, next) {
   return next()
 })
 
-router.post('/', async (req, res, next) => {
-  try {
-    const type = req.query.type
-    const item = await fakeApis[type].addItem(req.body)
-    res.send(item)
-  } catch (err) {
-    next(err)
+router.post(
+  '/',
+  checkSchema({
+    accNo: {
+      in: ['body'],
+      isInt: true,
+      toInt: true,
+      errorMessage: 'account number should be number',
+    },
+    category: {
+      exists: ['Purchase', 'Sale'],
+      errorMessage: 'should be of onf "Purchase" of "Sale"',
+    },
+  }),
+  checkErrors,
+
+  async (req, res, next) => {
+    try {
+      const type = req.query.type
+      const item = await fakeApis[type].addItem(req.body)
+      res.send(item)
+      res.send(null)
+    } catch (err) {
+      next(err)
+    }
   }
-})
+)
 
 router.get('/', async (req, res, next) => {
   try {
@@ -86,26 +113,60 @@ router.get('/:id', async (req, res, next) => {
   }
 })
 
-router.put('/:id', async (req, res, next) => {
-  try {
-    const type = req.query.type
-    const id = parseInt(req.params.id, 10)
-    const item = await fakeApis[type].updateItem({ id, ...req.body })
-    res.send(item)
-  } catch (err) {
-    next(err)
+router.put(
+  '/:id',
+  checkSchema({
+    id: {
+      in: ['params'],
+      isInt: true,
+      toInt: true,
+      errorMessage: 'Id is must have',
+    },
+    accNo: {
+      in: ['body'],
+      isInt: true,
+      toInt: true,
+      errorMessage: 'account number should be number',
+    },
+    category: {
+      exists: ['Purchase', 'Sale'],
+      errorMessage: 'should be of onf "Purchase" of "Sale"',
+    },
+  }),
+  checkErrors,
+  async (req, res, next) => {
+    try {
+      const type = req.query.type
+      const id = parseInt(req.params.id, 10)
+      const item = await fakeApis[type].updateItem({ id, ...req.body })
+      res.send(item)
+    } catch (err) {
+      next(err)
+    }
   }
-})
+)
 
-router.delete('/:id', async (req, res, next) => {
-  try {
-    const type = req.query.type
-    const id = parseInt(req.params.id, 10)
-    await fakeApis[type].removeItem({ id, ...req.body })
-    res.send({ ok: true })
-  } catch (err) {
-    next(err)
+router.delete(
+  '/:id',
+  checkSchema({
+    id: {
+      in: ['params'],
+      isInt: true,
+      toInt: true,
+      errorMessage: 'Id is must have',
+    },
+  }),
+  checkErrors,
+  async (req, res, next) => {
+    try {
+      const type = req.query.type
+      const id = parseInt(req.params.id, 10)
+      await fakeApis[type].removeItem({ id, ...req.body })
+      res.send({ ok: true })
+    } catch (err) {
+      next(err)
+    }
   }
-})
+)
 
 export default router
