@@ -1,20 +1,20 @@
 #!/usr/bin/env node
 
 import debugF from 'debug'
-import http from 'http';
-import express from 'express';
-import path from 'path';
-import cookieParser from 'cookie-parser';
-import logger from 'morgan';
+import http from 'http'
+import express from 'express'
+import path from 'path'
+import cookieParser from 'cookie-parser'
+import logger from 'morgan'
 import pretty from 'express-prettify'
 
-import indexRouter from './routes/index';
+import indexRouter from './routes/index'
 
-const debug = debugF('server:server');
-const port = normalizePort(process.env.PORT || '3000');
-const app = express();
+const debug = debugF('server:server')
+const port = normalizePort(process.env.PORT || '3000')
+const app = express()
 
-app.use(pretty({ query: 'pretty' }));
+app.use(pretty({ query: 'pretty' }))
 app.use(logger('dev'))
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
@@ -26,13 +26,13 @@ app.use(express.static(path.join(__dirname, '../client/build')))
 app.use('/api', indexRouter)
 app.set('port', port)
 
-const server = http.createServer(app);
+const server = http.createServer(app)
 server.listen(port)
 server.on('error', onError)
 server.on('listening', onListening)
 
 function normalizePort(val) {
-  const port = parseInt(val, 10);
+  const port = parseInt(val, 10)
   if (isNaN(port)) {
     return val
   }
@@ -47,7 +47,7 @@ function onError(error) {
     throw error
   }
 
-  const bind = typeof port === 'string' ? 'Pipe ' + port : 'Port ' + port;
+  const bind = typeof port === 'string' ? 'Pipe ' + port : 'Port ' + port
 
   switch (error.code) {
     case 'EACCES':
@@ -64,7 +64,7 @@ function onError(error) {
 }
 
 function onListening() {
-  const addr = server.address();
-  const bind = typeof addr === 'string' ? 'pipe ' + addr : 'port ' + addr.port;
+  const addr = server.address()
+  const bind = typeof addr === 'string' ? 'pipe ' + addr : 'port ' + addr.port
   debug('Listening on ' + bind)
 }
