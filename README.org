@@ -29,7 +29,7 @@ Executes server side code watcher in dev mode.
  
 ** NodeJs backend
 *** TODO [4/8] List
-    - [X] CRUD actions ([[*Accounts][Accounts API Docs]])
+    - [X] CRUD actions
     - [X] ES6 syntax
     - [X] Request validation/sanitation
       - [X] Single route validation
