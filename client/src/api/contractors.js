@@ -1,15 +1,60 @@
-import f from 'faker'
-import { makeFakeApi } from '../utils'
+import { host, fetchIt } from '../utils'
 
-const schema = {
-  id: { faker: 'random.number({"min": 10, "max": 100})' },
-  role: {
-    function: () =>
-      f.random.arrayElement(['Sales', 'Developer', 'Tech Lead', 'Assistant']),
-  },
-  salary: { faker: 'random.number({"min": 10000, "max": 100000})' },
-  fname: { faker: 'name.firstName' },
-  lname: { faker: 'name.lastName' },
+const makeAddItem = () => async item => {
+  try {
+    const data = await fetchIt(`${host()}/api/contractors`, {
+      method: 'POST',
+      body: JSON.stringify(item),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+    return data
+  } catch (err) {
+    console.error(err)
+  }
 }
 
-export default makeFakeApi('contractors', schema)
+const makeUpdateItem = () => async item => {
+  try {
+    const data = await fetchIt(`${host()}/api/contractors/${item.id}`, {
+      method: 'PUT',
+      body: JSON.stringify(item),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+    return data
+  } catch (err) {
+    console.error(err)
+  }
+}
+
+const makeRemoveItem = () => async ({ id }) => {
+  try {
+    const data = await fetchIt(`${host()}/api/contractors/${id}`, {
+      method: 'DELETE',
+    })
+    return data
+  } catch (err) {
+    console.error(err)
+  }
+}
+
+const makeFetchItems = () => async () => {
+  try {
+    const data = await fetchIt(`${host()}/api/contractors`, {
+      method: 'GET',
+    })
+    return data.items
+  } catch (err) {
+    console.error(err)
+  }
+}
+
+export default {
+  addItem: makeAddItem(),
+  fetchItems: makeFetchItems(),
+  removeItem: makeRemoveItem(),
+  updateItem: makeUpdateItem(),
+}

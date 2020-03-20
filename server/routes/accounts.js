@@ -1,8 +1,9 @@
 import express from 'express'
 import f from 'faker'
-import { checkSchema, validationResult } from 'express-validator'
+import { checkSchema } from 'express-validator'
 import * as utils from '../utils'
 
+const { checkErrors } = utils
 const router = express.Router()
 
 const schema = {
@@ -32,14 +33,6 @@ const fakeApis = {
 
 const allowedTypes = Object.keys(fakeApis)
 const allowedTypesStr = allowedTypes.map(s => `'${s}'`).join(', ')
-
-const checkErrors = (req, res, next) => {
-  const errors = validationResult(req)
-  if (!errors.isEmpty()) {
-    return res.status(422).json({ errors: errors.array() })
-  }
-  next()
-}
 
 router.use(function checkAccountType(req, res, next) {
   const type = req.query.accountType
@@ -71,13 +64,11 @@ router.post(
     },
   }),
   checkErrors,
-
   async (req, res, next) => {
     try {
       const type = req.query.type
       const item = await fakeApis[type].addItem(req.body)
       res.send(item)
-      res.send(null)
     } catch (err) {
       next(err)
     }
