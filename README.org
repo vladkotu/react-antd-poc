@@ -29,7 +29,7 @@ Executes server side code watcher in dev mode.
  
 ** NodeJs backend
 *** TODO [4/8] List
-    - [X] CRUD actions
+    - [X] CRUD actions ([[*Accounts][Accounts API Docs]])
     - [X] ES6 syntax
     - [X] Request validation/sanitation
       - [X] Single route validation
@@ -41,7 +41,6 @@ Executes server side code watcher in dev mode.
     - [ ] DynamoDB
 
 *** API docs
-
 **** Accounts
      :PROPERTIES:
      :header-args: :var API="http://localhost:5000/api"
