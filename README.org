@@ -1,200 +1,217 @@
 
-** Available Scripts
+* Proof of qualification repo
+  This project aim to proof knowledge of NodeJs/React stack
+** Start Scripts
+   See [[file:package.json][server package.json]] and [[file:client/package.json][client package.json]] "scripts" sections for details.
 
-In the project directory, you can run:
+#+begin_src sh
+yarn dev:all
+#+end_src
 
-*** `yarn start`
+Starts server modemon as well as client React app in development/watch mode.
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+#+begin_src sh
+yarn nodemon
+#+end_src
 
-*** `yarn test`
+Executes server side code watcher in dev mode.
 
-Launches the test runner in the interactive watch mode.
-
-** TODO [5/7] list:
+** TODO [6/9] List:
    1. [X] Use React Hooks for state management
    2. [X] Use [[https://ant.design/components/button/][Ant Design]]  components library
    3. [X] Implement reusable Editable list component for admin dashboard
    4. [ ] Sass styling
-   5. [X] Mock api calls but keep storage persistent
-   6. [X] Fake data with faker.js
-   7. [ ] Cover with tests
-
-
-   
-** API docs
-
-*** Accounts
-    :PROPERTIES:
-    :header-args: :var API="http://localhost:5000/api"
-    :END:
-    All accounts tested for "bookkeeping" type
-**** [C] Create account
-  #+NAME: create-account 
-  #+begin_src sh :results verbatim :exports both
-    curl -X POST -vs "${API}/accounts?type=bookkeeping&pretty" \
-         -H 'Content-Type: application/json' \
-         -d '{ "accNo": 111, "category": "Purchase", "vatPercent": 11, "vatCategoryS": "P", "accName": "One one one" }'
- #+end_src
-
-  #+RESULTS: create-account
-  : {
-  :   "accNo": 111,
-  :   "category": "Purchase",
-  :   "vatPercent": 11,
-  :   "vatCategoryS": "P",
-  :   "accName": "One one one",
-  :   "id": 968
-  : }
-
-***** Invalid request
-
-  #+NAME: create-account-invalid
-  #+begin_src sh :results verbatim :exports both
-    curl -X POST -vsi "${API}/accounts?type=bookkeeping&pretty" \
-         -H 'Content-Type: application/json' \
-         -d '{ "category": "Purchase" }'
- #+end_src
-
- #+RESULTS: create-account-invalid
- #+begin_example
- HTTP/1.1 422 Unprocessable Entity
- X-Powered-By: Express
- Content-Type: application/json; charset=utf-8
- Content-Length: 130
- ETag: W/"82-HHj2rmNjH457Bv9LJ8U88iWD1J8"
- Date: Thu, 19 Mar 2020 16:39:11 GMT
- Connection: keep-alive
+   5. [X] Mock api calls while developing
+   6. [ ] Integrate BE API
+   7. [X] Mock api data with faker.js
+   8. [X] Unit tests
+   9. [ ] Functional tests
  
- {
-   "errors": [
-     {
-       "msg": "account number should be number",
-       "param": "accNo",
-       "location": "body"
-     }
-   ]
- }
- #+end_example
+** NodeJs backend
+*** TODO [4/8] List
+    - [X] CRUD actions
+    - [X] ES6 syntax
+    - [X] Request validation/sanitation
+      - [X] Single route validation
+      - [X] Custom validation middleware
+    - [X] Error handling
+    - [ ] Unit tests
+    - [ ] Functional API tests
+    - [ ] Deploy to AWS (localstack)
+    - [ ] DynamoDB
 
-**** [R1] Get all accounts 
-   #+NAME: get-all-boo-accounts 
+*** API docs
+
+**** Accounts
+     :PROPERTIES:
+     :header-args: :var API="http://localhost:5000/api"
+     :END:
+     All accounts tested for "bookkeeping" type
+***** [C] Create account
+   #+NAME: create-account 
    #+begin_src sh :results verbatim :exports both
-     curl -vsi "${API}/accounts?type=bookkeeping&pretty&limit=2"
+     curl -X POST -vs "${API}/accounts?type=bookkeeping&pretty" \
+          -H 'Content-Type: application/json' \
+          -d '{ "accNo": 111, "category": "Purchase", "vatPercent": 11, "vatCategoryS": "P", "accName": "One one one" }'
   #+end_src
 
-  #+RESULTS: get-all-boo-accounts
+   #+RESULTS: create-account
+   : {
+   :   "accNo": 111,
+   :   "category": "Purchase",
+   :   "vatPercent": 11,
+   :   "vatCategoryS": "P",
+   :   "accName": "One one one",
+   :   "id": 968
+   : }
+
+****** Invalid request
+
+   #+NAME: create-account-invalid
+   #+begin_src sh :results verbatim :exports both
+     curl -X POST -vsi "${API}/accounts?type=bookkeeping&pretty" \
+          -H 'Content-Type: application/json' \
+          -d '{ "category": "Purchase" }'
+  #+end_src
+
+  #+RESULTS: create-account-invalid
   #+begin_example
-  HTTP/1.1 200 OK
+  HTTP/1.1 422 Unprocessable Entity
   X-Powered-By: Express
   Content-Type: application/json; charset=utf-8
-  Content-Length: 462
-  ETag: W/"1ce-53pljYKpmW/QIkcNvkL9YUeiaDw"
-  Date: Thu, 19 Mar 2020 15:30:04 GMT
+  Content-Length: 130
+  ETag: W/"82-HHj2rmNjH457Bv9LJ8U88iWD1J8"
+  Date: Thu, 19 Mar 2020 16:39:11 GMT
   Connection: keep-alive
-  
+ 
   {
-    "count": 6,
-    "limit": "2",
-    "items": [
+    "errors": [
       {
-        "accNo": 111,
-        "category": "Purchase",
-        "vatPercent": 111,
-        "vatCategoryS": "P",
-        "accName": "One One One",
-        "id": 968
-      },
-      {
-        "id": 15,
-        "accNo": 98,
-        "category": "Sales",
-        "vatPercent": 55,
-        "vatCategoryS": "S",
-        "accName": "Senior generate calculate",
-        "extRevenuClass": null,
-        "extTaxCode": null,
-        "comment": null
+        "msg": "account number should be number",
+        "param": "accNo",
+        "location": "body"
       }
     ]
   }
   #+end_example
 
-**** [R2] Get single account  
-   #+NAME: get-one-boo-accounts 
+***** [R1] Get all accounts 
+    #+NAME: get-all-boo-accounts 
+    #+begin_src sh :results verbatim :exports both
+      curl -vsi "${API}/accounts?type=bookkeeping&pretty&limit=2"
+   #+end_src
+
+   #+RESULTS: get-all-boo-accounts
+   #+begin_example
+   HTTP/1.1 200 OK
+   X-Powered-By: Express
+   Content-Type: application/json; charset=utf-8
+   Content-Length: 462
+   ETag: W/"1ce-53pljYKpmW/QIkcNvkL9YUeiaDw"
+   Date: Thu, 19 Mar 2020 15:30:04 GMT
+   Connection: keep-alive
+  
+   {
+     "count": 6,
+     "limit": "2",
+     "items": [
+       {
+         "accNo": 111,
+         "category": "Purchase",
+         "vatPercent": 111,
+         "vatCategoryS": "P",
+         "accName": "One One One",
+         "id": 968
+       },
+       {
+         "id": 15,
+         "accNo": 98,
+         "category": "Sales",
+         "vatPercent": 55,
+         "vatCategoryS": "S",
+         "accName": "Senior generate calculate",
+         "extRevenuClass": null,
+         "extTaxCode": null,
+         "comment": null
+       }
+     ]
+   }
+   #+end_example
+
+***** [R2] Get single account  
+    #+NAME: get-one-boo-accounts 
+    #+begin_src sh :results verbatim :exports both
+      curl -vsi "${API}/accounts/968/?type=bookkeeping&pretty"
+   #+end_src
+
+   #+RESULTS: get-one-boo-accounts
+   #+begin_example
+   HTTP/1.1 200 OK
+   X-Powered-By: Express
+   Content-Type: application/json; charset=utf-8
+   Content-Length: 128
+   ETag: W/"80-/zcS/dOXmo/QZGY78nkBimKf6d4"
+   Date: Thu, 19 Mar 2020 15:23:48 GMT
+   Connection: keep-alive
+  
+   {
+     "accNo": 111,
+     "category": "Purchase",
+     "vatPercent": 11,
+     "vatCategoryS": "P",
+     "accName": "One one one",
+     "id": 968
+   }
+   #+end_example
+
+***** [U] Update account
+   #+NAME: update-account 
    #+begin_src sh :results verbatim :exports both
-     curl -vsi "${API}/accounts/968/?type=bookkeeping&pretty"
+     curl -X PUT -vs "${API}/accounts/968/?type=bookkeeping&pretty" \
+          -H 'Content-Type: application/json' \
+          -d '{ "vatPercent": 111, "accName": "One One One" }'
   #+end_src
 
-  #+RESULTS: get-one-boo-accounts
+  #+RESULTS: update-account
+  : {
+  :   "accNo": 111,
+  :   "category": "Purchase",
+  :   "vatPercent": 111,
+  :   "vatCategoryS": "P",
+  :   "accName": "One One One",
+  :   "id": 968
+  : }
+
+****** Invalid request
+
+   #+NAME: update-account-invalid 
+   #+begin_src sh :results verbatim :exports both
+     curl -X PUT -vs "${API}/accounts/?type=bookkeeping&pretty" \
+          -H 'Content-Type: application/json' \
+          -d '{ "vatPercent": 111, "accName": "One One One" }'
+  #+end_src
+
+  #+RESULTS: update-account-invalid
   #+begin_example
-  HTTP/1.1 200 OK
-  X-Powered-By: Express
-  Content-Type: application/json; charset=utf-8
-  Content-Length: 128
-  ETag: W/"80-/zcS/dOXmo/QZGY78nkBimKf6d4"
-  Date: Thu, 19 Mar 2020 15:23:48 GMT
-  Connection: keep-alive
-  
-  {
-    "accNo": 111,
-    "category": "Purchase",
-    "vatPercent": 11,
-    "vatCategoryS": "P",
-    "accName": "One one one",
-    "id": 968
-  }
+  <!DOCTYPE html>
+  <html lang="en">
+  <head>
+  <meta charset="utf-8">
+  <title>Error</title>
+  </head>
+  <body>
+  <pre>Cannot PUT /api/accounts/</pre>
+  </body>
+  </html>
   #+end_example
 
-**** [U] Update account
-  #+NAME: update-account 
-  #+begin_src sh :results verbatim :exports both
-    curl -X PUT -vs "${API}/accounts/968/?type=bookkeeping&pretty" \
-         -H 'Content-Type: application/json' \
-         -d '{ "vatPercent": 111, "accName": "One One One" }'
- #+end_src
+***** [D] Delete account
+   #+NAME: delete-account 
+   #+begin_src sh :results verbatim :exports both
+     curl -X DELETE -vs "${API}/accounts/968/?type=bookkeeping&pretty"
+  #+end_src
 
- #+RESULTS: update-account
- : {
- :   "accNo": 111,
- :   "category": "Purchase",
- :   "vatPercent": 111,
- :   "vatCategoryS": "P",
- :   "accName": "One One One",
- :   "id": 968
- : }
-
-***** Invalid request
-
-  #+NAME: update-account-invalid 
-  #+begin_src sh :results verbatim :exports both
-    curl -X PUT -vs "${API}/accounts/?type=bookkeeping&pretty" \
-         -H 'Content-Type: application/json' \
-         -d '{ "vatPercent": 111, "accName": "One One One" }'
- #+end_src
-
- #+RESULTS: update-account-invalid
- #+begin_example
- <!DOCTYPE html>
- <html lang="en">
- <head>
- <meta charset="utf-8">
- <title>Error</title>
- </head>
- <body>
- <pre>Cannot PUT /api/accounts/</pre>
- </body>
- </html>
- #+end_example
-
-**** [D] Delete account
-  #+NAME: delete-account 
-  #+begin_src sh :results verbatim :exports both
-    curl -X DELETE -vs "${API}/accounts/968/?type=bookkeeping&pretty"
- #+end_src
-
- #+RESULTS: delete-account
- : {
- :   "ok": true
- : }
+  #+RESULTS: delete-account
+  : {
+  :   "ok": true
+  : }
