@@ -1,4 +1,4 @@
 
-export const BOOKEE = 'bookk'
-export const DEFACC = 'defacc'
+export const BOOKEE = 'bookkeeping'
+export const DEFACC = 'default'
 export const CONTRA = 'contra'

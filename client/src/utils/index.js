@@ -68,3 +68,5 @@ export const makeFakeApi = (ctx, schema) => ({
   updateItem: makeUpdateItem(ctx),
   removeItem: makeRemoveItem(ctx),
 })
+
+export { default as fetchIt } from './fetchIt'
