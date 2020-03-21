@@ -38,6 +38,7 @@ function EditableList({
         )}
         <List
           dataSource={items}
+          pagination={items.length > 10}
           renderItem={item => (
             <List.Item>
               <Row>

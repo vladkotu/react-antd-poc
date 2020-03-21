@@ -1,26 +1,70 @@
-import f from 'faker'
-import { makeFakeApi } from '../utils'
+import { fetchIt } from '../utils'
 import { BOOKEE, DEFACC } from '../constants'
 
-const schema = {
-  id: { faker: 'random.number({"min": 10, "max": 100})' },
-  accNo: { faker: 'random.number({"min": 10, "max": 100})' },
-  category: {
-    function: () => f.random.arrayElement(['Sales', 'Purchase']),
-  },
-  vatPercent: { faker: 'random.number({"min": 1, "max": 100})' },
-  vatCategoryS: {
-    function: function() {
-      return this.object.category.substr(0, 1)
-    },
-  },
-  accName: { faker: 'random.words' },
-  extRevenuClass: { static: null },
-  extTaxCode: { static: null },
-  comment: { static: null },
+const host = () => `${document.location.protocol}//${document.location.host}`
+
+const makeAddItem = type => async item => {
+  try {
+    const data = await fetchIt(`${host()}/api/accounts`, {
+      method: 'POST',
+      searchParams: { type },
+      body: JSON.stringify(item),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+    return data
+  } catch (err) {
+    console.error(err)
+  }
+}
+const makeUpdateItem = type => async item => {
+  try {
+    const data = await fetchIt(`${host()}/api/accounts/${item.id}`, {
+      method: 'PUT',
+      searchParams: { type },
+      body: JSON.stringify(item),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+    return data
+  } catch (err) {
+    console.error(err)
+  }
+}
+const makeRemoveItem = type => async ({ id }) => {
+  try {
+    const data = await fetchIt(`${host()}/api/accounts/${id}`, {
+      method: 'DELETE',
+      searchParams: { type },
+    })
+    return data
+  } catch (err) {
+    console.error(err)
+  }
 }
 
+const makeFetchItems = type => async n => {
+  try {
+    const data = await fetchIt(`${host()}/api/accounts`, {
+      method: 'GET',
+      searchParams: { type, limit: n || 5 },
+    })
+    return data.items
+  } catch (err) {
+    console.error(err)
+  }
+}
+
+const makeApi = ctx => ({
+  addItem: makeAddItem(ctx),
+  fetchItems: makeFetchItems(ctx),
+  removeItem: makeRemoveItem(ctx),
+  updateItem: makeUpdateItem(ctx),
+})
+
 export default {
-  [BOOKEE]: makeFakeApi('bookkeepingAccounts', schema),
-  [DEFACC]: makeFakeApi('defaultAccounts', schema),
+  [BOOKEE]: makeApi(BOOKEE),
+  [DEFACC]: makeApi(DEFACC),
 }

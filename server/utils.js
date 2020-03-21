@@ -1,6 +1,7 @@
 import mocker from 'mocker-data-generator'
 import f from 'faker'
 import localStorage from 'node-persist'
+import { validationResult } from 'express-validator'
 
 export const randomNumBut = (from, to, exclude = [], retries = 10) => {
   const id = f.random.number({ min: from, max: to })
@@ -62,6 +63,14 @@ export const makeFakeApi = (ctx, schema) => ({
   updateItem: makeUpdateItem(ctx),
   removeItem: makeRemoveItem(ctx),
 })
+
+export const checkErrors = (req, res, next) => {
+  const errors = validationResult(req)
+  if (!errors.isEmpty()) {
+    return res.status(422).json({ errors: errors.array() })
+  }
+  next()
+}
 ;(async function init() {
   await localStorage.init()
 })()

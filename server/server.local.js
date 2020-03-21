@@ -2,31 +2,15 @@
 
 import debugF from 'debug'
 import http from 'http'
-import express from 'express'
-import path from 'path'
-import cookieParser from 'cookie-parser'
-import logger from 'morgan'
-import pretty from 'express-prettify'
-
-import indexRouter from './routes/index'
+import app from './app'
 
 const debug = debugF('server:server')
 const port = normalizePort(process.env.PORT || '3000')
-const app = express()
 
-app.use(pretty({ query: 'pretty' }))
-app.use(logger('dev'))
-app.use(express.json())
-app.use(express.urlencoded({ extended: false }))
-app.use(cookieParser())
-
-// shold be enabled only for prod build
-app.use(express.static(path.join(__dirname, '../client/build')))
-
-app.use('/api', indexRouter)
 app.set('port', port)
 
 const server = http.createServer(app)
+
 server.listen(port)
 server.on('error', onError)
 server.on('listening', onListening)

@@ -68,3 +68,8 @@ export const makeFakeApi = (ctx, schema) => ({
   updateItem: makeUpdateItem(ctx),
   removeItem: makeRemoveItem(ctx),
 })
+
+export const host = () =>
+  `${document.location.protocol}//${document.location.host}`
+
+export { default as fetchIt } from './fetchIt'
