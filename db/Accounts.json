@@ -1,0 +1,53 @@
+{
+  "TableName": "Accounts",
+
+  "AttributeDefinitions": [
+    {
+      "AttributeName": "id",
+      "AttributeType": "S"
+    },
+    {
+      "AttributeName": "createdDateTime",
+      "AttributeType": "S"
+    },
+    {
+      "AttributeName": "accName",
+      "AttributeType": "S"
+    }
+  ],
+
+  "KeySchema": [
+    {
+      "AttributeName": "id",
+      "KeyType": "HASH"
+    },
+    {
+      "AttributeName": "createdDateTime",
+      "KeyType": "RANGE"
+    }
+  ],
+
+  "ProvisionedThroughput": {
+    "ReadCapacityUnits": 1,
+    "WriteCapacityUnits": 1
+  },
+
+  "GlobalSecondaryIndexes": [
+    {
+      "IndexName": "accName",
+      "KeySchema": [
+        {
+          "AttributeName": "accName",
+          "KeyType": "HASH"
+        }
+      ],
+      "Projection": {
+        "ProjectionType": "ALL"
+      },
+      "ProvisionedThroughput": {
+        "ReadCapacityUnits": 1,
+        "WriteCapacityUnits": 1
+      }
+    }
+  ]
+}

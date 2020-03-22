@@ -15,17 +15,17 @@ yarn nodemon
 #+end_src
 
 Executes server side code watcher in dev mode.
-
-** TODO [6/9] List:
-   1. [X] Use React Hooks for state management
-   2. [X] Use [[https://ant.design/components/button/][Ant Design]]  components library
-   3. [X] Implement reusable Editable list component for admin dashboard
-   4. [ ] Sass styling
-   5. [X] Mock api calls while developing
-   6. [ ] Integrate BE API
-   7. [X] Mock api data with faker.js
-   8. [X] Unit tests
-   9. [ ] Functional tests
+** React(Hooks) front-end
+*** TODO [6/9] List:
+    1. [X] Use React Hooks for state management
+    2. [X] Use [[https://ant.design/components/button/][Ant Design]]  components library
+    3. [X] Implement reusable Editable list component for admin dashboard
+    4. [ ] Sass styling
+    5. [X] Mock api calls while developing
+    6. [ ] Integrate BE API
+    7. [X] Mock api data with faker.js
+    8. [X] Unit tests
+    9. [ ] Functional tests
  
 ** NodeJs backend
 *** TODO [4/8] List
@@ -214,3 +214,159 @@ Executes server side code watcher in dev mode.
   : {
   :   "ok": true
   : }
+
+  
+
+** aws scripts
+
+*** Manage DynamoDB from cli
+   
+**** Create accounts table
+     Generate json shema for DynamoDB table:
+  #+begin_src sh :results output :eval never-export :exports both
+    aws dynamodb create-table --generate-cli-skeleton > ./db/table-shema.json
+  #+end_src
+
+  #+NAME: delete-table
+  #+begin_src sh :results silent :eval never-export :exports both
+   aws --endpoint-url http://localhost:4569 \
+       dynamodb delete-table \
+       --table-name Accounts
+  #+end_src
+
+
+  #+NAME: create-table
+  #+begin_src sh :results output org :eval never-export :exports both
+   aws --endpoint-url http://localhost:4569 \
+       dynamodb create-table \
+       --cli-input-json file://db/accounts.json
+  #+end_src
+
+  #+RESULTS: create-table
+  #+begin_src json
+  {
+      "TableDescription": {
+          "TableArn": "arn:aws:dynamodb:us-east-1:000000000000:table/Accounts", 
+          "AttributeDefinitions": [
+              {
+                  "AttributeName": "id", 
+                  "AttributeType": "S"
+              }, 
+              {
+                  "AttributeName": "createdDateTime", 
+                  "AttributeType": "S"
+              }, 
+              {
+                  "AttributeName": "accName", 
+                  "AttributeType": "S"
+              }
+          ], 
+          "GlobalSecondaryIndexes": [
+              {
+                  "IndexSizeBytes": 0, 
+                  "IndexName": "accName", 
+                  "Projection": {
+                      "ProjectionType": "ALL"
+                  }, 
+                  "ProvisionedThroughput": {
+                      "WriteCapacityUnits": 1, 
+                      "ReadCapacityUnits": 1
+                  }, 
+                  "IndexStatus": "ACTIVE", 
+                  "KeySchema": [
+                      {
+                          "KeyType": "HASH", 
+                          "AttributeName": "accName"
+                      }
+                  ], 
+                  "IndexArn": "arn:aws:dynamodb:ddblocal:000000000000:table/Accounts/index/accName", 
+                  "ItemCount": 0
+              }
+          ], 
+          "ProvisionedThroughput": {
+              "NumberOfDecreasesToday": 0, 
+              "WriteCapacityUnits": 1, 
+              "LastIncreaseDateTime": 0.0, 
+              "ReadCapacityUnits": 1, 
+              "LastDecreaseDateTime": 0.0
+          }, 
+          "TableSizeBytes": 0, 
+          "TableName": "Accounts", 
+          "BillingModeSummary": {
+              "LastUpdateToPayPerRequestDateTime": 0.0, 
+              "BillingMode": "PROVISIONED"
+          }, 
+          "TableStatus": "ACTIVE", 
+          "KeySchema": [
+              {
+                  "KeyType": "HASH", 
+                  "AttributeName": "id"
+              }, 
+              {
+                  "KeyType": "RANGE", 
+                  "AttributeName": "createdDateTime"
+              }
+          ], 
+          "ItemCount": 0, 
+          "CreationDateTime": 1584882857.583
+      }
+  }
+  #+end_src
+
+ #+begin_src sh :results output org :eval never-export :exports both
+   aws --endpoint-url http://localhost:4569 \
+       dynamodb list-tables
+ #+end_src
+
+ #+RESULTS:
+ #+begin_src org
+ {
+     "TableNames": [
+         "Accounts"
+     ]
+ }
+ #+end_src
+
+**** Seed accounts with test data
+
+
+*** [Failed] [4/6] Attempt to create stack from cloud formation config on localstack env
+    - [X] Use aws-serverless-express custom server for lambda env
+    - [X] Mock aws infrastructure locally, using lockalstack
+    - [X] Refactor express server to be able to run it locally without deployment on lambda
+    - [X] Crete cloud formation template for s3 SPA hosting
+    - [ ] [Failed] Deploy express app to labmda
+          lockalstack problems appear on execution cloud formation template
+    - [ ] Decouple client code from beckend code 
+    - [ ] API Gatewat setup
+
+    
+ List of cloud formation stacks
+ #+NAME: end-point-list
+ #+begin_src sh :results output :eval never-export :exports both
+   aws --endpoint-url=http://localhost:4581 cloudformation list-stacks
+ #+end_src
+
+ #+RESULTS: end-point-list
+ : /Users/vladimir/projects/react-examples/rhooks-form-app
+ : {
+ :     "StackSummaries": []
+ : }
+
+ #+begin_src sh :results output :eval never-export :exports both
+ aws cloudformation create-stack \
+     --template-body file://cloudformation.yml \
+     --stack-name web-stack \
+     --endpoint-url=http://localhost:4581
+ #+end_src
+
+ #+RESULTS:
+ : An error occurred (502) when calling the CreateStack operation (reached max retries: 4): Bad Gateway
+
+ Error log from docker:
+ #+RESULTS:
+ : local_aws     |   File "/opt/code/localstack/.venv/lib/python3.8/site-packages/moto/cloudformation/utils.py", line 61, in yaml_tag_constructor
+ : local_aws     |     return {key: _f(loader, tag, node)}
+ : local_aws     |   File "/opt/code/localstack/.venv/lib/python3.8/site-packages/moto/cloudformation/utils.py", line 50, in _f
+ : local_aws     |     return node.value.split(".")
+ : local_aws     | AttributeError: 'list' object has no attribute 'split'
