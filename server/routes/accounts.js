@@ -18,10 +18,7 @@ const allowedTypes = Object.keys(fakeApis)
 const allowedTypesStr = allowedTypes.map(s => `'${s}'`).join(', ')
 
 router.use(function checkAccountType(req, res, next) {
-  const type = req.query.accountType
-  if (!type) {
-    return next()
-  }
+  const type = req.query.type
   if (!allowedTypes.includes(type)) {
     const err = new Error(
       `'accountType' param should have one of ${allowedTypesStr} values`

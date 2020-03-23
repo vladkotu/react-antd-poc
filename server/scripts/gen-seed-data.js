@@ -18,15 +18,11 @@ async function genData(ctx, schema, n) {
     }))
 }
 
-;(async function() {
+export async function genStoreSeedData() {
   Object.entries(schemas).forEach(async ([ctx, schema]) => {
-    console.log(ctx)
-    if (isEmptyObj(schema)) {
-      return
-    }
-    const fdata = await genData(ctx, schema, 25)
+    const fdata = await genData(ctx, schema, 5)
     const json = JSON.stringify(fdata, null, '  ')
     const fpath = path.join(__dirname, '../../db/', `${ctx}-seed.json`)
     await fs.writeFile(fpath, json, { flag: 'w' })
   })
-})()
+}

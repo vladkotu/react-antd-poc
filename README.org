@@ -64,7 +64,7 @@ Executes server side code watcher in dev mode.
    :   "vatPercent": 11,
    :   "vatCategoryS": "P",
    :   "accName": "One one one",
-   :   "id": 968
+   :   "id": 305
    : }
 
 ****** Invalid request

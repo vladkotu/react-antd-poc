@@ -3,6 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
+    "test": "jest",
     "lint": "eslint server/**/*.js",
     "format": "prettier-eslint --write $PWD/'server/**/*.js'",
     "client": "cd client && yarn start",
@@ -35,6 +36,13 @@
       "*.spec.js"
     ]
   },
+  "jest": {
+    "testEnvironment": "node",
+    "coveragePathIgnorePatterns": [
+      "/node_modules/",
+      "/client"
+    ]
+  },
   "dependencies": {
     "aws-sdk": "^2.643.0",
     "aws-serverless-express": "^3.3.6",
@@ -57,10 +65,12 @@
     "eslint": "^6.8.0",
     "eslint-config-prettier": "^6.10.0",
     "eslint-plugin-prettier": "^3.1.2",
+    "jest": "^25.1.0",
     "nodemon": "^2.0.2",
     "npm-run-all": "^4.1.5",
     "prettier": "^1.19.1",
     "prettier-eslint": "^9.0.1",
-    "prettier-eslint-cli": "^5.0.0"
+    "prettier-eslint-cli": "^5.0.0",
+    "supertest": "^4.0.2"
   }
 }
