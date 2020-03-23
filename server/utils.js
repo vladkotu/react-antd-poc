@@ -92,6 +92,9 @@ export function randomDate(start, end) {
   )
 }
 
+export const oneOf = opts => () => f.random.arrayElement(opts)
+export const randomDateFrom = (y, m, d) => () =>
+  randomDate(new Date(y, m, d), new Date()).getTime()
 ;(async function init() {
   await localStorage.init()
 })()

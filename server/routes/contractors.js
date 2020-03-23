@@ -1,21 +1,10 @@
 import express from 'express'
-import f from 'faker'
 import { checkSchema } from 'express-validator'
+import schema from '../schemas/contractors'
 import * as utils from '../utils'
 
 const { checkErrors } = utils
 const router = express.Router()
-
-const schema = {
-  id: { faker: 'random.number({"min": 10, "max": 100})' },
-  role: {
-    function: () =>
-      f.random.arrayElement(['Sales', 'Developer', 'Tech Lead', 'Assistant']),
-  },
-  salary: { faker: 'random.number({"min": 10000, "max": 100000})' },
-  fname: { faker: 'name.firstName' },
-  lname: { faker: 'name.lastName' },
-}
 
 const commonValidationSchema = {
   role: {

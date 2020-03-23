@@ -1,10 +1,6 @@
 import f from 'faker'
 import { v1 as uuidv1 } from 'uuid'
-import { randomDate, titleCase } from '../utils'
-
-const oneOf = opts => () => f.random.arrayElement(opts)
-const randomDateFrom = (y, m, d) => () =>
-  randomDate(new Date(y, m, d), new Date()).getTime()
+import { titleCase, oneOf, randomDateFrom } from '../utils'
 
 const schema = {
   id: { function: uuidv1 },
