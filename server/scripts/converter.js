@@ -2,15 +2,8 @@ import mocker from 'mocker-data-generator'
 import AWS from 'aws-sdk'
 import { promises as fs } from 'fs'
 import * as path from 'path'
-import { isEmptyObj } from '../utils'
+import { stripEmptyAttrs, isEmptyObj } from '../utils'
 import * as schemas from '../schemas'
-
-function stripEmptyAttrs(o) {
-  const filtered = Object.entries(o).filter(([k, v]) => {
-    return null !== v && undefined !== v && v
-  })
-  return Object.fromEntries(filtered)
-}
 
 async function genData(ctx, schema, n) {
   return mocker()
@@ -27,6 +20,7 @@ async function genData(ctx, schema, n) {
 
 ;(async function() {
   Object.entries(schemas).forEach(async ([ctx, schema]) => {
+    console.log(ctx)
     if (isEmptyObj(schema)) {
       return
     }

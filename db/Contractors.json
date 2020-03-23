@@ -1,0 +1,30 @@
+{
+  "TableName": "Contractors",
+
+  "AttributeDefinitions": [
+    {
+      "AttributeName": "id",
+      "AttributeType": "S"
+    },
+    {
+      "AttributeName": "createdDateTime",
+      "AttributeType": "N"
+    }
+  ],
+
+  "KeySchema": [
+    {
+      "AttributeName": "id",
+      "KeyType": "HASH"
+    },
+    {
+      "AttributeName": "createdDateTime",
+      "KeyType": "RANGE"
+    }
+  ],
+
+  "ProvisionedThroughput": {
+    "ReadCapacityUnits": 1,
+    "WriteCapacityUnits": 1
+  }
+}

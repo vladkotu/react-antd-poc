@@ -92,6 +92,13 @@ export function randomDate(start, end) {
   )
 }
 
+export function stripEmptyAttrs(o) {
+  const filtered = Object.entries(o).filter(([k, v]) => {
+    return null !== v && undefined !== v && v
+  })
+  return Object.fromEntries(filtered)
+}
+
 export const oneOf = opts => () => f.random.arrayElement(opts)
 export const randomDateFrom = (y, m, d) => () =>
   randomDate(new Date(y, m, d), new Date()).getTime()

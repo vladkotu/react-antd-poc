@@ -1,0 +1,604 @@
+{
+  "Contractors": [
+    {
+      "PutRequest": {
+        "Item": {
+          "id": {
+            "S": "51c17843-6d26-11ea-b66b-eddefd31ba92"
+          },
+          "role": {
+            "S": "Sales"
+          },
+          "createdDateTime": {
+            "N": "1449744941921"
+          },
+          "salary": {
+            "N": "81967"
+          },
+          "fname": {
+            "S": "Margarita"
+          },
+          "lname": {
+            "S": "Fahey"
+          }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "id": {
+            "S": "51c17844-6d26-11ea-b66b-eddefd31ba92"
+          },
+          "role": {
+            "S": "Assistant"
+          },
+          "createdDateTime": {
+            "N": "1444676059013"
+          },
+          "salary": {
+            "N": "77244"
+          },
+          "fname": {
+            "S": "Joan"
+          },
+          "lname": {
+            "S": "Auer"
+          }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "id": {
+            "S": "51c17845-6d26-11ea-b66b-eddefd31ba92"
+          },
+          "role": {
+            "S": "Assistant"
+          },
+          "createdDateTime": {
+            "N": "1354675012319"
+          },
+          "salary": {
+            "N": "97083"
+          },
+          "fname": {
+            "S": "Emmet"
+          },
+          "lname": {
+            "S": "Jones"
+          }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "id": {
+            "S": "51c17846-6d26-11ea-b66b-eddefd31ba92"
+          },
+          "role": {
+            "S": "Tech Lead"
+          },
+          "createdDateTime": {
+            "N": "1499779210357"
+          },
+          "salary": {
+            "N": "53926"
+          },
+          "fname": {
+            "S": "Gerald"
+          },
+          "lname": {
+            "S": "Goldner"
+          }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "id": {
+            "S": "51c19f50-6d26-11ea-b66b-eddefd31ba92"
+          },
+          "role": {
+            "S": "Assistant"
+          },
+          "createdDateTime": {
+            "N": "1500722557137"
+          },
+          "salary": {
+            "N": "45689"
+          },
+          "fname": {
+            "S": "Mallory"
+          },
+          "lname": {
+            "S": "Jenkins"
+          }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "id": {
+            "S": "51c19f51-6d26-11ea-b66b-eddefd31ba92"
+          },
+          "role": {
+            "S": "Developer"
+          },
+          "createdDateTime": {
+            "N": "1421017497317"
+          },
+          "salary": {
+            "N": "71322"
+          },
+          "fname": {
+            "S": "Raoul"
+          },
+          "lname": {
+            "S": "Maggio"
+          }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "id": {
+            "S": "51c19f52-6d26-11ea-b66b-eddefd31ba92"
+          },
+          "role": {
+            "S": "Assistant"
+          },
+          "createdDateTime": {
+            "N": "1495370700595"
+          },
+          "salary": {
+            "N": "50684"
+          },
+          "fname": {
+            "S": "Percy"
+          },
+          "lname": {
+            "S": "O'Keefe"
+          }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "id": {
+            "S": "51c19f53-6d26-11ea-b66b-eddefd31ba92"
+          },
+          "role": {
+            "S": "Developer"
+          },
+          "createdDateTime": {
+            "N": "1423669374435"
+          },
+          "salary": {
+            "N": "78788"
+          },
+          "fname": {
+            "S": "Sarai"
+          },
+          "lname": {
+            "S": "Mills"
+          }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "id": {
+            "S": "51c19f54-6d26-11ea-b66b-eddefd31ba92"
+          },
+          "role": {
+            "S": "Assistant"
+          },
+          "createdDateTime": {
+            "N": "1406430565612"
+          },
+          "salary": {
+            "N": "19993"
+          },
+          "fname": {
+            "S": "Anita"
+          },
+          "lname": {
+            "S": "Altenwerth"
+          }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "id": {
+            "S": "51c19f55-6d26-11ea-b66b-eddefd31ba92"
+          },
+          "role": {
+            "S": "Sales"
+          },
+          "createdDateTime": {
+            "N": "1380095474792"
+          },
+          "salary": {
+            "N": "87355"
+          },
+          "fname": {
+            "S": "Elinor"
+          },
+          "lname": {
+            "S": "Vandervort"
+          }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "id": {
+            "S": "51c19f56-6d26-11ea-b66b-eddefd31ba92"
+          },
+          "role": {
+            "S": "Developer"
+          },
+          "createdDateTime": {
+            "N": "1346619080647"
+          },
+          "salary": {
+            "N": "47731"
+          },
+          "fname": {
+            "S": "Terrance"
+          },
+          "lname": {
+            "S": "Nader"
+          }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "id": {
+            "S": "51c19f57-6d26-11ea-b66b-eddefd31ba92"
+          },
+          "role": {
+            "S": "Sales"
+          },
+          "createdDateTime": {
+            "N": "1472832684461"
+          },
+          "salary": {
+            "N": "82652"
+          },
+          "fname": {
+            "S": "Amber"
+          },
+          "lname": {
+            "S": "D'Amore"
+          }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "id": {
+            "S": "51c19f58-6d26-11ea-b66b-eddefd31ba92"
+          },
+          "role": {
+            "S": "Developer"
+          },
+          "createdDateTime": {
+            "N": "1354007411150"
+          },
+          "salary": {
+            "N": "39619"
+          },
+          "fname": {
+            "S": "Elinor"
+          },
+          "lname": {
+            "S": "Olson"
+          }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "id": {
+            "S": "51c19f59-6d26-11ea-b66b-eddefd31ba92"
+          },
+          "role": {
+            "S": "Tech Lead"
+          },
+          "createdDateTime": {
+            "N": "1455670145523"
+          },
+          "salary": {
+            "N": "60251"
+          },
+          "fname": {
+            "S": "Zane"
+          },
+          "lname": {
+            "S": "Lowe"
+          }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "id": {
+            "S": "51c19f5a-6d26-11ea-b66b-eddefd31ba92"
+          },
+          "role": {
+            "S": "Sales"
+          },
+          "createdDateTime": {
+            "N": "1478419673270"
+          },
+          "salary": {
+            "N": "42738"
+          },
+          "fname": {
+            "S": "Jaylin"
+          },
+          "lname": {
+            "S": "Vandervort"
+          }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "id": {
+            "S": "51c19f5b-6d26-11ea-b66b-eddefd31ba92"
+          },
+          "role": {
+            "S": "Assistant"
+          },
+          "createdDateTime": {
+            "N": "1433738966604"
+          },
+          "salary": {
+            "N": "36396"
+          },
+          "fname": {
+            "S": "Rico"
+          },
+          "lname": {
+            "S": "Luettgen"
+          }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "id": {
+            "S": "51c19f5c-6d26-11ea-b66b-eddefd31ba92"
+          },
+          "role": {
+            "S": "Sales"
+          },
+          "createdDateTime": {
+            "N": "1405647608992"
+          },
+          "salary": {
+            "N": "60530"
+          },
+          "fname": {
+            "S": "Maryjane"
+          },
+          "lname": {
+            "S": "Lang"
+          }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "id": {
+            "S": "51c19f5d-6d26-11ea-b66b-eddefd31ba92"
+          },
+          "role": {
+            "S": "Assistant"
+          },
+          "createdDateTime": {
+            "N": "1377785583862"
+          },
+          "salary": {
+            "N": "44338"
+          },
+          "fname": {
+            "S": "Uriel"
+          },
+          "lname": {
+            "S": "Anderson"
+          }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "id": {
+            "S": "51c19f5e-6d26-11ea-b66b-eddefd31ba92"
+          },
+          "role": {
+            "S": "Tech Lead"
+          },
+          "createdDateTime": {
+            "N": "1536377153204"
+          },
+          "salary": {
+            "N": "48589"
+          },
+          "fname": {
+            "S": "Edison"
+          },
+          "lname": {
+            "S": "Armstrong"
+          }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "id": {
+            "S": "51c19f5f-6d26-11ea-b66b-eddefd31ba92"
+          },
+          "role": {
+            "S": "Tech Lead"
+          },
+          "createdDateTime": {
+            "N": "1443433905125"
+          },
+          "salary": {
+            "N": "18181"
+          },
+          "fname": {
+            "S": "Pierre"
+          },
+          "lname": {
+            "S": "Rath"
+          }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "id": {
+            "S": "51c19f60-6d26-11ea-b66b-eddefd31ba92"
+          },
+          "role": {
+            "S": "Sales"
+          },
+          "createdDateTime": {
+            "N": "1397359714325"
+          },
+          "salary": {
+            "N": "68400"
+          },
+          "fname": {
+            "S": "Yazmin"
+          },
+          "lname": {
+            "S": "Barton"
+          }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "id": {
+            "S": "51c19f61-6d26-11ea-b66b-eddefd31ba92"
+          },
+          "role": {
+            "S": "Sales"
+          },
+          "createdDateTime": {
+            "N": "1431022442088"
+          },
+          "salary": {
+            "N": "52651"
+          },
+          "fname": {
+            "S": "Aron"
+          },
+          "lname": {
+            "S": "Simonis"
+          }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "id": {
+            "S": "51c19f62-6d26-11ea-b66b-eddefd31ba92"
+          },
+          "role": {
+            "S": "Developer"
+          },
+          "createdDateTime": {
+            "N": "1354085419420"
+          },
+          "salary": {
+            "N": "10199"
+          },
+          "fname": {
+            "S": "Catalina"
+          },
+          "lname": {
+            "S": "McClure"
+          }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "id": {
+            "S": "51c19f63-6d26-11ea-b66b-eddefd31ba92"
+          },
+          "role": {
+            "S": "Tech Lead"
+          },
+          "createdDateTime": {
+            "N": "1459330865048"
+          },
+          "salary": {
+            "N": "53424"
+          },
+          "fname": {
+            "S": "Robert"
+          },
+          "lname": {
+            "S": "Gorczany"
+          }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "id": {
+            "S": "51c19f64-6d26-11ea-b66b-eddefd31ba92"
+          },
+          "role": {
+            "S": "Tech Lead"
+          },
+          "createdDateTime": {
+            "N": "1472427643486"
+          },
+          "salary": {
+            "N": "29267"
+          },
+          "fname": {
+            "S": "Reilly"
+          },
+          "lname": {
+            "S": "Bradtke"
+          }
+        }
+      }
+    }
+  ]
+}
