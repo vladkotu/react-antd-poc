@@ -361,6 +361,92 @@ Executes server side code watcher in dev mode.
  :     "UnprocessedItems": {}
  : }
 
+ Unfortunately =batch-write-item= limited to 25 operations
+ 
+***** Quering single item
+
+#NAME: query-account-by-type
+#+begin_src sh :results output :eval never-export :exports both
+  aws --endpoint-url http://localhost:4569 \
+    dynamodb query \
+    --table-name Accounts \
+    --key-condition-expression "id = :id" \
+    --expression-attribute-values  '{":id":{"S":"61f62c30-6cf2-11ea-bf30-3718f412477e"}}'
+#+end_src
+
+#+RESULTS:
+#+begin_example json
+{
+    "Count": 1, 
+    "Items": [
+        {
+            "category": {
+                "S": "Sales"
+            }, 
+            "createdDateTime": {
+                "N": "1584673394659"
+            }, 
+            "accType": {
+                "S": "bookkeeping"
+            }, 
+            "vatPercent": {
+                "N": "1"
+            }, 
+            "accName": {
+                "S": "Rubber Neural Synthesize"
+            }, 
+            "vatCategoryS": {
+                "S": "S"
+            }, 
+            "id": {
+                "S": "61f62c30-6cf2-11ea-bf30-3718f412477e"
+            }, 
+            "accNo": {
+                "N": "86"
+            }
+        }
+    ], 
+    "ScannedCount": 1, 
+    "ConsumedCapacity": null
+}
+#+end_example
+
+
+***** Querying accounts from GSI
+#NAME: query-account-by-type
+#+begin_src sh :results output :eval never-export :exports both
+    aws --endpoint-url http://localhost:4569 \
+        dynamodb query \
+       --table-name Accounts \
+       --index-name accType \
+       --key-condition-expression "accType = :accType" \
+       --expression-attribute-values  '{":accType":{"S":"bookkeeping"}}'
+#+end_src
+
+#+RESULTS:
+#+begin_example json
+{
+    "Count": 25, 
+    "Items": [
+        {
+            "id": {
+                "S": "59eb4de0-6cf2-11ea-ae3e-3f52ccfac7ef"
+            }, 
+            "accNo": {
+                "N": "93"
+            }
+            ...
+        }, 
+        ....
+            ], 
+    "ScannedCount": 25, 
+    "ConsumedCapacity": null
+}
+#+end_example
+
+Because =createdDateTime= was used as =RANGE= (sorted) key, list of items returned by this query
+sorted descendant by =createdDateTime=
+
 **** [Failed] [4/6] Attempt to create stack from cloud formation config on localstack env
      - [X] Use aws-serverless-express custom server for lambda env
      - [X] Mock aws infrastructure locally, using lockalstack
