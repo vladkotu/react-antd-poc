@@ -71,6 +71,27 @@ export const checkErrors = (req, res, next) => {
   }
   next()
 }
+
+export function titleCase(string) {
+  return string
+    .toLowerCase()
+    .split(' ')
+    .map(s => {
+      return s[0].toUpperCase() + s.slice(1)
+    })
+    .join(' ')
+}
+
+export function isEmptyObj(o) {
+  return Object.keys(o).length === 0 && o.constructor === Object
+}
+
+export function randomDate(start, end) {
+  return new Date(
+    start.getTime() + Math.random() * (end.getTime() - start.getTime())
+  )
+}
+
 ;(async function init() {
   await localStorage.init()
 })()

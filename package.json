@@ -36,6 +36,7 @@
     ]
   },
   "dependencies": {
+    "aws-sdk": "^2.643.0",
     "aws-serverless-express": "^3.3.6",
     "cookie-parser": "~1.4.4",
     "debug": "~2.6.9",
@@ -45,7 +46,8 @@
     "faker": "^4.1.0",
     "mocker-data-generator": "^2.6.6",
     "morgan": "~1.9.1",
-    "node-persist": "^3.0.5"
+    "node-persist": "^3.0.5",
+    "uuid": "^7.0.2"
   },
   "devDependencies": {
     "@babel/cli": "^7.8.4",

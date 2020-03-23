@@ -7,12 +7,12 @@
       "AttributeType": "S"
     },
     {
-      "AttributeName": "createdDateTime",
+      "AttributeName": "accType",
       "AttributeType": "S"
     },
     {
-      "AttributeName": "accName",
-      "AttributeType": "S"
+      "AttributeName": "createdDateTime",
+      "AttributeType": "N"
     }
   ],
 
@@ -34,11 +34,15 @@
 
   "GlobalSecondaryIndexes": [
     {
-      "IndexName": "accName",
+      "IndexName": "accType",
       "KeySchema": [
         {
-          "AttributeName": "accName",
+          "AttributeName": "accType",
           "KeyType": "HASH"
+        },
+        {
+          "AttributeName": "createdDateTime",
+          "KeyType": "RANGE"
         }
       ],
       "Projection": {
