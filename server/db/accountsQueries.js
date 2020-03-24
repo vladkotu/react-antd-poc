@@ -20,6 +20,19 @@ export const addAccount = async item => {
   }
 }
 export const fetchAccounts = async item => {}
-export const fetchSingleAccount = async item => {}
+export const fetchSingleAccount = async item => {
+  try {
+    const ddb = ddbDoc()
+    const params = {
+      TableName: 'Accounts',
+      Key: item,
+    }
+    const res = await ddb.get(params)
+    return res.Item
+  } catch (err) {
+    console.log({ err })
+    throw err
+  }
+}
 export const updateAccount = async item => {}
 export const removeAccount = async item => {}

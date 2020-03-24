@@ -12,7 +12,7 @@ AWS.config.update({
   endpoint: 'http://localhost:4569',
 })
 
-const testApi = (method, url, payload, expectation) => {
+const testPostApi = (method, url, payload, expectation) => {
   request(app)
     [method](url)
     .type('json')
@@ -38,14 +38,24 @@ describe('api', () => {
 
     describe('accounts', () => {
       beforeEach(async () => {
-        await dd.createTable(accountsTable.default)
-        await dd.batchWriteItem({
-          RequestItems: accountsSeedTable.default,
-        })
+        try {
+          await dd.createTable(accountsTable.default)
+          await dd.batchWriteItem({
+            RequestItems: accountsSeedTable.default,
+          })
+        } catch (err) {
+          err.message = 'Not able to create and seed accounts taable'
+          console.error(err)
+        }
       })
 
       afterEach(async () => {
-        await dd.deleteTable({ TableName: 'Accounts' })
+        try {
+          await dd.deleteTable({ TableName: 'Accounts' })
+        } catch (err) {
+          err.message = 'Not able to deletet accounts taable'
+          console.error(err)
+        }
       })
 
       it('create bookkeeping account account', done => {
@@ -56,7 +66,7 @@ describe('api', () => {
           vatCategoryS: 'P',
           accName: 'One one one',
         }
-        testApi(
+        testPostApi(
           'post',
           '/api/accounts?type=bookkeeping',
           payload,
@@ -80,42 +90,72 @@ describe('api', () => {
           vatCategoryS: 'P',
           accName: 'One one one',
         }
-        testApi('post', '/api/accounts?type=default', payload, ({ body }) => {
-          expect(body).toMatchObject(payload)
-          expect(body).toHaveProperty('id')
-          expect(body).toHaveProperty('createdDateTime')
-          done()
-        })
+        testPostApi(
+          'post',
+          '/api/accounts?type=default',
+          payload,
+          ({ body }) => {
+            expect(body).toMatchObject(payload)
+            expect(body).toHaveProperty('id')
+            expect(body).toHaveProperty('createdDateTime')
+            done()
+          }
+        )
       })
 
+      it('get single existing account', done => {
+        const item = accountsSeedTable.Accounts[0].PutRequest.Item
+        const id = item.id.S
+        const createdDateTime = item.createdDateTime.N
+        request(app)
+          .get(`/api/accounts/${id}/?createdDateTime=${createdDateTime}`)
+          .set('Accept', 'application/json')
+          .expect(200, AWS.DynamoDB.Converter.unmarshall(item), done)
+      })
 
       xit('updates existing account', done => {
         const id = accountsSeedTable.Accounts[0].PutRequest.Item.id.S
-        const createdDateTime = accountsSeedTable.Accounts[0].PutRequest.Item.createdDateTime.N
+        const createdDateTime =
+          accountsSeedTable.Accounts[0].PutRequest.Item.createdDateTime.N
         const payload = {
           createdDateTime,
           category: 'Purchase',
           vatCategoryS: 'P',
         }
-        testApi('put', `/api/accounts/${id}/?type=default`, payload, ({ body }) => {
-          expect(body).toMatchObject(payload)
-          expect(body).toHaveProperty('id')
-          expect(body).toHaveProperty('createdDateTime')
-          done()
-        })
+        testPostApi(
+          'put',
+          `/api/accounts/${id}/?type=default`,
+          payload,
+          ({ body }) => {
+            expect(body).toMatchObject(payload)
+            expect(body).toHaveProperty('id')
+            expect(body).toHaveProperty('createdDateTime')
+            done()
+          }
+        )
       })
     })
 
     describe('contractors', () => {
       beforeEach(async () => {
-        await dd.createTable(contractorsTable.default)
-        await dd.batchWriteItem({
-          RequestItems: contractorsSeedTable.default,
-        })
+        try {
+          await dd.createTable(contractorsTable.default)
+          await dd.batchWriteItem({
+            RequestItems: contractorsSeedTable.default,
+          })
+        } catch (err) {
+          err.message = 'Not able to create and seed contractos taable'
+          console.error(err)
+        }
       })
 
       afterEach(async () => {
-        await dd.deleteTable({ TableName: 'Contractors' })
+        try {
+          await dd.deleteTable({ TableName: 'Contractors' })
+        } catch (err) {
+          err.message = 'Not able to delete contractos taable'
+          console.error(err)
+        }
       })
 
       it('create contractor', done => {
@@ -125,12 +165,22 @@ describe('api', () => {
           fname: 'Luke',
           lname: 'Rocketman',
         }
-        testApi('post', '/api/contractors', payload, ({ body }) => {
+        testPostApi('post', '/api/contractors', payload, ({ body }) => {
           expect(body).toMatchObject(payload)
           expect(body).toHaveProperty('id')
           expect(body).toHaveProperty('createdDateTime')
           done()
         })
+      })
+
+      it('get single existing contractor', done => {
+        const item = contractorsSeedTable.Contractors[0].PutRequest.Item
+        const id = item.id.S
+        const createdDateTime = item.createdDateTime.N
+        request(app)
+          .get(`/api/contractors/${id}/?createdDateTime=${createdDateTime}`)
+          .set('Accept', 'application/json')
+          .expect(200, AWS.DynamoDB.Converter.unmarshall(item), done)
       })
     })
   })

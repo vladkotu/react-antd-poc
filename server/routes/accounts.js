@@ -3,6 +3,7 @@ import f from 'faker'
 import { checkSchema } from 'express-validator'
 import * as utils from '../utils'
 import schema from '../schemas/accounts'
+import { idValidationSchema, createdDateValidationSchema } from './commonRules'
 import * as accountsQueries from '../db/accountsQueries'
 
 const { checkErrors } = utils
@@ -13,18 +14,25 @@ const apis = {
   bookkeeping: {
     ...utils.makeFakeApi('bookkeeping', schema),
     addItem: accountsQueries.addAccount,
+    fetchSingleAccount: accountsQueries.fetchSingleAccount,
   },
   default: {
     ...utils.makeFakeApi('default', defSchema),
     addItem: accountsQueries.addAccount,
+    fetchSingleAccount: accountsQueries.fetchSingleAccount,
   },
 }
 
 const allowedTypes = Object.keys(apis)
 const allowedTypesStr = allowedTypes.map(s => `'${s}'`).join(', ')
 
+function getAccType(req) {
+  const type = req.query.type || req.body.accType
+  return type
+}
+
 function checkAccountType(req, res, next) {
-  const type = req.query.type
+  const type = getAccType(req)
   if (!allowedTypes.includes(type)) {
     const err = new Error(
       `'accountType' param should have one of ${allowedTypesStr} values`
@@ -35,10 +43,9 @@ function checkAccountType(req, res, next) {
   return next()
 }
 
-router.use(checkAccountType)
-
 router.post(
   '/',
+  checkAccountType,
   checkSchema({
     accNo: {
       in: ['body'],
@@ -54,7 +61,7 @@ router.post(
   checkErrors,
   async (req, res, next) => {
     try {
-      const type = req.query.type
+      const type = getAccType(req)
       const item = await apis[type].addItem({
         accType: type,
         ...req.body,
@@ -69,8 +76,9 @@ router.post(
 router.get('/', async (req, res, next) => {
   try {
     const {
-      query: { type, limit = 5 },
+      query: { limit = 5 },
     } = req
+    const type = getAccType(req)
     const items = await apis[type].fetchItems(5)
     res.send({
       count: items.length,
@@ -82,18 +90,25 @@ router.get('/', async (req, res, next) => {
   }
 })
 
-router.get('/:id', async (req, res, next) => {
-  try {
-    const {
-      query: { type },
-    } = req
-    const items = await apis[type].fetchItems()
-    const item = items.find(i => i.id === parseInt(req.params.id, 10))
-    res.send(item)
-  } catch (err) {
-    next(err)
+router.get(
+  '/:id',
+  checkSchema({
+    ...idValidationSchema,
+    ...createdDateValidationSchema,
+  }),
+  checkErrors,
+  async (req, res, next) => {
+    try {
+      const item = await accountsQueries.fetchSingleAccount({
+        id: req.params.id,
+        createdDateTime: req.query.createdDateTime,
+      })
+      res.send(item)
+    } catch (err) {
+      next(err)
+    }
   }
-})
+)
 
 router.put(
   '/:id',

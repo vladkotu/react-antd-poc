@@ -1,6 +1,7 @@
 import express from 'express'
 import { checkSchema } from 'express-validator'
 import schema from '../schemas/contractors'
+import { idValidationSchema, createdDateValidationSchema } from './commonRules'
 import * as contractorsQueries from '../db/contractorsQueries'
 import * as utils from '../utils'
 
@@ -21,18 +22,8 @@ const commonValidationSchema = {
   },
 }
 
-const idValidationSchema = {
-  id: {
-    in: ['params'],
-    isInt: true,
-    toInt: true,
-    errorMessage: 'Id is must have',
-  },
-}
-
 const api = {
   ...utils.makeFakeApi('contractors', schema),
-  addItem: contractorsQueries.addContractor,
 }
 
 router.post(
@@ -41,7 +32,7 @@ router.post(
   checkErrors,
   async (req, res, next) => {
     try {
-      const item = await api.addItem(req.body)
+      const item = await contractorsQueries.addContractor(req.body)
       res.send(item)
     } catch (err) {
       next(err)
@@ -58,6 +49,26 @@ router.get('/', async (req, res, next) => {
     next(err)
   }
 })
+
+router.get(
+  '/:id',
+  checkSchema({ ...idValidationSchema, ...createdDateValidationSchema }),
+  checkErrors,
+  async (req, res, next) => {
+    try {
+      const id = req.params.id
+      const createdDateTime = req.query.createdDateTime
+      const item = await contractorsQueries.fetchSingleContractor({
+        id,
+        createdDateTime,
+      })
+      res.send(item)
+    } catch (err) {
+      console.error(err)
+      next(err)
+    }
+  }
+)
 
 router.put(
   '/:id',

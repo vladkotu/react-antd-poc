@@ -1,5 +1,10 @@
 import AWS from 'aws-sdk'
 
+AWS.config.update({
+  region: 'eu-west-2',
+  endpoint: 'http://localhost:4569',
+})
+
 function wrapObj(obj, methods) {
   for (let method in obj) {
     if (methods.includes(method)) {
