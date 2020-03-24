@@ -1,8 +1,10 @@
 import AWS from 'aws-sdk'
 import request from 'supertest'
 import { ddbCli, ddbDoc } from '../db/ddb'
-import * as accTable from '../../db/Accounts.json'
+import * as accountsTable from '../../db/Accounts.json'
+import * as accountsSeedTable from '../../db/accounts-seed.json'
 import * as contractorsTable from '../../db/Contractors.json'
+import * as contractorsSeedTable from '../../db/Contractors-seed.json'
 import app from '../app'
 
 AWS.config.update({
@@ -10,9 +12,9 @@ AWS.config.update({
   endpoint: 'http://localhost:4569',
 })
 
-const testApi = (url, payload, expectation) => {
+const testApi = (method, url, payload, expectation) => {
   request(app)
-    .post(url)
+    [method](url)
     .type('json')
     .send(payload)
     .set('Accept', 'application/json')
@@ -36,7 +38,10 @@ describe('api', () => {
 
     describe('accounts', () => {
       beforeEach(async () => {
-        await dd.createTable(accTable.default)
+        await dd.createTable(accountsTable.default)
+        await dd.batchWriteItem({
+          RequestItems: accountsSeedTable.default,
+        })
       })
 
       afterEach(async () => {
@@ -51,18 +56,23 @@ describe('api', () => {
           vatCategoryS: 'P',
           accName: 'One one one',
         }
-        testApi('/api/accounts?type=bookkeeping', payload, ({ body }) => {
-          expect(body).toMatchObject({
-            ...payload,
-            vatCategoryS: 'P',
-          })
-          expect(body).toHaveProperty('id')
-          expect(body).toHaveProperty('createdDateTime')
-          done()
-        })
+        testApi(
+          'post',
+          '/api/accounts?type=bookkeeping',
+          payload,
+          ({ body }) => {
+            expect(body).toMatchObject({
+              ...payload,
+              vatCategoryS: 'P',
+            })
+            expect(body).toHaveProperty('id')
+            expect(body).toHaveProperty('createdDateTime')
+            done()
+          }
+        )
       })
 
-      it('create default account account', done => {
+      it('create default account', done => {
         const payload = {
           accNo: 111,
           category: 'Sales',
@@ -70,7 +80,24 @@ describe('api', () => {
           vatCategoryS: 'P',
           accName: 'One one one',
         }
-        testApi('/api/accounts?type=default', payload, ({ body }) => {
+        testApi('post', '/api/accounts?type=default', payload, ({ body }) => {
+          expect(body).toMatchObject(payload)
+          expect(body).toHaveProperty('id')
+          expect(body).toHaveProperty('createdDateTime')
+          done()
+        })
+      })
+
+
+      xit('updates existing account', done => {
+        const id = accountsSeedTable.Accounts[0].PutRequest.Item.id.S
+        const createdDateTime = accountsSeedTable.Accounts[0].PutRequest.Item.createdDateTime.N
+        const payload = {
+          createdDateTime,
+          category: 'Purchase',
+          vatCategoryS: 'P',
+        }
+        testApi('put', `/api/accounts/${id}/?type=default`, payload, ({ body }) => {
           expect(body).toMatchObject(payload)
           expect(body).toHaveProperty('id')
           expect(body).toHaveProperty('createdDateTime')
@@ -82,6 +109,9 @@ describe('api', () => {
     describe('contractors', () => {
       beforeEach(async () => {
         await dd.createTable(contractorsTable.default)
+        await dd.batchWriteItem({
+          RequestItems: contractorsSeedTable.default,
+        })
       })
 
       afterEach(async () => {
@@ -95,7 +125,7 @@ describe('api', () => {
           fname: 'Luke',
           lname: 'Rocketman',
         }
-        testApi('/api/contractors', payload, ({ body }) => {
+        testApi('post', '/api/contractors', payload, ({ body }) => {
           expect(body).toMatchObject(payload)
           expect(body).toHaveProperty('id')
           expect(body).toHaveProperty('createdDateTime')

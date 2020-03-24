@@ -19,18 +19,9 @@ export const randomNumBut = (from, to, exclude = [], retries = 10) => {
 export const getItems = async ctx => await localStorage.getItem(ctx)
 export const storeItems = async (ctx, ix) => await localStorage.setItem(ctx, ix)
 
-export const makeFetchItems = (ctx, schema) => async (n = 3) => {
-  const items = await getItems(ctx)
-  if (items && items.length) return items
-  else
-    return mocker()
-      .schema(ctx, schema, n)
-      .build()
-      .then(data => {
-        storeItems(ctx, data[ctx])
-        return data[ctx]
-      })
-}
+export const fetchContractors = async (item) => {}
+export const fetchSingleContractor = async (item) => {}
+export const makeFetchItems = (ctx) => async (item) =>  {}
 
 export const makeRemoveItem = ctx => async item => {
   await storeItems(
@@ -39,57 +30,44 @@ export const makeRemoveItem = ctx => async item => {
   )
 }
 
-const getPutParamsByCtx = (ctx, item) => {
-  const itemParams = {
-    id: uuidv1(),
-    createdDateTime: new Date().getTime(),
-    ...item,
-  }
+const getUpdateParamsByCtx = (ctx, item) => {
   if (['bookkeeping', 'default'].includes(ctx)) {
     return {
       TableName: 'Accounts',
-      Item: {
-        accType: ctx,
-        ...itemParams,
+      Key: {
+        id: item.id,
+        createdDateTime: parseInt(item.createdDateTime, 10),
       },
     }
   }
   if ('contractors' === ctx) {
     return {
       TableName: 'Contractors',
-      Item: {
-        ...itemParams,
+      Key: {
+        id: item.id,
       },
     }
   }
-  throw new Error('Context have to be known')
 }
 
-export const makeAddItem = ctx => {
-  return async item => {
-    try {
-      const ddb = ddbDoc()
-      const params = getPutParamsByCtx(ctx, item)
-      const res = await ddb.put(params)
-      return res.Attributes
-    } catch (err) {
-      console.log(err)
-      throw err
-    }
+export const makeUpdateItem = ctx => async item => {
+  // 1. get item by primary key
+  // 2. merge item with updated fields
+  // 3. remove item form db
+  // 4. write new item with old primary key
+  try {
+    const ddb = ddbDoc()
+    const params = getUpdateParamsByCtx(ctx, item)
+    console.log(params)
+    const origItem = await ddb.get(params)
+    console.log(origItem)
+  } catch (err) {
+    console.log(err)
+    throw err
   }
 }
 
-export const makeUpdateItem = ctx => async acc => {
-  const items = await getItems(ctx)
-  const idx = items.findIndex(a => a.id === acc.id)
-  const item = { ...items[idx], ...acc }
-  items[idx] = item
-  await storeItems(ctx, items)
-  return item
-}
-
 export const makeFakeApi = (ctx, schema) => ({
-  addItem: makeAddItem(ctx),
   fetchItems: makeFetchItems(ctx, schema),
   updateItem: makeUpdateItem(ctx),
   removeItem: makeRemoveItem(ctx),

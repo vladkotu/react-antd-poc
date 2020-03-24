@@ -1,6 +1,7 @@
 import express from 'express'
 import { checkSchema } from 'express-validator'
 import schema from '../schemas/contractors'
+import * as contractorsQueries from '../db/contractorsQueries'
 import * as utils from '../utils'
 
 const { checkErrors } = utils
@@ -29,7 +30,10 @@ const idValidationSchema = {
   },
 }
 
-const fakeApi = utils.makeFakeApi('contractors', schema)
+const api = {
+  ...utils.makeFakeApi('contractors', schema),
+  addItem: contractorsQueries.addContractor,
+}
 
 router.post(
   '/',
@@ -37,7 +41,7 @@ router.post(
   checkErrors,
   async (req, res, next) => {
     try {
-      const item = await fakeApi.addItem(req.body)
+      const item = await api.addItem(req.body)
       res.send(item)
     } catch (err) {
       next(err)
@@ -48,7 +52,7 @@ router.post(
 router.get('/', async (req, res, next) => {
   try {
     res.send({
-      items: await fakeApi.fetchItems(150),
+      items: await api.fetchItems(150),
     })
   } catch (err) {
     next(err)
@@ -65,7 +69,7 @@ router.put(
   async (req, res, next) => {
     try {
       const id = req.params.id
-      const item = await fakeApi.updateItem({ id, ...req.body })
+      const item = await api.updateItem({ id, ...req.body })
       res.send(item)
     } catch (err) {
       next(err)
@@ -82,7 +86,7 @@ router.delete(
   async (req, res, next) => {
     try {
       const id = req.params.id
-      const item = await fakeApi.removeItem({ id })
+      const item = await api.removeItem({ id })
       res.send(item)
     } catch (err) {
       next(err)

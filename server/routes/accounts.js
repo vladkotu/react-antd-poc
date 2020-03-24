@@ -3,21 +3,27 @@ import f from 'faker'
 import { checkSchema } from 'express-validator'
 import * as utils from '../utils'
 import schema from '../schemas/accounts'
+import * as accountsQueries from '../db/accountsQueries'
 
 const { checkErrors } = utils
 const router = express.Router()
-
 const { vatCategoryS, ...defSchema } = schema
 
 const apis = {
-  bookkeeping: utils.makeFakeApi('bookkeeping', schema),
-  default: utils.makeFakeApi('default', defSchema),
+  bookkeeping: {
+    ...utils.makeFakeApi('bookkeeping', schema),
+    addItem: accountsQueries.addAccount,
+  },
+  default: {
+    ...utils.makeFakeApi('default', defSchema),
+    addItem: accountsQueries.addAccount,
+  },
 }
 
 const allowedTypes = Object.keys(apis)
 const allowedTypesStr = allowedTypes.map(s => `'${s}'`).join(', ')
 
-router.use(function checkAccountType(req, res, next) {
+function checkAccountType(req, res, next) {
   const type = req.query.type
   if (!allowedTypes.includes(type)) {
     const err = new Error(
@@ -27,7 +33,9 @@ router.use(function checkAccountType(req, res, next) {
     return next(err)
   }
   return next()
-})
+}
+
+router.use(checkAccountType)
 
 router.post(
   '/',
@@ -47,7 +55,10 @@ router.post(
   async (req, res, next) => {
     try {
       const type = req.query.type
-      const item = await apis[type].addItem(req.body)
+      const item = await apis[type].addItem({
+        accType: type,
+        ...req.body,
+      })
       res.send(item)
     } catch (err) {
       next(err)
@@ -89,26 +100,29 @@ router.put(
   checkSchema({
     id: {
       in: ['params'],
-      isInt: true,
-      toInt: true,
       errorMessage: 'Id is must have',
     },
-    accNo: {
+    createdDateTime: {
       in: ['body'],
-      isInt: true,
-      toInt: true,
-      errorMessage: 'account number should be number',
+      errorMessage: 'createdDateTime epoch is must have',
     },
-    category: {
-      exists: ['Purchase', 'Sale'],
-      errorMessage: 'should be of onf "Purchase" of "Sale"',
-    },
+
+    // accNo: {
+    //   in: ['body'],
+    //   isInt: true,
+    //   toInt: true,
+    //   errorMessage: 'account number should be number',
+    // },
+    // category: {
+    //   exists: ['Purchase', 'Sale'],
+    //   errorMessage: 'should be of onf "Purchase" of "Sale"',
+    // },
   }),
   checkErrors,
   async (req, res, next) => {
     try {
       const type = req.query.type
-      const id = parseInt(req.params.id, 10)
+      const id = req.params.id
       const item = await apis[type].updateItem({ id, ...req.body })
       res.send(item)
     } catch (err) {
