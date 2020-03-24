@@ -42,10 +42,10 @@ router.post(
 
 router.get('/', async (req, res, next) => {
   try {
-    res.send({
-      items: await api.fetchItems(150),
-    })
+    const items = await contractorsQueries.fetchContractors()
+    res.send(items)
   } catch (err) {
+    console.error(err)
     next(err)
   }
 })

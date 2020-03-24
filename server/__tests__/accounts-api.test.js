@@ -103,14 +103,27 @@ describe('api', () => {
         )
       })
 
-      it('get single existing account', done => {
-        const item = accountsSeedTable.Accounts[0].PutRequest.Item
-        const id = item.id.S
-        const createdDateTime = item.createdDateTime.N
+      it('get all accounts of a type', done => {
         request(app)
-          .get(`/api/accounts/${id}/?createdDateTime=${createdDateTime}`)
+          .get('/api/accounts?type=default')
           .set('Accept', 'application/json')
-          .expect(200, AWS.DynamoDB.Converter.unmarshall(item), done)
+          .expect(200)
+          .then(({ body }) => {
+            expect(body.Items.length).toBe(2)
+            expect(body.Items[0]).toMatchObject({
+              vatCategoryS: 'S',
+              accNo: 55,
+              accName: 'Roi Greens Backing Up',
+              createdDateTime: 1446960934025,
+              comment: 'Facere deleniti blanditiis eum.',
+              id: 'd83ef3c0-6d35-11ea-9d77-3dffd7d18939',
+              accType: 'default',
+              category: 'Sales',
+              vatPercent: 49,
+            })
+            expect(body).toHaveProperty('Count', 2)
+            done()
+          })
       })
 
       it('delete existing account', done => {
@@ -191,6 +204,26 @@ describe('api', () => {
           .get(`/api/contractors/${id}/?createdDateTime=${createdDateTime}`)
           .set('Accept', 'application/json')
           .expect(200, AWS.DynamoDB.Converter.unmarshall(item), done)
+      })
+
+      it('get all contractors', done => {
+        request(app)
+          .get('/api/contractors')
+          .set('Accept', 'application/json')
+          .expect(200)
+          .then(({ body }) => {
+            expect(body.Items.length).toBe(5)
+            expect(body.Items[0]).toMatchObject({
+              createdDateTime: 1485975663942,
+              fname: 'Melisa',
+              lname: 'Bogan',
+              id: 'd83fde23-6d35-11ea-9d77-3dffd7d18939',
+              role: 'Assistant',
+              salary: 73573,
+            })
+            expect(body).toHaveProperty('Count', 5)
+            done()
+          })
       })
 
       it('delete existing contractor', done => {

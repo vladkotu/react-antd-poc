@@ -19,7 +19,26 @@ export const addAccount = async item => {
     throw err
   }
 }
-export const fetchAccounts = async item => {}
+
+export const fetchAccounts = async type => {
+  try {
+    const ddb = ddbDoc()
+    const params = {
+      TableName: 'Accounts',
+      IndexName: 'accType',
+      KeyConditionExpression: 'accType = :accType',
+      ExpressionAttributeValues: {
+        ':accType': type,
+      },
+    }
+    const res = await ddb.query(params)
+    return res
+  } catch (err) {
+    console.error(err)
+    throw err
+  }
+}
+
 export const fetchSingleAccount = async item => {
   try {
     const ddb = ddbDoc()
@@ -34,7 +53,9 @@ export const fetchSingleAccount = async item => {
     throw err
   }
 }
+
 export const updateAccount = async item => {}
+
 export const removeAccount = async item => {
   try {
     const ddb = ddbDoc()

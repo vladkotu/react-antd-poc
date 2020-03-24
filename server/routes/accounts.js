@@ -73,18 +73,11 @@ router.post(
   }
 )
 
-router.get('/', async (req, res, next) => {
+router.get('/', checkAccountType, async (req, res, next) => {
   try {
-    const {
-      query: { limit = 5 },
-    } = req
     const type = getAccType(req)
-    const items = await apis[type].fetchItems(5)
-    res.send({
-      count: items.length,
-      limit,
-      items: items.slice(0, limit),
-    })
+    const items = await accountsQueries.fetchAccounts(type)
+    res.send(items)
   } catch (err) {
     next(err)
   }

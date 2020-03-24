@@ -19,7 +19,21 @@ export const addContractor = async item => {
     throw err
   }
 }
-export const fetchContractors = async item => {}
+
+export const fetchContractors = async () => {
+  try {
+    const ddb = ddbDoc()
+    const params = {
+      TableName: 'Contractors',
+    }
+    const res = await ddb.scan(params)
+    return res
+  } catch (err) {
+    console.error(err)
+    throw err
+  }
+}
+
 export const fetchSingleContractor = async item => {
   try {
     const ddb = ddbDoc()
