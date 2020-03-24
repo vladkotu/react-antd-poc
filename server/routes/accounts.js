@@ -149,20 +149,19 @@ router.put(
 router.delete(
   '/:id',
   checkSchema({
-    id: {
-      in: ['params'],
-      isInt: true,
-      toInt: true,
-      errorMessage: 'Id is must have',
-    },
+    ...idValidationSchema,
+    ...createdDateValidationSchema,
   }),
   checkErrors,
   async (req, res, next) => {
     try {
-      const type = req.query.type
-      const id = parseInt(req.params.id, 10)
-      await apis[type].removeItem({ id, ...req.body })
-      res.send({ ok: true })
+      const id = req.params.id
+      const createdDateTime = req.query.createdDateTime
+      await accountsQueries.removeAccount({
+        id,
+        createdDateTime,
+      })
+      res.send('')
     } catch (err) {
       next(err)
     }

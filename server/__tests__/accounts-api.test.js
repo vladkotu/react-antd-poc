@@ -113,6 +113,16 @@ describe('api', () => {
           .expect(200, AWS.DynamoDB.Converter.unmarshall(item), done)
       })
 
+      it('delete existing account', done => {
+        const item = accountsSeedTable.Accounts[0].PutRequest.Item
+        const id = item.id.S
+        const createdDateTime = item.createdDateTime.N
+        request(app)
+          .delete(`/api/accounts/${id}/?createdDateTime=${createdDateTime}`)
+          .set('Accept', 'application/json')
+          .expect(200, done)
+      })
+
       xit('updates existing account', done => {
         const id = accountsSeedTable.Accounts[0].PutRequest.Item.id.S
         const createdDateTime =
@@ -181,6 +191,16 @@ describe('api', () => {
           .get(`/api/contractors/${id}/?createdDateTime=${createdDateTime}`)
           .set('Accept', 'application/json')
           .expect(200, AWS.DynamoDB.Converter.unmarshall(item), done)
+      })
+
+      it('delete existing contractor', done => {
+        const item = contractorsSeedTable.Contractors[0].PutRequest.Item
+        const id = item.id.S
+        const createdDateTime = item.createdDateTime.N
+        request(app)
+          .delete(`/api/contractors/${id}/?createdDateTime=${createdDateTime}`)
+          .set('Accept', 'application/json')
+          .expect(200, done)
       })
     })
   })

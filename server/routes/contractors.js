@@ -90,15 +90,17 @@ router.put(
 
 router.delete(
   '/:id',
-  checkSchema({
-    ...idValidationSchema,
-  }),
+  checkSchema({ ...idValidationSchema, ...createdDateValidationSchema }),
   checkErrors,
   async (req, res, next) => {
     try {
       const id = req.params.id
-      const item = await api.removeItem({ id })
-      res.send(item)
+      const createdDateTime = req.query.createdDateTime
+      await contractorsQueries.removeContractor({
+        id,
+        createdDateTime,
+      })
+      res.send('')
     } catch (err) {
       next(err)
     }

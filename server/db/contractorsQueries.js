@@ -35,4 +35,16 @@ export const fetchSingleContractor = async item => {
   }
 }
 export const updateContractor = async item => {}
-export const removeContractor = async item => {}
+export const removeContractor = async item => {
+  try {
+    const ddb = ddbDoc()
+    const params = {
+      TableName: 'Contractors',
+      Key: item,
+    }
+    await ddb.delete(params)
+  } catch (err) {
+    console.log(err)
+    throw err
+  }
+}
