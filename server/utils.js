@@ -1,6 +1,8 @@
 import mocker from 'mocker-data-generator'
 import f from 'faker'
 import localStorage from 'node-persist'
+import { ddbCli, ddbDoc } from './db/ddb.js'
+import { v1 as uuidv1 } from 'uuid'
 import { validationResult } from 'express-validator'
 
 export const randomNumBut = (from, to, exclude = [], retries = 10) => {
@@ -37,15 +39,44 @@ export const makeRemoveItem = ctx => async item => {
   )
 }
 
-export const makeAddItem = ctx => async acc => {
-  const currentItems = await getItems(ctx)
-  acc.id = randomNumBut(
-    10,
-    1000,
-    currentItems.map(i => i.id)
-  )
-  await storeItems(ctx, [acc, ...currentItems])
-  return acc
+const getPutParamsByCtx = (ctx, item) => {
+  const itemParams = {
+    id: uuidv1(),
+    createdDateTime: new Date().getTime(),
+    ...item,
+  }
+  if (['bookkeeping', 'default'].includes(ctx)) {
+    return {
+      TableName: 'Accounts',
+      Item: {
+        accType: ctx,
+        ...itemParams,
+      },
+    }
+  }
+  if ('contractors' === ctx) {
+    return {
+      TableName: 'Contractors',
+      Item: {
+        ...itemParams,
+      },
+    }
+  }
+  throw new Error('Context have to be known')
+}
+
+export const makeAddItem = ctx => {
+  return async item => {
+    try {
+      const ddb = ddbDoc()
+      const params = getPutParamsByCtx(ctx, item)
+      const res = await ddb.put(params)
+      return res.Attributes
+    } catch (err) {
+      console.log(err)
+      throw err
+    }
+  }
 }
 
 export const makeUpdateItem = ctx => async acc => {

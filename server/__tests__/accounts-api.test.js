@@ -2,6 +2,7 @@ import AWS from 'aws-sdk'
 import request from 'supertest'
 import { ddbCli, ddbDoc } from '../db/ddb'
 import * as accTable from '../../db/Accounts.json'
+import * as contractorsTable from '../../db/Contractors.json'
 import app from '../app'
 
 AWS.config.update({
@@ -9,7 +10,18 @@ AWS.config.update({
   endpoint: 'http://localhost:4569',
 })
 
-describe('accounts api', () => {
+const testApi = (url, payload, expectation) => {
+  request(app)
+    .post(url)
+    .type('json')
+    .send(payload)
+    .set('Accept', 'application/json')
+    .expect(200)
+    .expect('Content-Type', /json/)
+    .then(expectation)
+}
+
+describe('api', () => {
   it('Not found', done => {
     request(app)
       .get('/not-exits')
@@ -22,43 +34,74 @@ describe('accounts api', () => {
     const dd = ddbCli()
     const dbDoc = ddbDoc()
 
-    beforeEach(async () => {
-      const t = await dd.createTable(accTable.default)
-    })
+    describe('accounts', () => {
+      beforeEach(async () => {
+        await dd.createTable(accTable.default)
+      })
 
-    afterEach(async () => {
-      await dd.deleteTable({ TableName: 'Accounts' })
-    })
+      afterEach(async () => {
+        await dd.deleteTable({ TableName: 'Accounts' })
+      })
 
-    it('create account', done => {
-      request(app)
-        .post('/api/accounts?type=bookkeeping')
-        .type('json')
-        .send({
+      it('create bookkeeping account account', done => {
+        const payload = {
           accNo: 111,
           category: 'Purchase',
           vatPercent: 11,
           vatCategoryS: 'P',
           accName: 'One one one',
-        })
-        .set('Accept', 'application/json')
-        .expect(200)
-        .expect('Content-Type', /json/)
-        .then(({ body }) => {
-          console.log(body)
-          expect(body.count).toBe(5)
+        }
+        testApi('/api/accounts?type=bookkeeping', payload, ({ body }) => {
+          expect(body).toMatchObject({
+            ...payload,
+            vatCategoryS: 'P',
+          })
+          expect(body).toHaveProperty('id')
+          expect(body).toHaveProperty('createdDateTime')
           done()
         })
+      })
+
+      it('create default account account', done => {
+        const payload = {
+          accNo: 111,
+          category: 'Sales',
+          vatPercent: 11,
+          vatCategoryS: 'P',
+          accName: 'One one one',
+        }
+        testApi('/api/accounts?type=default', payload, ({ body }) => {
+          expect(body).toMatchObject(payload)
+          expect(body).toHaveProperty('id')
+          expect(body).toHaveProperty('createdDateTime')
+          done()
+        })
+      })
+    })
+
+    describe('contractors', () => {
+      beforeEach(async () => {
+        await dd.createTable(contractorsTable.default)
+      })
+
+      afterEach(async () => {
+        await dd.deleteTable({ TableName: 'Contractors' })
+      })
+
+      it('create contractor', done => {
+        const payload = {
+          role: 'Developer',
+          salary: 40000,
+          fname: 'Luke',
+          lname: 'Rocketman',
+        }
+        testApi('/api/contractors', payload, ({ body }) => {
+          expect(body).toMatchObject(payload)
+          expect(body).toHaveProperty('id')
+          expect(body).toHaveProperty('createdDateTime')
+          done()
+        })
+      })
     })
   })
 })
-
-// request(app)
-//   .get('/api/accounts?type=bookkeeping')
-//   .set('Accept', 'application/json')
-//   .expect(200)
-//   .expect('Content-Type', /json/)
-//   .then(({ body }) => {
-//     expect(body.count).toBe(5)
-//     done()
-//   })

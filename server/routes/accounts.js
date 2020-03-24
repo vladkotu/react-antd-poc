@@ -9,12 +9,12 @@ const router = express.Router()
 
 const { vatCategoryS, ...defSchema } = schema
 
-const fakeApis = {
+const apis = {
   bookkeeping: utils.makeFakeApi('bookkeeping', schema),
   default: utils.makeFakeApi('default', defSchema),
 }
 
-const allowedTypes = Object.keys(fakeApis)
+const allowedTypes = Object.keys(apis)
 const allowedTypesStr = allowedTypes.map(s => `'${s}'`).join(', ')
 
 router.use(function checkAccountType(req, res, next) {
@@ -47,7 +47,7 @@ router.post(
   async (req, res, next) => {
     try {
       const type = req.query.type
-      const item = await fakeApis[type].addItem(req.body)
+      const item = await apis[type].addItem(req.body)
       res.send(item)
     } catch (err) {
       next(err)
@@ -60,7 +60,7 @@ router.get('/', async (req, res, next) => {
     const {
       query: { type, limit = 5 },
     } = req
-    const items = await fakeApis[type].fetchItems(5)
+    const items = await apis[type].fetchItems(5)
     res.send({
       count: items.length,
       limit,
@@ -76,7 +76,7 @@ router.get('/:id', async (req, res, next) => {
     const {
       query: { type },
     } = req
-    const items = await fakeApis[type].fetchItems()
+    const items = await apis[type].fetchItems()
     const item = items.find(i => i.id === parseInt(req.params.id, 10))
     res.send(item)
   } catch (err) {
@@ -109,7 +109,7 @@ router.put(
     try {
       const type = req.query.type
       const id = parseInt(req.params.id, 10)
-      const item = await fakeApis[type].updateItem({ id, ...req.body })
+      const item = await apis[type].updateItem({ id, ...req.body })
       res.send(item)
     } catch (err) {
       next(err)
@@ -132,7 +132,7 @@ router.delete(
     try {
       const type = req.query.type
       const id = parseInt(req.params.id, 10)
-      await fakeApis[type].removeItem({ id, ...req.body })
+      await apis[type].removeItem({ id, ...req.body })
       res.send({ ok: true })
     } catch (err) {
       next(err)
