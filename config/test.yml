@@ -1,0 +1,6 @@
+ddb:
+  endpoint: http://localhost:4569
+  region: 'eu-west-2'
+  tables:
+    accounts: AccountsTest
+    contractors: ContractorsTest

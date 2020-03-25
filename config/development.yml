@@ -1,0 +1,8 @@
+server:
+  port: 3000
+ddb:
+  endpoint: http://localhost:4569
+  region: 'eu-west-2'
+  tables:
+    accounts: Accounts
+    contractors: Contractors

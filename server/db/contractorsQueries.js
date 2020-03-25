@@ -1,12 +1,15 @@
 import { v1 as uuidv1 } from 'uuid'
-import { ddbCli, ddbDoc } from '../db/ddb.js'
+import { ddbDoc } from '../db/ddb.js'
+import config from 'config'
+
+const dbCfg = config.get('ddb')
 
 export const addContractor = async item => {
   try {
     const ddb = ddbDoc()
     const { id, createdDateTime } = item
     const params = {
-      TableName: 'Contractors',
+      TableName: dbCfg.tables.contractors,
       Item: {
         id: id || uuidv1(),
         createdDateTime: createdDateTime || new Date().getTime(),
@@ -25,7 +28,7 @@ export const fetchContractors = async () => {
   try {
     const ddb = ddbDoc()
     const params = {
-      TableName: 'Contractors',
+      TableName: dbCfg.tables.contractors,
     }
     const res = await ddb.scan(params)
     return res
@@ -40,7 +43,7 @@ export const fetchSingleContractor = async item => {
     const ddb = ddbDoc()
     const { id, createdDateTime } = item
     const params = {
-      TableName: 'Contractors',
+      TableName: dbCfg.tables.contractors,
       Key: { id, createdDateTime },
     }
     const res = await ddb.get(params)
@@ -55,7 +58,7 @@ export const removeContractor = async item => {
     const ddb = ddbDoc()
     const { id, createdDateTime } = item
     const params = {
-      TableName: 'Contractors',
+      TableName: dbCfg.tables.contractors,
       Key: { id, createdDateTime },
     }
     await ddb.delete(params)

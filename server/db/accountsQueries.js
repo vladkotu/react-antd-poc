@@ -1,12 +1,15 @@
 import { v1 as uuidv1 } from 'uuid'
 import { ddbCli, ddbDoc } from '../db/ddb.js'
+import config from 'config'
+
+const dbCfg = config.get('ddb')
 
 export const addAccount = async item => {
   try {
     const ddb = ddbDoc()
     const { id, createdDateTime } = item
     const params = {
-      TableName: 'Accounts',
+      TableName: dbCfg.tables.accounts,
       Item: {
         id: id || uuidv1(),
         createdDateTime: createdDateTime || new Date().getTime(),
@@ -25,7 +28,7 @@ export const fetchAccounts = async type => {
   try {
     const ddb = ddbDoc()
     const params = {
-      TableName: 'Accounts',
+      TableName: dbCfg.tables.accounts,
       IndexName: 'accType',
       KeyConditionExpression: 'accType = :accType',
       ExpressionAttributeValues: {
@@ -45,7 +48,7 @@ export const fetchSingleAccount = async item => {
     const ddb = ddbDoc()
     const { id, createdDateTime } = item
     const params = {
-      TableName: 'Accounts',
+      TableName: dbCfg.tables.accounts,
       Key: { id, createdDateTime },
     }
     const res = await ddb.get(params)
@@ -61,7 +64,7 @@ export const removeAccount = async item => {
     const ddb = ddbDoc()
     const { id, createdDateTime } = item
     const params = {
-      TableName: 'Accounts',
+      TableName: dbCfg.tables.accounts,
       Key: { id, createdDateTime },
     }
     await ddb.delete(params)

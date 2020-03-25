@@ -1,11 +1,21 @@
 #!/usr/bin/env node
 
+import AWS from 'aws-sdk'
 import debugF from 'debug'
 import http from 'http'
 import app from './app'
+import config from 'config'
+
+const dbCfg = config.get('ddb')
+const serverCfg = config.get('server')
+
+AWS.config.update({
+  region: dbCfg.region,
+  endpoint: dbCfg.endpoint,
+})
 
 const debug = debugF('server:server')
-const port = normalizePort(process.env.PORT || '3000')
+const port = serverCfg.port
 
 app.set('port', port)
 
@@ -14,17 +24,6 @@ const server = http.createServer(app)
 server.listen(port)
 server.on('error', onError)
 server.on('listening', onListening)
-
-function normalizePort(val) {
-  const port = parseInt(val, 10)
-  if (isNaN(port)) {
-    return val
-  }
-  if (port >= 0) {
-    return port
-  }
-  return false
-}
 
 function onError(error) {
   if (error.syscall !== 'listen') {

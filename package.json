@@ -8,7 +8,7 @@
     "format": "prettier-eslint --write $PWD/'server/**/*.js'",
     "client": "cd client && yarn start",
     "build": "babel ./server --out-dir build",
-    "server": "PORT=5000 node ./build/server.local.js",
+    "server": "node ./build/server.local.js",
     "dev": "NODE_ENV=development npm-run-all build server",
     "prod": "NODE_ENV=production npm-run-all build server",
     "dev:all": "concurrently \"yarn nodemon\" \"yarn client\""
@@ -46,6 +46,7 @@
   "dependencies": {
     "aws-sdk": "^2.643.0",
     "aws-serverless-express": "^3.3.6",
+    "config": "^3.3.0",
     "cookie-parser": "~1.4.4",
     "debug": "~2.6.9",
     "express": "~4.16.1",
