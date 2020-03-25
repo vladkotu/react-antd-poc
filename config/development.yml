@@ -1,5 +1,5 @@
 server:
-  port: 3000
+  port: 5000
 ddb:
   endpoint: http://localhost:4569
   region: 'eu-west-2'

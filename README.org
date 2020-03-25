@@ -7,14 +7,25 @@
 ** Start Scripts
    See [[file:package.json][server package.json]] and [[file:client/package.json][client package.json]] "scripts" sections for details.
 
+
+Start local infrastructure 
+#+begin_src sh
+docker-compose up -d
+#+end_src
+  
+Start dev server and client code watchers 
 #+begin_src sh
 yarn dev:all
 #+end_src
 
-Starts server modemon as well as client React app in development/watch mode.
-
+Starts server separately
 #+begin_src sh
 yarn nodemon
+#+end_src
+
+Run test in watch mode
+#+begin_src sh
+yarn test --watch
 #+end_src
 
 Executes server side code watcher in dev mode.
@@ -155,7 +166,8 @@ Executes server side code watcher in dev mode.
    #+begin_src org
    {
        "TableNames": [
-           "Accounts"
+           "Accounts", 
+           "Contractors"
        ]
    }
    #+end_src
@@ -237,22 +249,96 @@ Executes server side code watcher in dev mode.
  #+end_src
 
  #+RESULTS:
- #+begin_example json
+ #+begin_example
  {
-     "Count": 25, 
+     "Count": 3, 
      "Items": [
          {
+             "comment": {
+                 "S": "est autem facere"
+             }, 
+             "category": {
+                 "S": "Purchase"
+             }, 
+             "createdDateTime": {
+                 "N": "1329262892304"
+             }, 
+             "accType": {
+                 "S": "bookkeeping"
+             }, 
+             "vatPercent": {
+                 "N": "73"
+             }, 
+             "accName": {
+                 "S": "Agp"
+             }, 
+             "vatCategoryS": {
+                 "S": "P"
+             }, 
              "id": {
-                 "S": "59eb4de0-6cf2-11ea-ae3e-3f52ccfac7ef"
+                 "S": "d83fde20-6d35-11ea-9d77-3dffd7d18939"
              }, 
              "accNo": {
                  "N": "93"
              }
-             ...
          }, 
-         ....
-             ], 
-     "ScannedCount": 25, 
+         {
+             "comment": {
+                 "S": "Amet consequatur similique quis nobis nam maxime ut dolor. Vitae sed quo sunt molestias vero tempore minima. Necessitatibus ducimus hic reprehenderit. Hic dolore error animi ut aperiam. Hic inventore sunt ipsa ut recusandae. Sed accusantium et iusto.\n \rUnde neque sequi quidem beatae. Quo repudiandae voluptatem impedit nostrum asperiores nostrum aut magnam odio. At recusandae dolorem sunt debitis sequi totam esse ipsa. Eos repellendus totam aut hic.\n \rConsequatur voluptate sunt ratione est est ad omnis. Debitis animi ut est consequatur. Quos praesentium autem est minus et ea."
+             }, 
+             "category": {
+                 "S": "Purchase"
+             }, 
+             "createdDateTime": {
+                 "N": "1551172226477"
+             }, 
+             "accType": {
+                 "S": "bookkeeping"
+             }, 
+             "vatPercent": {
+                 "N": "22"
+             }, 
+             "accName": {
+                 "S": "Computer Manat Vanuatu"
+             }, 
+             "vatCategoryS": {
+                 "S": "P"
+             }, 
+             "id": {
+                 "S": "d83f41e0-6d35-11ea-9d77-3dffd7d18939"
+             }, 
+             "accNo": {
+                 "N": "66"
+             }
+         }, 
+         {
+             "category": {
+                 "S": "Purchase"
+             }, 
+             "createdDateTime": {
+                 "N": "1564661196514"
+             }, 
+             "accType": {
+                 "S": "bookkeeping"
+             }, 
+             "vatPercent": {
+                 "N": "88"
+             }, 
+             "accName": {
+                 "S": "Maroon Refined Granite Tuna"
+             }, 
+             "vatCategoryS": {
+                 "S": "P"
+             }, 
+             "id": {
+                 "S": "d83fb710-6d35-11ea-9d77-3dffd7d18939"
+             }, 
+             "accNo": {
+                 "N": "93"
+             }
+         }
+     ], 
+     "ScannedCount": 3, 
      "ConsumedCapacity": null
  }
  #+end_example
@@ -520,7 +606,7 @@ Executes server side code watcher in dev mode.
 ***** [R2] Get single account  
     #+NAME: get-one-boo-accounts 
     #+begin_src sh :results verbatim :exports both
-      curl -vsi "${API}/accounts/d83ef3c0-6d35-11ea-9d77-3dffd7d18939/?createdDateTime=1446960934025&pretty"
+      curl -vsi "${API}/accounts/d83f41e0-6d35-11ea-9d77-3dffd7d18939/?createdDateTime=1551172226477&pretty"
    #+end_src
 
    #+RESULTS: get-one-boo-accounts
@@ -528,21 +614,21 @@ Executes server side code watcher in dev mode.
    HTTP/1.1 200 OK
    X-Powered-By: Express
    Content-Type: application/json; charset=utf-8
-   Content-Length: 277
-   ETag: W/"115-/l/C3cVYzB5nSZ4KrfOAEKDAftc"
-   Date: Wed, 25 Mar 2020 11:19:46 GMT
+   Content-Length: 839
+   ETag: W/"347-8UwvaUyL8Z9gwUbvp+bJFXGOfH4"
+   Date: Wed, 25 Mar 2020 11:58:23 GMT
    Connection: keep-alive
    
    {
-     "vatCategoryS": "S",
-     "accNo": 55,
-     "accName": "Roi Greens Backing Up",
-     "createdDateTime": 1446960934025,
-     "comment": "Facere deleniti blanditiis eum.",
-     "id": "d83ef3c0-6d35-11ea-9d77-3dffd7d18939",
-     "category": "Sales",
-     "accType": "default",
-     "vatPercent": 49
+     "vatCategoryS": "P",
+     "accNo": 66,
+     "accName": "Computer Manat Vanuatu",
+     "createdDateTime": 1551172226477,
+     "comment": "Amet consequatur similique quis nobis nam maxime ut dolor. Vitae sed quo sunt molestias vero tempore minima. Necessitatibus ducimus hic reprehenderit. Hic dolore error animi ut aperiam. Hic inventore sunt ipsa ut recusandae. Sed accusantium et iusto.\n \rUnde neque sequi quidem beatae. Quo repudiandae voluptatem impedit nostrum asperiores nostrum aut magnam odio. At recusandae dolorem sunt debitis sequi totam esse ipsa. Eos repellendus totam aut hic.\n \rConsequatur voluptate sunt ratione est est ad omnis. Debitis animi ut est consequatur. Quos praesentium autem est minus et ea.",
+     "id": "d83f41e0-6d35-11ea-9d77-3dffd7d18939",
+     "category": "Purchase",
+     "accType": "bookkeeping",
+     "vatPercent": 22
    }
    #+end_example
 ***** [U] Update account
@@ -554,19 +640,6 @@ Executes server side code watcher in dev mode.
   #+end_src
 
   #+RESULTS: update-account
-  #+begin_example json
-  {
-    "id": "d83ef3c0-6d35-11ea-9d77-3dffd7d18939",
-    "createdDateTime": 1446960934025,
-    "vatCategoryS": "S",
-    "accNo": 55,
-    "accName": "One One One",
-    "comment": "Facere deleniti blanditiis eum.",
-    "category": "Sales",
-    "accType": "default",
-    "vatPercent": 111
-  }
-  #+end_example
 
 ****** Invalid request
 
