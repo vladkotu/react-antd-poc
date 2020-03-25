@@ -6,10 +6,13 @@ import * as AccountsDataSeed from '../db/AccountsDataSeed.json'
 import * as ContractorsSchema from '../db/ContractorsSchema.json'
 import * as ContractorsDataSeed from '../db/ContractorsDataSeed.json'
 import app from '../app'
+import config from 'config'
+
+const dbCfg = config.get('ddb')
 
 AWS.config.update({
-  region: 'eu-west-2',
-  endpoint: 'http://localhost:4569',
+  region: dbCfg.region,
+  endpoint: dbCfg.endpoint,
 })
 
 const testPostApi = (method, url, payload, expectation) => {
@@ -39,9 +42,14 @@ describe('api', () => {
     describe('accounts', () => {
       beforeEach(async () => {
         try {
-          await dd.createTable(AccountsSchema.default)
+          await dd.createTable({
+            ...AccountsSchema.default,
+            TableName: dbCfg.tables.accounts,
+          })
           await dd.batchWriteItem({
-            RequestItems: AccountsDataSeed.default,
+            RequestItems: {
+              [dbCfg.tables.accounts]: AccountsDataSeed.default.Accounts,
+            },
           })
         } catch (err) {
           err.message = 'Not able to create and seed accounts taable'
@@ -51,7 +59,7 @@ describe('api', () => {
 
       afterEach(async () => {
         try {
-          await dd.deleteTable({ TableName: 'Accounts' })
+          await dd.deleteTable({ TableName: dbCfg.tables.accounts })
         } catch (err) {
           err.message = 'Not able to deletet accounts taable'
           console.error(err)
@@ -164,9 +172,15 @@ describe('api', () => {
     describe('contractors', () => {
       beforeEach(async () => {
         try {
-          await dd.createTable(ContractorsSchema.default)
+          await dd.createTable({
+            ...ContractorsSchema.default,
+            TableName: dbCfg.tables.contractors,
+          })
           await dd.batchWriteItem({
-            RequestItems: ContractorsDataSeed.default,
+            RequestItems: {
+              [dbCfg.tables.contractors]:
+                ContractorsDataSeed.default.Contractors,
+            },
           })
         } catch (err) {
           err.message = 'Not able to create and seed contractos taable'
@@ -176,7 +190,7 @@ describe('api', () => {
 
       afterEach(async () => {
         try {
-          await dd.deleteTable({ TableName: 'Contractors' })
+          await dd.deleteTable({ TableName: dbCfg.tables.contractors })
         } catch (err) {
           err.message = 'Not able to delete contractos taable'
           console.error(err)
