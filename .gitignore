@@ -29,3 +29,5 @@ yarn-error.log*
 
 .node-persist
 .localstack
+
+/logs

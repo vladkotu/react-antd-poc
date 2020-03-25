@@ -1,18 +1,19 @@
 import express from 'express'
 import path from 'path'
 import cookieParser from 'cookie-parser'
-import logger from 'morgan'
 import pretty from 'express-prettify'
+import log4js from 'log4js'
+import { logger } from './logger'
 import indexRouter from './routes/index'
 
 const app = express()
 
 app.use(pretty({ query: 'pretty' }))
-app.use(logger('dev'))
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
 app.use(cookieParser())
 app.use(express.static(path.join(__dirname, '../client/build')))
+app.use(log4js.connectLogger(logger))
 
 app.use('/api', indexRouter)
 
@@ -36,6 +37,7 @@ app.use(function(err, req, res, next) {
       res.type('txt').send('Not found')
     },
   })
+  next(err, req, res)
 })
 
 module.exports = app

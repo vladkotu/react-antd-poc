@@ -1,6 +1,7 @@
 import express from 'express'
 import { checkSchema } from 'express-validator'
 import * as utils from '../utils'
+import { logger } from '../logger'
 import { idValidationSchema, createdDateValidationSchema } from './commonRules'
 import * as accountsQueries from '../db/accountsQueries'
 
@@ -18,7 +19,7 @@ function checkAccountType(req, res, next) {
   const type = getAccType(req)
   if (!allowedTypes.includes(type)) {
     const err = new Error(
-      `'accountType' param should have one of ${allowedTypesStr} values`
+      `'accountType' param should have one of ${allowedTypes.join(', ')} values`
     )
     err.statusCode = 400
     return next(err)
@@ -62,6 +63,7 @@ router.get('/', checkAccountType, async (req, res, next) => {
     const items = await accountsQueries.fetchAccounts(type)
     res.send(items)
   } catch (err) {
+    logger.error(err)
     next(err)
   }
 })
@@ -105,7 +107,7 @@ router.put(
       })
       res.send(item)
     } catch (err) {
-      console.error(err)
+      logger.error(err)
       next(err)
     }
   }

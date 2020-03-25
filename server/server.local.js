@@ -1,10 +1,10 @@
 #!/usr/bin/env node
 
 import AWS from 'aws-sdk'
-import debugF from 'debug'
 import http from 'http'
-import app from './app'
 import config from 'config'
+import { logger } from './logger'
+import app from './app'
 
 const dbCfg = config.get('ddb')
 const serverCfg = config.get('server')
@@ -14,7 +14,6 @@ AWS.config.update({
   endpoint: dbCfg.endpoint,
 })
 
-const debug = debugF('server:server')
 const port = serverCfg.port
 
 app.set('port', port)
@@ -29,9 +28,7 @@ function onError(error) {
   if (error.syscall !== 'listen') {
     throw error
   }
-
   const bind = typeof port === 'string' ? 'Pipe ' + port : 'Port ' + port
-
   switch (error.code) {
     case 'EACCES':
       console.error(bind + ' requires elevated privileges')
@@ -49,5 +46,5 @@ function onError(error) {
 function onListening() {
   const addr = server.address()
   const bind = typeof addr === 'string' ? 'pipe ' + addr : 'port ' + addr.port
-  debug('Listening on ' + bind)
+  logger.info('Listening on ' + bind)
 }

@@ -1,5 +1,6 @@
 import express from 'express'
 import { checkSchema } from 'express-validator'
+import { logger } from '../logger'
 import { idValidationSchema, createdDateValidationSchema } from './commonRules'
 import * as contractorsQueries from '../db/contractorsQueries'
 import * as utils from '../utils'
@@ -40,7 +41,7 @@ router.get('/', async (req, res, next) => {
     const items = await contractorsQueries.fetchContractors()
     res.send(items)
   } catch (err) {
-    console.error(err)
+    logger.error(err)
     next(err)
   }
 })
