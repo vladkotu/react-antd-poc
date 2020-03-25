@@ -1,5 +1,8 @@
 
 * Proof of qualification repo
+    :PROPERTIES:
+    :header-args: :var DBPATH="server/db"
+    :END:
   This project aim to proof knowledge of NodeJs/React stack
 ** Start Scripts
    See [[file:package.json][server package.json]] and [[file:client/package.json][client package.json]] "scripts" sections for details.
@@ -43,223 +46,31 @@ Executes server side code watcher in dev mode.
     - [ ] Migrate app to DynamoDB as main DB
     - [ ] [WAITING] Deploy to AWS lambda (localstack)
 
-*** API docs
-**** Accounts
-     :PROPERTIES:
-     :header-args: :var API="http://localhost:5000/api"
-     :END:
-     All accounts tested for "bookkeeping" type
-***** [C] Create account
-   #+NAME: create-account 
-   #+begin_src sh :results verbatim :exports both
-     curl -X POST -vs "${API}/accounts?type=bookkeeping&pretty" \
-          -H 'Content-Type: application/json' \
-          -d '{ "accNo": 111, "category": "Purchase", "vatPercent": 11, "vatCategoryS": "P", "accName": "One one one" }'
-  #+end_src
-
-   #+RESULTS: create-account
-   : {
-   :   "accNo": 111,
-   :   "category": "Purchase",
-   :   "vatPercent": 11,
-   :   "vatCategoryS": "P",
-   :   "accName": "One one one",
-   :   "id": 305
-   : }
-
-****** Invalid request
-
-   #+NAME: create-account-invalid
-   #+begin_src sh :results verbatim :exports both
-     curl -X POST -vsi "${API}/accounts?type=bookkeeping&pretty" \
-          -H 'Content-Type: application/json' \
-          -d '{ "category": "Purchase" }'
-  #+end_src
-
-  #+RESULTS: create-account-invalid
-  #+begin_example
-  HTTP/1.1 422 Unprocessable Entity
-  X-Powered-By: Express
-  Content-Type: application/json; charset=utf-8
-  Content-Length: 130
-  ETag: W/"82-HHj2rmNjH457Bv9LJ8U88iWD1J8"
-  Date: Thu, 19 Mar 2020 16:39:11 GMT
-  Connection: keep-alive
- 
-  {
-    "errors": [
-      {
-        "msg": "account number should be number",
-        "param": "accNo",
-        "location": "body"
-      }
-    ]
-  }
-  #+end_example
-
-***** [R1] Get all accounts 
-    #+NAME: get-all-boo-accounts 
-    #+begin_src sh :results verbatim :exports both
-      curl -vsi "${API}/accounts?type=bookkeeping&pretty&limit=2"
-   #+end_src
-
-   #+RESULTS: get-all-boo-accounts
-   #+begin_example
-   HTTP/1.1 200 OK
-   X-Powered-By: Express
-   Content-Type: application/json; charset=utf-8
-   Content-Length: 462
-   ETag: W/"1ce-53pljYKpmW/QIkcNvkL9YUeiaDw"
-   Date: Thu, 19 Mar 2020 15:30:04 GMT
-   Connection: keep-alive
-  
-   {
-     "count": 6,
-     "limit": "2",
-     "items": [
-       {
-         "accNo": 111,
-         "category": "Purchase",
-         "vatPercent": 111,
-         "vatCategoryS": "P",
-         "accName": "One One One",
-         "id": 968
-       },
-       {
-         "id": 15,
-         "accNo": 98,
-         "category": "Sales",
-         "vatPercent": 55,
-         "vatCategoryS": "S",
-         "accName": "Senior generate calculate",
-         "extRevenuClass": null,
-         "extTaxCode": null,
-         "comment": null
-       }
-     ]
-   }
-   #+end_example
-
-***** [R2] Get single account  
-    #+NAME: get-one-boo-accounts 
-    #+begin_src sh :results verbatim :exports both
-      curl -vsi "${API}/accounts/968/?type=bookkeeping&pretty"
-   #+end_src
-
-   #+RESULTS: get-one-boo-accounts
-   #+begin_example
-   HTTP/1.1 200 OK
-   X-Powered-By: Express
-   Content-Type: application/json; charset=utf-8
-   Content-Length: 128
-   ETag: W/"80-/zcS/dOXmo/QZGY78nkBimKf6d4"
-   Date: Thu, 19 Mar 2020 15:23:48 GMT
-   Connection: keep-alive
-  
-   {
-     "accNo": 111,
-     "category": "Purchase",
-     "vatPercent": 11,
-     "vatCategoryS": "P",
-     "accName": "One one one",
-     "id": 968
-   }
-   #+end_example
-
-***** [U] Update account
-   #+NAME: update-account 
-   #+begin_src sh :results verbatim :exports both
-     curl -X PUT -vs "${API}/accounts/968/?type=bookkeeping&pretty" \
-          -H 'Content-Type: application/json' \
-          -d '{ "vatPercent": 111, "accName": "One One One" }'
-  #+end_src
-
-  #+RESULTS: update-account
-  : {
-  :   "accNo": 111,
-  :   "category": "Purchase",
-  :   "vatPercent": 111,
-  :   "vatCategoryS": "P",
-  :   "accName": "One One One",
-  :   "id": 968
-  : }
-
-****** Invalid request
-
-   #+NAME: update-account-invalid 
-   #+begin_src sh :results verbatim :exports both
-     curl -X PUT -vs "${API}/accounts/?type=bookkeeping&pretty" \
-          -H 'Content-Type: application/json' \
-          -d '{ "vatPercent": 111, "accName": "One One One" }'
-  #+end_src
-
-  #+RESULTS: update-account-invalid
-  #+begin_example
-  <!DOCTYPE html>
-  <html lang="en">
-  <head>
-  <meta charset="utf-8">
-  <title>Error</title>
-  </head>
-  <body>
-  <pre>Cannot PUT /api/accounts/</pre>
-  </body>
-  </html>
-  #+end_example
-
-***** [D] Delete account
-   #+NAME: delete-account 
-   #+begin_src sh :results verbatim :exports both
-     curl -X DELETE -vs "${API}/accounts/968/?type=bookkeeping&pretty"
-  #+end_src
-
-  #+RESULTS: delete-account
-  : {
-  :   "ok": true
-  : }
-
-  
-
-** DynamoDB
-**** Design table keys
-     - What attr should be partition(hash?) key for accounts and contractors?
-       partition key is dimension of scalability, distributes aggregates (items by identity?)
-       across partitions (horizontal scaling)
-
-       It's typical use case - direct item lookup by id
-
-       1->many: combination of partition and sort keys(this should stay unique across table)
-       Example: deviceId (P) and recordedTime in epoch (s)
-
-     - What attr should be sorted(range?) key for accounts and contractors?
-     - How to lookup by account type?
-     - How to generate identity values? DDB  does it automatically? should node.uuid be used?
-
+*** DynamoDB
 **** Create and seed with data tables
 ***** Accounts table
 ****** Create accounts table
        Generate json shema for DynamoDB table:
     #+begin_src sh :results output :eval never-export :exports both
-      aws dynamodb create-table --generate-cli-skeleton > ./db/table-shema.json
+      aws dynamodb create-table --generate-cli-skeleton > ./server/db/table-shema-example.json
     #+end_src
 
-    #+NAME: delete-table
+    #+NAME: delete-accounts-table
     #+begin_src sh :results silent :eval never-export :exports both
      aws --endpoint-url http://localhost:4569 \
          dynamodb delete-table \
          --table-name Accounts
     #+end_src
 
-
     #+NAME: create-table
     #+begin_src sh :results output org :eval never-export :exports both
      aws --endpoint-url http://localhost:4569 \
          dynamodb create-table \
-         --cli-input-json file://db/accounts.json
+         --cli-input-json file://${DBPATH}/AccountsSchema.json
     #+end_src
 
     #+RESULTS: create-table
-    #+begin_src org
+    #+begin_src json
     {
         "TableDescription": {
             "TableArn": "arn:aws:dynamodb:us-east-1:000000000000:table/Accounts", 
@@ -328,11 +139,13 @@ Executes server side code watcher in dev mode.
                 }
             ], 
             "ItemCount": 0, 
-            "CreationDateTime": 1584959727.959
+            "CreationDateTime": 1585134915.481
         }
     }
     #+end_src
 
+
+    #+RESULTS: create-tabl
    #+begin_src sh :results output org :eval never-export :exports both
      aws --endpoint-url http://localhost:4569 \
          dynamodb list-tables
@@ -346,7 +159,6 @@ Executes server side code watcher in dev mode.
        ]
    }
    #+end_src
-
 ****** Seed accounts with test data
 
   #NAME: seed-accounts
@@ -354,7 +166,7 @@ Executes server side code watcher in dev mode.
      aws --endpoint-url http://localhost:4569 \
          dynamodb batch-write-item \
          --request-items   \
-         file://db/accounts-seed.json
+         file://${DBPATH}/AccountsDataSeed.json
   #+end_src
 
   #+RESULTS:
@@ -363,7 +175,6 @@ Executes server side code watcher in dev mode.
   : }
 
   Unfortunately =batch-write-item= limited to 25 operations
- 
 ****** Quering single item
 
  #NAME: query-account-by-type
@@ -372,7 +183,7 @@ Executes server side code watcher in dev mode.
      dynamodb query \
      --table-name Accounts \
      --key-condition-expression "id = :id" \
-     --expression-attribute-values  '{":id":{"S":"61f62c30-6cf2-11ea-bf30-3718f412477e"}}'
+     --expression-attribute-values  '{":id":{"S": "d83ef3c0-6d35-11ea-9d77-3dffd7d18939"}}'
  #+end_src
 
  #+RESULTS:
@@ -381,29 +192,32 @@ Executes server side code watcher in dev mode.
      "Count": 1, 
      "Items": [
          {
+             "comment": {
+                 "S": "Facere deleniti blanditiis eum."
+             }, 
              "category": {
                  "S": "Sales"
              }, 
              "createdDateTime": {
-                 "N": "1584673394659"
+                 "N": "1446960934025"
              }, 
              "accType": {
-                 "S": "bookkeeping"
+                 "S": "default"
              }, 
              "vatPercent": {
-                 "N": "1"
+                 "N": "49"
              }, 
              "accName": {
-                 "S": "Rubber Neural Synthesize"
+                 "S": "Roi Greens Backing Up"
              }, 
              "vatCategoryS": {
                  "S": "S"
              }, 
              "id": {
-                 "S": "61f62c30-6cf2-11ea-bf30-3718f412477e"
+                 "S": "d83ef3c0-6d35-11ea-9d77-3dffd7d18939"
              }, 
              "accNo": {
-                 "N": "86"
+                 "N": "55"
              }
          }
      ], 
@@ -411,7 +225,6 @@ Executes server side code watcher in dev mode.
      "ConsumedCapacity": null
  }
  #+end_example
-
 ****** Querying accounts from GSI
  #NAME: query-account-by-type
  #+begin_src sh :results output :eval never-export :exports both
@@ -460,7 +273,7 @@ Executes server side code watcher in dev mode.
     #+begin_src sh :results output org :eval never-export :exports both
      aws --endpoint-url http://localhost:4569 \
          dynamodb create-table \
-         --cli-input-json file://db/Contractors.json
+         --cli-input-json file://${DBPATH}/ContractorsSchema.json
     #+end_src
 
     #+RESULTS: create-contractors-table
@@ -503,7 +316,7 @@ Executes server side code watcher in dev mode.
                 }
             ], 
             "ItemCount": 0, 
-            "CreationDateTime": 1584978392.171
+            "CreationDateTime": 1585135026.665
         }
     }
     #+end_src
@@ -522,14 +335,13 @@ Executes server side code watcher in dev mode.
        ]
    }
    #+end_src
-
 ****** Seed accounts with test data
 
   #NAME: seed-accounts
   #+begin_src sh :results output :eval never-export :exports both
      aws --endpoint-url http://localhost:4569 \
          dynamodb batch-write-item \
-         --request-items file://db/Contractors-seed.json
+         --request-items file://${DBPATH}/ContractorsDataSeed.json
   #+end_src
 
   #+RESULTS:
@@ -565,11 +377,9 @@ Executes server side code watcher in dev mode.
  }
  #+end_example
 
-
-
 **** [WAITING] [4/6] Attempt to create stack from cloud formation config on localstack env
      - [X] Use aws-serverless-express custom server for lambda env
-     - [X] Mock aws infrastructure locally, using lockalstack
+     - [X] Mock aws infrastructure with localstack
      - [X] Refactor express server to be able to run it locally without deployment on lambda
      - [X] Crete cloud formation template for s3 SPA hosting
      - [ ] [Failed] Deploy express app to labmda
@@ -577,7 +387,6 @@ Executes server side code watcher in dev mode.
      - [ ] Decouple client code from beckend code 
      - [ ] API Gatewat setup
 
-    
   List of cloud formation stacks
   #+NAME: end-point-list
   #+begin_src sh :results output :eval never-export :exports both
@@ -607,3 +416,187 @@ Executes server side code watcher in dev mode.
   : local_aws     |   File "/opt/code/localstack/.venv/lib/python3.8/site-packages/moto/cloudformation/utils.py", line 50, in _f
   : local_aws     |     return node.value.split(".")
   : local_aws     | AttributeError: 'list' object has no attribute 'split'
+*** API docs
+**** Accounts
+     :PROPERTIES:
+     :header-args: :var API="http://localhost:5000/api"
+     :END:
+     All accounts tested for "bookkeeping" type
+***** [C] Create account
+   #+NAME: create-account 
+   #+begin_src sh :results verbatim :exports both
+     curl -X POST -vs "${API}/accounts?type=bookkeeping&pretty" \
+          -H 'Content-Type: application/json' \
+          -d '{ "accNo": 111, "category": "Purchase", "vatPercent": 11, "vatCategoryS": "P", "accName": "One one one" }'
+  #+end_src
+
+   #+RESULTS: create-account
+   #+begin_example json
+   {
+     "id": "6be54070-6e8a-11ea-966f-79ee4efae916",
+     "createdDateTime": 1585135138295,
+     "accType": "bookkeeping",
+     "accNo": 111,
+     "category": "Purchase",
+     "vatPercent": 11,
+     "vatCategoryS": "P",
+     "accName": "One one one"
+   }
+   #+end_example
+
+****** Invalid request
+
+   #+NAME: create-account-invalid
+   #+begin_src sh :results verbatim :exports both
+     curl -X POST -vsi "${API}/accounts?type=bookkeeping&pretty" \
+          -H 'Content-Type: application/json' \
+          -d '{ "category": "Purchase" }'
+  #+end_src
+
+  #+RESULTS: create-account-invalid
+  #+begin_example
+  HTTP/1.1 422 Unprocessable Entity
+  X-Powered-By: Express
+  Content-Type: application/json; charset=utf-8
+  Content-Length: 130
+  ETag: W/"82-HHj2rmNjH457Bv9LJ8U88iWD1J8"
+  Date: Wed, 25 Mar 2020 11:19:14 GMT
+  Connection: keep-alive
+  
+  {
+    "errors": [
+      {
+        "msg": "account number should be number",
+        "param": "accNo",
+        "location": "body"
+      }
+    ]
+  }
+  #+end_example
+
+***** [R1] Get all accounts 
+    #+NAME: get-all-boo-accounts 
+    #+begin_src sh :results verbatim :exports both
+      curl -vsi "${API}/accounts?type=bookkeeping&pretty"
+   #+end_src
+
+   #+RESULTS: get-all-boo-accounts
+   #+begin_example
+   HTTP/1.1 200 OK
+   X-Powered-By: Express
+   Content-Type: application/json; charset=utf-8
+   Content-Length: 462
+   ETag: W/"1ce-53pljYKpmW/QIkcNvkL9YUeiaDw"
+   Date: Thu, 19 Mar 2020 15:30:04 GMT
+   Connection: keep-alive
+  
+   {
+     "count": 6,
+     "limit": "2",
+     "items": [
+       {
+         "accNo": 111,
+         "category": "Purchase",
+         "vatPercent": 111,
+         "vatCategoryS": "P",
+         "accName": "One One One",
+         "id": 968
+       },
+       {
+         "id": 15,
+         "accNo": 98,
+         "category": "Sales",
+         "vatPercent": 55,
+         "vatCategoryS": "S",
+         "accName": "Senior generate calculate",
+         "extRevenuClass": null,
+         "extTaxCode": null,
+         "comment": null
+       }
+     ]
+   }
+   #+end_example
+
+***** [R2] Get single account  
+    #+NAME: get-one-boo-accounts 
+    #+begin_src sh :results verbatim :exports both
+      curl -vsi "${API}/accounts/d83ef3c0-6d35-11ea-9d77-3dffd7d18939/?createdDateTime=1446960934025&pretty"
+   #+end_src
+
+   #+RESULTS: get-one-boo-accounts
+   #+begin_example
+   HTTP/1.1 200 OK
+   X-Powered-By: Express
+   Content-Type: application/json; charset=utf-8
+   Content-Length: 277
+   ETag: W/"115-/l/C3cVYzB5nSZ4KrfOAEKDAftc"
+   Date: Wed, 25 Mar 2020 11:19:46 GMT
+   Connection: keep-alive
+   
+   {
+     "vatCategoryS": "S",
+     "accNo": 55,
+     "accName": "Roi Greens Backing Up",
+     "createdDateTime": 1446960934025,
+     "comment": "Facere deleniti blanditiis eum.",
+     "id": "d83ef3c0-6d35-11ea-9d77-3dffd7d18939",
+     "category": "Sales",
+     "accType": "default",
+     "vatPercent": 49
+   }
+   #+end_example
+***** [U] Update account
+   #+NAME: update-account 
+   #+begin_src sh :results verbatim :exports both
+     curl -X PUT -vs "${API}/accounts/d83ef3c0-6d35-11ea-9d77-3dffd7d18939/?pretty" \
+          -H 'Content-Type: application/json' \
+          -d '{ "createdDateTime": "1446960934025","vatPercent": 111, "accName": "One One One" }'
+  #+end_src
+
+  #+RESULTS: update-account
+  #+begin_example json
+  {
+    "id": "d83ef3c0-6d35-11ea-9d77-3dffd7d18939",
+    "createdDateTime": 1446960934025,
+    "vatCategoryS": "S",
+    "accNo": 55,
+    "accName": "One One One",
+    "comment": "Facere deleniti blanditiis eum.",
+    "category": "Sales",
+    "accType": "default",
+    "vatPercent": 111
+  }
+  #+end_example
+
+****** Invalid request
+
+   #+NAME: update-account-invalid 
+   #+begin_src sh :results verbatim :exports both
+     curl -X PUT -vs "${API}/accounts/?type=bookkeeping&pretty" \
+          -H 'Content-Type: application/json' \
+          -d '{ "vatPercent": 111, "accName": "One One One" }'
+  #+end_src
+
+  #+RESULTS: update-account-invalid
+  #+begin_example
+  <!DOCTYPE html>
+  <html lang="en">
+  <head>
+  <meta charset="utf-8">
+  <title>Error</title>
+  </head>
+  <body>
+  <pre>Cannot PUT /api/accounts/</pre>
+  </body>
+  </html>
+  #+end_example
+
+***** [D] Delete account
+   #+NAME: delete-account 
+   #+begin_src sh :results verbatim :exports both
+     curl -X DELETE -vs "${API}/accounts/d83ef3c0-6d35-11ea-9d77-3dffd7d18939/?createdDateTime=1446960934025&pretty"
+  #+end_src
+
+
+  
+
