@@ -1,14 +1,11 @@
 import express from 'express'
-import f from 'faker'
 import { checkSchema } from 'express-validator'
 import * as utils from '../utils'
-import schema from '../schemas/accounts'
 import { idValidationSchema, createdDateValidationSchema } from './commonRules'
 import * as accountsQueries from '../db/accountsQueries'
 
 const { checkErrors } = utils
 const router = express.Router()
-const { vatCategoryS, ...defSchema } = schema
 
 const allowedTypes = ['bookkeeping', 'default']
 

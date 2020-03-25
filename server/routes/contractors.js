@@ -1,6 +1,5 @@
 import express from 'express'
 import { checkSchema } from 'express-validator'
-import schema from '../schemas/contractors'
 import { idValidationSchema, createdDateValidationSchema } from './commonRules'
 import * as contractorsQueries from '../db/contractorsQueries'
 import * as utils from '../utils'
@@ -20,10 +19,6 @@ const commonValidationSchema = {
     isInt: true,
     toInt: true,
   },
-}
-
-const api = {
-  ...utils.makeFakeApi('contractors', schema),
 }
 
 router.post(

@@ -1,10 +1,10 @@
 import AWS from 'aws-sdk'
 import request from 'supertest'
 import { ddbCli, ddbDoc } from '../db/ddb'
-import * as accountsTable from '../../db/Accounts.json'
-import * as accountsSeedTable from '../../db/accounts-seed.json'
-import * as contractorsTable from '../../db/Contractors.json'
-import * as contractorsSeedTable from '../../db/Contractors-seed.json'
+import * as AccountsSchema from '../db/AccountsSchema.json'
+import * as AccountsDataSeed from '../db/AccountsDataSeed.json'
+import * as ContractorsSchema from '../db/ContractorsSchema.json'
+import * as ContractorsDataSeed from '../db/ContractorsDataSeed.json'
 import app from '../app'
 
 AWS.config.update({
@@ -39,9 +39,9 @@ describe('api', () => {
     describe('accounts', () => {
       beforeEach(async () => {
         try {
-          await dd.createTable(accountsTable.default)
+          await dd.createTable(AccountsSchema.default)
           await dd.batchWriteItem({
-            RequestItems: accountsSeedTable.default,
+            RequestItems: AccountsDataSeed.default,
           })
         } catch (err) {
           err.message = 'Not able to create and seed accounts taable'
@@ -127,7 +127,7 @@ describe('api', () => {
       })
 
       it('delete existing account', done => {
-        const item = accountsSeedTable.Accounts[0].PutRequest.Item
+        const item = AccountsDataSeed.Accounts[0].PutRequest.Item
         const id = item.id.S
         const createdDateTime = item.createdDateTime.N
         request(app)
@@ -137,7 +137,7 @@ describe('api', () => {
       })
 
       it('updates existing account', done => {
-        const item = accountsSeedTable.Accounts[0].PutRequest.Item
+        const item = AccountsDataSeed.Accounts[0].PutRequest.Item
         const id = item.id.S
         const createdDateTime = item.createdDateTime.N
         const payload = {
@@ -164,9 +164,9 @@ describe('api', () => {
     describe('contractors', () => {
       beforeEach(async () => {
         try {
-          await dd.createTable(contractorsTable.default)
+          await dd.createTable(ContractorsSchema.default)
           await dd.batchWriteItem({
-            RequestItems: contractorsSeedTable.default,
+            RequestItems: ContractorsDataSeed.default,
           })
         } catch (err) {
           err.message = 'Not able to create and seed contractos taable'
@@ -199,7 +199,7 @@ describe('api', () => {
       })
 
       it('get single existing contractor', done => {
-        const item = contractorsSeedTable.Contractors[0].PutRequest.Item
+        const item = ContractorsDataSeed.Contractors[0].PutRequest.Item
         const id = item.id.S
         const createdDateTime = item.createdDateTime.N
         request(app)
@@ -229,7 +229,7 @@ describe('api', () => {
       })
 
       it('delete existing contractor', done => {
-        const item = contractorsSeedTable.Contractors[0].PutRequest.Item
+        const item = ContractorsDataSeed.Contractors[0].PutRequest.Item
         const id = item.id.S
         const createdDateTime = item.createdDateTime.N
         request(app)
@@ -239,7 +239,7 @@ describe('api', () => {
       })
 
       it('updates existing contractor', done => {
-        const item = contractorsSeedTable.Contractors[0].PutRequest.Item
+        const item = ContractorsDataSeed.Contractors[0].PutRequest.Item
         const id = item.id.S
         const createdDateTime = item.createdDateTime.N
         const payload = {
