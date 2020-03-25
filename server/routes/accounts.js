@@ -10,21 +10,7 @@ const { checkErrors } = utils
 const router = express.Router()
 const { vatCategoryS, ...defSchema } = schema
 
-const apis = {
-  bookkeeping: {
-    ...utils.makeFakeApi('bookkeeping', schema),
-    addItem: accountsQueries.addAccount,
-    fetchSingleAccount: accountsQueries.fetchSingleAccount,
-  },
-  default: {
-    ...utils.makeFakeApi('default', defSchema),
-    addItem: accountsQueries.addAccount,
-    fetchSingleAccount: accountsQueries.fetchSingleAccount,
-  },
-}
-
-const allowedTypes = Object.keys(apis)
-const allowedTypesStr = allowedTypes.map(s => `'${s}'`).join(', ')
+const allowedTypes = ['bookkeeping', 'default']
 
 function getAccType(req) {
   const type = req.query.type || req.body.accType
@@ -62,7 +48,7 @@ router.post(
   async (req, res, next) => {
     try {
       const type = getAccType(req)
-      const item = await apis[type].addItem({
+      const item = await accountsQueries.addAccount({
         accType: type,
         ...req.body,
       })
@@ -106,34 +92,23 @@ router.get(
 router.put(
   '/:id',
   checkSchema({
-    id: {
-      in: ['params'],
-      errorMessage: 'Id is must have',
-    },
-    createdDateTime: {
-      in: ['body'],
-      errorMessage: 'createdDateTime epoch is must have',
-    },
-
-    // accNo: {
-    //   in: ['body'],
-    //   isInt: true,
-    //   toInt: true,
-    //   errorMessage: 'account number should be number',
-    // },
-    // category: {
-    //   exists: ['Purchase', 'Sale'],
-    //   errorMessage: 'should be of onf "Purchase" of "Sale"',
-    // },
+    ...idValidationSchema,
+    ...createdDateValidationSchema,
   }),
   checkErrors,
   async (req, res, next) => {
     try {
-      const type = req.query.type
       const id = req.params.id
-      const item = await apis[type].updateItem({ id, ...req.body })
+      const createdDateTime =
+        req.query.createdDateTime || req.body.createdDateTime
+      const item = await accountsQueries.updateAccount({
+        id,
+        createdDateTime,
+        ...req.body,
+      })
       res.send(item)
     } catch (err) {
+      console.error(err)
       next(err)
     }
   }

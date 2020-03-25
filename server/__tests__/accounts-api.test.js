@@ -136,26 +136,28 @@ describe('api', () => {
           .expect(200, done)
       })
 
-      xit('updates existing account', done => {
-        const id = accountsSeedTable.Accounts[0].PutRequest.Item.id.S
-        const createdDateTime =
-          accountsSeedTable.Accounts[0].PutRequest.Item.createdDateTime.N
+      it('updates existing account', done => {
+        const item = accountsSeedTable.Accounts[0].PutRequest.Item
+        const id = item.id.S
+        const createdDateTime = item.createdDateTime.N
         const payload = {
-          createdDateTime,
+          createdDateTime: parseInt(createdDateTime, 10),
           category: 'Purchase',
           vatCategoryS: 'P',
         }
-        testPostApi(
-          'put',
-          `/api/accounts/${id}/?type=default`,
-          payload,
-          ({ body }) => {
-            expect(body).toMatchObject(payload)
-            expect(body).toHaveProperty('id')
-            expect(body).toHaveProperty('createdDateTime')
+        request(app)
+          .put(`/api/accounts/${id}/?createdDateTime=${createdDateTime}`)
+          .set('Accept', 'application/json')
+          .type('json')
+          .send(payload)
+          .expect(200)
+          .then(({ body }) => {
+            expect(body).toMatchObject({
+              ...AWS.DynamoDB.Converter.unmarshall(item),
+              ...payload,
+            })
             done()
-          }
-        )
+          })
       })
     })
 
@@ -234,6 +236,29 @@ describe('api', () => {
           .delete(`/api/contractors/${id}/?createdDateTime=${createdDateTime}`)
           .set('Accept', 'application/json')
           .expect(200, done)
+      })
+
+      it('updates existing contractor', done => {
+        const item = contractorsSeedTable.Contractors[0].PutRequest.Item
+        const id = item.id.S
+        const createdDateTime = item.createdDateTime.N
+        const payload = {
+          createdDateTime: parseInt(createdDateTime, 10),
+          fname: 'Larry',
+        }
+        request(app)
+          .put(`/api/contractors/${id}/?createdDateTime=${createdDateTime}`)
+          .set('Accept', 'application/json')
+          .type('json')
+          .send(payload)
+          .expect(200)
+          .then(({ body }) => {
+            expect(body).toMatchObject({
+              ...AWS.DynamoDB.Converter.unmarshall(item),
+              ...payload,
+            })
+            done()
+          })
       })
     })
   })

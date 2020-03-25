@@ -8,7 +8,7 @@ export const idValidationSchema = {
 
 export const createdDateValidationSchema = {
   createdDateTime: {
-      in: ['query'],
+    in: ['query', 'body'],
     toInt: true,
     errorMessage: 'createdDate is must have',
   },

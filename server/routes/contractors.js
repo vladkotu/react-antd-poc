@@ -73,14 +73,20 @@ router.get(
 router.put(
   '/:id',
   checkSchema({
-    ...commonValidationSchema,
     ...idValidationSchema,
+    ...createdDateValidationSchema,
   }),
   checkErrors,
   async (req, res, next) => {
     try {
       const id = req.params.id
-      const item = await api.updateItem({ id, ...req.body })
+      const createdDateTime =
+        req.query.createdDateTime || req.body.createdDateTime
+      const item = await contractorsQueries.updateContractor({
+        id,
+        createdDateTime,
+        ...req.body,
+      })
       res.send(item)
     } catch (err) {
       next(err)

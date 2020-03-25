@@ -4,11 +4,12 @@ import { ddbCli, ddbDoc } from '../db/ddb.js'
 export const addContractor = async item => {
   try {
     const ddb = ddbDoc()
+    const { id, createdDateTime } = item
     const params = {
       TableName: 'Contractors',
       Item: {
-        id: uuidv1(),
-        createdDateTime: new Date().getTime(),
+        id: id || uuidv1(),
+        createdDateTime: createdDateTime || new Date().getTime(),
         ...item,
       },
     }
@@ -37,9 +38,10 @@ export const fetchContractors = async () => {
 export const fetchSingleContractor = async item => {
   try {
     const ddb = ddbDoc()
+    const { id, createdDateTime } = item
     const params = {
       TableName: 'Contractors',
-      Key: item,
+      Key: { id, createdDateTime },
     }
     const res = await ddb.get(params)
     return res.Item
@@ -48,17 +50,29 @@ export const fetchSingleContractor = async item => {
     throw err
   }
 }
-export const updateContractor = async item => {}
 export const removeContractor = async item => {
   try {
     const ddb = ddbDoc()
+    const { id, createdDateTime } = item
     const params = {
       TableName: 'Contractors',
-      Key: item,
+      Key: { id, createdDateTime },
     }
     await ddb.delete(params)
   } catch (err) {
     console.log(err)
+    throw err
+  }
+}
+
+export const updateContractor = async item => {
+  try {
+    const origItem = await fetchSingleContractor(item)
+    const newItem = { ...origItem, ...item }
+    await removeContractor(item)
+    return await addContractor(newItem)
+  } catch (err) {
+    console.error(err)
     throw err
   }
 }

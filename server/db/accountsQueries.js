@@ -4,11 +4,12 @@ import { ddbCli, ddbDoc } from '../db/ddb.js'
 export const addAccount = async item => {
   try {
     const ddb = ddbDoc()
+    const { id, createdDateTime } = item
     const params = {
       TableName: 'Accounts',
       Item: {
-        id: uuidv1(),
-        createdDateTime: new Date().getTime(),
+        id: id || uuidv1(),
+        createdDateTime: createdDateTime || new Date().getTime(),
         ...item,
       },
     }
@@ -42,9 +43,10 @@ export const fetchAccounts = async type => {
 export const fetchSingleAccount = async item => {
   try {
     const ddb = ddbDoc()
+    const { id, createdDateTime } = item
     const params = {
       TableName: 'Accounts',
-      Key: item,
+      Key: { id, createdDateTime },
     }
     const res = await ddb.get(params)
     return res.Item
@@ -54,16 +56,27 @@ export const fetchSingleAccount = async item => {
   }
 }
 
-export const updateAccount = async item => {}
-
 export const removeAccount = async item => {
   try {
     const ddb = ddbDoc()
+    const { id, createdDateTime } = item
     const params = {
       TableName: 'Accounts',
-      Key: item,
+      Key: { id, createdDateTime },
     }
     await ddb.delete(params)
+  } catch (err) {
+    console.error(err)
+    throw err
+  }
+}
+
+export const updateAccount = async item => {
+  try {
+    const origItem = await fetchSingleAccount(item)
+    const newItem = { ...origItem, ...item }
+    await removeAccount(item)
+    return await addAccount(newItem)
   } catch (err) {
     console.error(err)
     throw err
