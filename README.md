@@ -99,92 +99,11 @@ Executes server side code watcher in dev mode.
                 --cli-input-json file://${DBPATH}/AccountsSchema.json
             ```
             
-            ```org
-            {
-                "TableDescription": {
-                    "TableArn": "arn:aws:dynamodb:us-east-1:000000000000:table/Accounts", 
-                    "AttributeDefinitions": [
-                        {
-                            "AttributeName": "id", 
-                            "AttributeType": "S"
-                        }, 
-                        {
-                            "AttributeName": "accType", 
-                            "AttributeType": "S"
-                        }, 
-                        {
-                            "AttributeName": "createdDateTime", 
-                            "AttributeType": "N"
-                        }
-                    ], 
-                    "GlobalSecondaryIndexes": [
-                        {
-                            "IndexSizeBytes": 0, 
-                            "IndexName": "accType", 
-                            "Projection": {
-                                "ProjectionType": "ALL"
-                            }, 
-                            "ProvisionedThroughput": {
-                                "WriteCapacityUnits": 1, 
-                                "ReadCapacityUnits": 1
-                            }, 
-                            "IndexStatus": "ACTIVE", 
-                            "KeySchema": [
-                                {
-                                    "KeyType": "HASH", 
-                                    "AttributeName": "accType"
-                                }, 
-                                {
-                                    "KeyType": "RANGE", 
-                                    "AttributeName": "createdDateTime"
-                                }
-                            ], 
-                            "IndexArn": "arn:aws:dynamodb:ddblocal:000000000000:table/Accounts/index/accType", 
-                            "ItemCount": 0
-                        }
-                    ], 
-                    "ProvisionedThroughput": {
-                        "NumberOfDecreasesToday": 0, 
-                        "WriteCapacityUnits": 1, 
-                        "LastIncreaseDateTime": 0.0, 
-                        "ReadCapacityUnits": 1, 
-                        "LastDecreaseDateTime": 0.0
-                    }, 
-                    "TableSizeBytes": 0, 
-                    "TableName": "Accounts", 
-                    "BillingModeSummary": {
-                        "LastUpdateToPayPerRequestDateTime": 0.0, 
-                        "BillingMode": "PROVISIONED"
-                    }, 
-                    "TableStatus": "ACTIVE", 
-                    "KeySchema": [
-                        {
-                            "KeyType": "HASH", 
-                            "AttributeName": "id"
-                        }, 
-                        {
-                            "KeyType": "RANGE", 
-                            "AttributeName": "createdDateTime"
-                        }
-                    ], 
-                    "ItemCount": 0, 
-                    "CreationDateTime": 1585243254.024
-                }
-            }
-            ```
+            <details> </details>
             
             ```sh
             aws --endpoint-url http://localhost:4569 \
                 dynamodb list-tables
-            ```
-            
-            ```sh
-            {
-                "TableNames": [
-                    "Accounts", 
-                    "Contractors"
-                ]
-            }
             ```
         
         2.  Seed accounts with test data
@@ -196,12 +115,6 @@ Executes server side code watcher in dev mode.
                 dynamodb batch-write-item \
                 --request-items   \
                 file://${DBPATH}/AccountsDataSeed.json
-            ```
-            
-            ```sh
-            {
-                "UnprocessedItems": {}
-            }
             ```
             
             Unfortunately `batch-write-item` limited to 25 operations
@@ -217,45 +130,6 @@ Executes server side code watcher in dev mode.
               --key-condition-expression "id = :id" \
               --expression-attribute-values  '{":id":{"S": "d83ef3c0-6d35-11ea-9d77-3dffd7d18939"}}'
             ```
-            
-            ```sh
-            {
-                "Count": 1, 
-                "Items": [
-                    {
-                        "comment": {
-                            "S": "Facere deleniti blanditiis eum."
-                        }, 
-                        "category": {
-                            "S": "Sales"
-                        }, 
-                        "createdDateTime": {
-                            "N": "1446960934025"
-                        }, 
-                        "accType": {
-                            "S": "default"
-                        }, 
-                        "vatPercent": {
-                            "N": "49"
-                        }, 
-                        "accName": {
-                            "S": "Roi Greens Backing Up"
-                        }, 
-                        "vatCategoryS": {
-                            "S": "S"
-                        }, 
-                        "id": {
-                            "S": "d83ef3c0-6d35-11ea-9d77-3dffd7d18939"
-                        }, 
-                        "accNo": {
-                            "N": "55"
-                        }
-                    }
-                ], 
-                "ScannedCount": 1, 
-                "ConsumedCapacity": null
-            }
-            ```
         
         4.  Querying accounts from GSI
         
@@ -268,100 +142,6 @@ Executes server side code watcher in dev mode.
                --index-name accType \
                --key-condition-expression "accType = :accType" \
                --expression-attribute-values  '{":accType":{"S":"bookkeeping"}}'
-            ```
-            
-            ```sh
-            {
-                "Count": 3, 
-                "Items": [
-                    {
-                        "comment": {
-                            "S": "est autem facere"
-                        }, 
-                        "category": {
-                            "S": "Purchase"
-                        }, 
-                        "createdDateTime": {
-                            "N": "1329262892304"
-                        }, 
-                        "accType": {
-                            "S": "bookkeeping"
-                        }, 
-                        "vatPercent": {
-                            "N": "73"
-                        }, 
-                        "accName": {
-                            "S": "Agp"
-                        }, 
-                        "vatCategoryS": {
-                            "S": "P"
-                        }, 
-                        "id": {
-                            "S": "d83fde20-6d35-11ea-9d77-3dffd7d18939"
-                        }, 
-                        "accNo": {
-                            "N": "93"
-                        }
-                    }, 
-                    {
-                        "comment": {
-                            "S": "Amet consequatur similique quis nobis nam maxime ut dolor. Vitae sed quo sunt molestias vero tempore minima. Necessitatibus ducimus hic reprehenderit. Hic dolore error animi ut aperiam. Hic inventore sunt ipsa ut recusandae. Sed accusantium et iusto.\n \rUnde neque sequi quidem beatae. Quo repudiandae voluptatem impedit nostrum asperiores nostrum aut magnam odio. At recusandae dolorem sunt debitis sequi totam esse ipsa. Eos repellendus totam aut hic.\n \rConsequatur voluptate sunt ratione est est ad omnis. Debitis animi ut est consequatur. Quos praesentium autem est minus et ea."
-                        }, 
-                        "category": {
-                            "S": "Purchase"
-                        }, 
-                        "createdDateTime": {
-                            "N": "1551172226477"
-                        }, 
-                        "accType": {
-                            "S": "bookkeeping"
-                        }, 
-                        "vatPercent": {
-                            "N": "22"
-                        }, 
-                        "accName": {
-                            "S": "Computer Manat Vanuatu"
-                        }, 
-                        "vatCategoryS": {
-                            "S": "P"
-                        }, 
-                        "id": {
-                            "S": "d83f41e0-6d35-11ea-9d77-3dffd7d18939"
-                        }, 
-                        "accNo": {
-                            "N": "66"
-                        }
-                    }, 
-                    {
-                        "category": {
-                            "S": "Purchase"
-                        }, 
-                        "createdDateTime": {
-                            "N": "1564661196514"
-                        }, 
-                        "accType": {
-                            "S": "bookkeeping"
-                        }, 
-                        "vatPercent": {
-                            "N": "88"
-                        }, 
-                        "accName": {
-                            "S": "Maroon Refined Granite Tuna"
-                        }, 
-                        "vatCategoryS": {
-                            "S": "P"
-                        }, 
-                        "id": {
-                            "S": "d83fb710-6d35-11ea-9d77-3dffd7d18939"
-                        }, 
-                        "accNo": {
-                            "N": "93"
-                        }
-                    }
-                ], 
-                "ScannedCount": 3, 
-                "ConsumedCapacity": null
-            }
             ```
             
             Because `createdDateTime` was used as `RANGE` (sorted) key, list of items returned by this query sorted descendant by `createdDateTime`
@@ -383,61 +163,8 @@ Executes server side code watcher in dev mode.
             ```
             
             ```sh
-            {
-                "TableDescription": {
-                    "TableArn": "arn:aws:dynamodb:us-east-1:000000000000:table/Contractors", 
-                    "AttributeDefinitions": [
-                        {
-                            "AttributeName": "id", 
-                            "AttributeType": "S"
-                        }, 
-                        {
-                            "AttributeName": "createdDateTime", 
-                            "AttributeType": "N"
-                        }
-                    ], 
-                    "ProvisionedThroughput": {
-                        "NumberOfDecreasesToday": 0, 
-                        "WriteCapacityUnits": 1, 
-                        "LastIncreaseDateTime": 0.0, 
-                        "ReadCapacityUnits": 1, 
-                        "LastDecreaseDateTime": 0.0
-                    }, 
-                    "TableSizeBytes": 0, 
-                    "TableName": "Contractors", 
-                    "BillingModeSummary": {
-                        "LastUpdateToPayPerRequestDateTime": 0.0, 
-                        "BillingMode": "PROVISIONED"
-                    }, 
-                    "TableStatus": "ACTIVE", 
-                    "KeySchema": [
-                        {
-                            "KeyType": "HASH", 
-                            "AttributeName": "id"
-                        }, 
-                        {
-                            "KeyType": "RANGE", 
-                            "AttributeName": "createdDateTime"
-                        }
-                    ], 
-                    "ItemCount": 0, 
-                    "CreationDateTime": 1585243058.528
-                }
-            }
-            ```
-            
-            ```sh
             aws --endpoint-url http://localhost:4569 \
                 dynamodb list-tables
-            ```
-            
-            ```sh
-            {
-                "TableNames": [
-                    "Accounts", 
-                    "Contractors"
-                ]
-            }
             ```
         
         2.  Seed accounts with test data
@@ -449,12 +176,6 @@ Executes server side code watcher in dev mode.
                 dynamodb batch-write-item \
                 --request-items file://${DBPATH}/ContractorsDataSeed.json
             ```
-            
-            ```sh
-            {
-                "UnprocessedItems": {}
-            }
-            ```
         
         3.  Scan all items
         
@@ -464,116 +185,6 @@ Executes server side code watcher in dev mode.
             aws --endpoint-url http://localhost:4569 \
                 dynamodb scan \
                --table-name Contractors 
-            ```
-            
-            ```sh
-            {
-                "Count": 5, 
-                "Items": [
-                    {
-                        "salary": {
-                            "N": "73573"
-                        }, 
-                        "createdDateTime": {
-                            "N": "1485975663942"
-                        }, 
-                        "lname": {
-                            "S": "Bogan"
-                        }, 
-                        "role": {
-                            "S": "Assistant"
-                        }, 
-                        "fname": {
-                            "S": "Melisa"
-                        }, 
-                        "id": {
-                            "S": "d83fde23-6d35-11ea-9d77-3dffd7d18939"
-                        }
-                    }, 
-                    {
-                        "salary": {
-                            "N": "66464"
-                        }, 
-                        "createdDateTime": {
-                            "N": "1541301126353"
-                        }, 
-                        "lname": {
-                            "S": "Weber"
-                        }, 
-                        "role": {
-                            "S": "Tech Lead"
-                        }, 
-                        "fname": {
-                            "S": "Dixie"
-                        }, 
-                        "id": {
-                            "S": "d83fde22-6d35-11ea-9d77-3dffd7d18939"
-                        }
-                    }, 
-                    {
-                        "salary": {
-                            "N": "87487"
-                        }, 
-                        "createdDateTime": {
-                            "N": "1355210819473"
-                        }, 
-                        "lname": {
-                            "S": "Larkin"
-                        }, 
-                        "role": {
-                            "S": "Assistant"
-                        }, 
-                        "fname": {
-                            "S": "Louisa"
-                        }, 
-                        "id": {
-                            "S": "d83fde21-6d35-11ea-9d77-3dffd7d18939"
-                        }
-                    }, 
-                    {
-                        "salary": {
-                            "N": "76169"
-                        }, 
-                        "createdDateTime": {
-                            "N": "1566826234865"
-                        }, 
-                        "lname": {
-                            "S": "Gerhold"
-                        }, 
-                        "role": {
-                            "S": "Developer"
-                        }, 
-                        "fname": {
-                            "S": "Major"
-                        }, 
-                        "id": {
-                            "S": "d83fde25-6d35-11ea-9d77-3dffd7d18939"
-                        }
-                    }, 
-                    {
-                        "salary": {
-                            "N": "84469"
-                        }, 
-                        "createdDateTime": {
-                            "N": "1548899509818"
-                        }, 
-                        "lname": {
-                            "S": "Kassulke"
-                        }, 
-                        "role": {
-                            "S": "Sales"
-                        }, 
-                        "fname": {
-                            "S": "Estefania"
-                        }, 
-                        "id": {
-                            "S": "d83fde24-6d35-11ea-9d77-3dffd7d18939"
-                        }
-                    }
-                ], 
-                "ScannedCount": 5, 
-                "ConsumedCapacity": null
-            }
             ```
 
 2.  [WAITING] <code>[4/6]</code> Attempt to create stack from cloud formation config on localstack env
@@ -592,19 +203,12 @@ Executes server side code watcher in dev mode.
     aws --endpoint-url=http://localhost:4581 cloudformation list-stacks
     ```
     
-        /Users/vladimir/projects/react-examples/rhooks-form-app
-        {
-            "StackSummaries": []
-        }
-    
     ```sh
     aws cloudformation create-stack \
         --template-body file://cloudformation.yml \
         --stack-name web-stack \
         --endpoint-url=http://localhost:4581
     ```
-    
-        An error occurred (502) when calling the CreateStack operation (reached max retries: 4): Bad Gateway
     
     Error log from docker:
     
@@ -628,18 +232,6 @@ Executes server side code watcher in dev mode.
              -d '{ "accNo": 111, "category": "Purchase", "vatPercent": 11, "vatCategoryS": "P", "accName": "One one one" }'
         ```
         
-        ```sh
-        {
-          "id": "ZDcwNThjNjAtNmY4NS0xMWVhLTkyYWYtOGYyZjgxYjZiODlmLDE1ODUyNDMxMjE3MDI%3D",
-          "accType": "bookkeeping",
-          "accNo": 111,
-          "category": "Purchase",
-          "vatPercent": 11,
-          "vatCategoryS": "P",
-          "accName": "One one one"
-        }
-        ```
-        
         1.  Invalid request
         
             ```sh
@@ -647,85 +239,11 @@ Executes server side code watcher in dev mode.
                  -H 'Content-Type: application/json' \
                  -d '{ "category": "Purchase" }'
             ```
-            
-            ```sh
-            HTTP/1.1 422 Unprocessable Entity
-            X-Powered-By: Express
-            Content-Type: application/json; charset=utf-8
-            Content-Length: 130
-            ETag: W/"82-HHj2rmNjH457Bv9LJ8U88iWD1J8"
-            Date: Thu, 26 Mar 2020 17:19:16 GMT
-            Connection: keep-alive
-            
-            {
-              "errors": [
-                {
-                  "msg": "account number should be number",
-                  "param": "accNo",
-                  "location": "body"
-                }
-              ]
-            }
-            ```
     
     2.  [R1] Get all accounts
     
         ```sh
         curl -vsi "${API}/accounts?type=bookkeeping&pretty"
-        ```
-        
-        ```sh
-        HTTP/1.1 200 OK
-        X-Powered-By: Express
-        Content-Type: application/json; charset=utf-8
-        Content-Length: 1744
-        ETag: W/"6d0-QOCkXK3Pv5QR27cnmBad8f/vVio"
-        Date: Thu, 26 Mar 2020 17:19:25 GMT
-        Connection: keep-alive
-        
-        {
-          "items": [
-            {
-              "id": "ZDgzZmRlMjAtNmQzNS0xMWVhLTlkNzctM2RmZmQ3ZDE4OTM5LDEzMjkyNjI4OTIzMDQ%3D",
-              "vatCategoryS": "P",
-              "accNo": 93,
-              "accName": "Agp",
-              "comment": "est autem facere",
-              "category": "Purchase",
-              "accType": "bookkeeping",
-              "vatPercent": 73
-            },
-            {
-              "id": "ZDgzZjQxZTAtNmQzNS0xMWVhLTlkNzctM2RmZmQ3ZDE4OTM5LDE1NTExNzIyMjY0Nzc%3D",
-              "vatCategoryS": "P",
-              "accNo": 66,
-              "accName": "Computer Manat Vanuatu",
-              "comment": "Amet consequatur similique quis nobis nam maxime ut dolor. Vitae sed quo sunt molestias vero tempore minima. Necessitatibus ducimus hic reprehenderit. Hic dolore error animi ut aperiam. Hic inventore sunt ipsa ut recusandae. Sed accusantium et iusto.\n \rUnde neque sequi quidem beatae. Quo repudiandae voluptatem impedit nostrum asperiores nostrum aut magnam odio. At recusandae dolorem sunt debitis sequi totam esse ipsa. Eos repellendus totam aut hic.\n \rConsequatur voluptate sunt ratione est est ad omnis. Debitis animi ut est consequatur. Quos praesentium autem est minus et ea.",
-              "category": "Purchase",
-              "accType": "bookkeeping",
-              "vatPercent": 22
-            },
-            {
-              "id": "ZDgzZmI3MTAtNmQzNS0xMWVhLTlkNzctM2RmZmQ3ZDE4OTM5LDE1NjQ2NjExOTY1MTQ%3D",
-              "vatCategoryS": "P",
-              "accNo": 93,
-              "accName": "Maroon Refined Granite Tuna",
-              "category": "Purchase",
-              "accType": "bookkeeping",
-              "vatPercent": 88
-            },
-            {
-              "id": "ZDcwNThjNjAtNmY4NS0xMWVhLTkyYWYtOGYyZjgxYjZiODlmLDE1ODUyNDMxMjE3MDI%3D",
-              "vatCategoryS": "P",
-              "accNo": 111,
-              "accName": "One one one",
-              "accType": "bookkeeping",
-              "category": "Purchase",
-              "vatPercent": 11
-            }
-          ],
-          "count": 4
-        }
         ```
     
     3.  [R2] Get single account
@@ -733,25 +251,6 @@ Executes server side code watcher in dev mode.
         ```sh
         curl -vsi "${API}/accounts/ZDgzZWYzYzAtNmQzNS0xMWVhLTlkNzctM2RmZmQ3ZDE4OTM5LDE0NDY5NjA5MzQwMjU%3D/?pretty"
         ```
-        
-            HTTP/1.1 200 OK
-            X-Powered-By: Express
-            Content-Type: application/json; charset=utf-8
-            Content-Length: 275
-            ETag: W/"113-8G/9TPw6G+iF1N4VS0htAw7+rJ8"
-            Date: Thu, 26 Mar 2020 09:46:09 GMT
-            Connection: keep-alive
-            
-            {
-              "id": "ZDgzZWYzYzAtNmQzNS0xMWVhLTlkNzctM2RmZmQ3ZDE4OTM5LDE0NDY5NjA5MzQwMjU%3D",
-              "vatCategoryS": "S",
-              "accNo": 55,
-              "accName": "Roi Greens Backing Up",
-              "comment": "Facere deleniti blanditiis eum.",
-              "category": "Sales",
-              "accType": "default",
-              "vatPercent": 49
-            }
     
     4.  [U] Update account
     
@@ -761,17 +260,6 @@ Executes server side code watcher in dev mode.
              -d '{ "vatPercent": 111, "accName": "One One One" }'
         ```
         
-            {
-              "id": "ZDgzZWYzYzAtNmQzNS0xMWVhLTlkNzctM2RmZmQ3ZDE4OTM5LDE0NDY5NjA5MzQwMjU%3D",
-              "vatCategoryS": "S",
-              "accNo": 55,
-              "accName": "One One One",
-              "comment": "Facere deleniti blanditiis eum.",
-              "category": "Sales",
-              "accType": "default",
-              "vatPercent": 111
-            }
-        
         1.  Invalid request
         
             ```sh
@@ -779,17 +267,6 @@ Executes server side code watcher in dev mode.
                  -H 'Content-Type: application/json' \
                  -d '{ "vatPercent": 111, "accName": "One One One" }'
             ```
-            
-                <!DOCTYPE html>
-                <html lang="en">
-                <head>
-                <meta charset="utf-8">
-                <title>Error</title>
-                </head>
-                <body>
-                <pre>Cannot PUT /api/accounts/</pre>
-                </body>
-                </html>
     
     5.  [D] Delete account
     
