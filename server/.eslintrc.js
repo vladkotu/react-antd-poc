@@ -2,6 +2,7 @@ module.exports = {
     "env": {
         "node": true,
         "es6": true,
+        "jest": true,
     },
     "extends": [
         "eslint:recommended",
@@ -21,7 +22,6 @@ module.exports = {
                 "printWidth": 80,
                 "trailingComma": "es5",
                 "semi": false,
-                "jsxSingleQuote": true,
                 "singleQuote": true,
                 "useTabs": false
             }

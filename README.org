@@ -42,7 +42,7 @@ Executes server side code watcher in dev mode.
     9. [ ] Functional tests
  
 ** NodeJs backend
-*** TODO [4/8] List
+*** TODO [6/8] List
     - [X] CRUD actions
     - [X] ES6 syntax for server side code
     - [X] Request validation/sanitation
@@ -50,11 +50,11 @@ Executes server side code watcher in dev mode.
       - [X] Custom validation middleware
     - [X] Error handling
     - [ ] Unit tests
-    - [ ] End-to-end API testing
-      - [ ] Scripts for reseting/seeding database with test data
-      - [ ] Run docker localstack image before tests
-      - [ ] Wtite end-to-end tests
-    - [ ] Migrate app to DynamoDB as main DB
+    - [X] End-to-end API testing
+      - [X] Scripts for reseting/seeding database with test data
+      - [X] Run docker localstack image before tests
+      - [X] Wtite end-to-end tests
+    - [X] Migrate app to DynamoDB as main DB
     - [ ] [WAITING] Deploy to AWS lambda (localstack)
 
 *** DynamoDB

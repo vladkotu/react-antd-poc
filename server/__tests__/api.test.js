@@ -101,7 +101,6 @@ describe('api', () => {
           .expect(200, item, done)
       })
 
-
       it('create default account', done => {
         const payload = {
           accType: 'default',
