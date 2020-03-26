@@ -61,7 +61,10 @@ function Accounts() {
       </Menu>
 
       <Content className='App-content'>
-        <EditableList {...navigation[currentNav]} />
+        <EditableList
+          key={navigation[currentNav].title}
+          {...navigation[currentNav]}
+        />
       </Content>
     </>
   )

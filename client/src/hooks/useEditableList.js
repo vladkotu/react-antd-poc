@@ -34,10 +34,6 @@ function useEditableList(api) {
     }
   }
 
-  useEffect(() => {
-    getItems()
-  }, [])
-
   return {
     currentItem,
     items,

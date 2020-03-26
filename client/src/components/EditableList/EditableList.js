@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Row, Card, List } from 'antd'
 import { Link, ItemForm } from '../'
 import './styles.css'
@@ -7,16 +7,20 @@ function EditableList({
   title,
   headActionTitle,
   currentItem,
-  items,
+  items = [],
   formFields = [],
   itemTitleComponent = () => null,
-
   onBeforeSubmit = v => v,
   setCurrentItem,
   addItem,
   updateItem,
   removeItem,
+  getItems,
 }) {
+  useEffect(() => {
+    getItems()
+  }, [])
+
   const cardProps = {
     title,
     extra: headActionTitle ? (
