@@ -1,3 +1,5 @@
+import * as fs from 'fs'
+import * as path from 'path'
 import f from 'faker'
 import { validationResult } from 'express-validator'
 
@@ -73,3 +75,9 @@ export const oneOf = opts => () => f.random.arrayElement(opts)
 
 export const randomDateFrom = (y, m, d) => () =>
   randomDate(new Date(y, m, d), new Date()).getTime()
+
+export function readJson (f){
+  const fp = path.join(__dirname, f)
+  const cnt = fs.readFileSync(fp, 'utf-8')
+  return JSON.parse(cnt)
+}

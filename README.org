@@ -1,7 +1,7 @@
 
 * Proof of qualification repo
     :PROPERTIES:
-    :header-args: :var DBPATH="server/db"
+    :header-args: :var DBPATH="server/src/db"
     :END:
   This project aim to proof knowledge of NodeJs/React stack
 ** Start Scripts
@@ -81,7 +81,7 @@ Executes server side code watcher in dev mode.
     #+end_src
 
     #+RESULTS: create-table
-    #+begin_src json
+    #+begin_src org
     {
         "TableDescription": {
             "TableArn": "arn:aws:dynamodb:us-east-1:000000000000:table/Accounts", 
@@ -150,7 +150,7 @@ Executes server side code watcher in dev mode.
                 }
             ], 
             "ItemCount": 0, 
-            "CreationDateTime": 1585134915.481
+            "CreationDateTime": 1585223158.465
         }
     }
     #+end_src
@@ -166,8 +166,7 @@ Executes server side code watcher in dev mode.
    #+begin_src org
    {
        "TableNames": [
-           "Accounts", 
-           "Contractors"
+           "Accounts"
        ]
    }
    #+end_src
@@ -363,7 +362,7 @@ Executes server side code watcher in dev mode.
     #+end_src
 
     #+RESULTS: create-contractors-table
-    #+begin_src json
+    #+begin_src org
     {
         "TableDescription": {
             "TableArn": "arn:aws:dynamodb:us-east-1:000000000000:table/Contractors", 
@@ -402,7 +401,7 @@ Executes server side code watcher in dev mode.
                 }
             ], 
             "ItemCount": 0, 
-            "CreationDateTime": 1585135026.665
+            "CreationDateTime": 1585223192.602
         }
     }
     #+end_src

@@ -3,11 +3,11 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "test": "jest",
-    "lint": "eslint ./",
-    "format": "prettier-eslint --write $PWD/'**/*.js'",
+    "test": "NODE_ENV=test jest",
+    "lint": "eslint ./src",
+    "format": "prettier-eslint --write $PWD/'src/**/*.js'",
     "client": "cd ../client && yarn start",
-    "build": "babel ./ --out-dir build",
+    "build": "babel ./src --out-dir build  --ignore node_modules",
     "server": "node ./build/server.local.js",
     "dev": "NODE_ENV=development npm-run-all build server",
     "prod": "NODE_ENV=production npm-run-all build server",
@@ -19,7 +19,8 @@
         "@babel/preset-env",
         {
           "targets": {
-            "esmodules": true
+            "esmodules": true,
+            "node": "current"
           }
         }
       ]
@@ -28,7 +29,7 @@
   "nodemonConfig": {
     "exec": "npm run dev",
     "watch": [
-      "server/*"
+      "src/*"
     ],
     "ignore": [
       "**/__tests__/**",
@@ -39,8 +40,7 @@
   "jest": {
     "testEnvironment": "node",
     "coveragePathIgnorePatterns": [
-      "/node_modules/",
-      "/client"
+      "/node_modules/"
     ]
   },
   "dependencies": {

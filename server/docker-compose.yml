@@ -2,7 +2,7 @@ version: '3.2'
 services:
   localstack:
     image: localstack/localstack:latest
-    container_name: local_aws
+    container_name: localstack
     ports:
       - '4563-4599:4563-4599'
       - '8055:8080'
@@ -11,5 +11,5 @@ services:
       - DEBUG=1
       - DATA_DIR=/tmp/localstack/data
     volumes:
-      - '../.localstack/volume:/tmp/localstack'
+      - '.localstack/volume:/tmp/localstack'
       - '/var/run/docker.sock:/var/run/docker.sock'
