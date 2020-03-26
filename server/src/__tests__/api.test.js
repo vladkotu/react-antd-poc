@@ -1,7 +1,7 @@
 import AWS from 'aws-sdk'
 import request from 'supertest'
-import { encodeId, decodeId } from '../utils'
-import { ddbCli, ddbDoc } from '../db/ddb'
+import { encodeId } from '../utils'
+import { ddbCli } from '../db/ddb'
 import * as AccountsSchema from '../db/AccountsSchema.json'
 import * as AccountsDataSeed from '../db/AccountsDataSeed.json'
 import * as ContractorsSchema from '../db/ContractorsSchema.json'
@@ -10,6 +10,7 @@ import app from '../app'
 import config from 'config'
 
 const dbCfg = config.get('ddb')
+const __debug = false
 
 AWS.config.update({
   region: dbCfg.region,
@@ -27,6 +28,39 @@ const testPostApi = (method, url, payload, expectation) => {
     .then(expectation)
 }
 
+const db = ddbCli()
+
+const setupDatabase = async (tableName, schema, data, done) => {
+  try {
+    await db.createTable({
+      ...schema,
+      TableName: tableName,
+    })
+    __debug && console.log(`'${tableName}' - created`)
+    await db.batchWriteItem({
+      RequestItems: {
+        [tableName]: data,
+      },
+    })
+    __debug && console.log(`'${tableName}' - seeded`)
+    done()
+  } catch (err) {
+    __debug && console.log(`'${tableName}' - create error`, err)
+    done(err)
+  }
+}
+
+const tearDownDatabse = async (tableName, done) => {
+  try {
+    await db.deleteTable({ TableName: tableName })
+    __debug && console.log(`'${tableName}' - removed`)
+    done()
+  } catch (err) {
+    __debug && console.log(`'${tableName}' - remove error`, err)
+    done(err)
+  }
+}
+
 describe('api', () => {
   it('Not found', done => {
     request(app)
@@ -37,34 +71,18 @@ describe('api', () => {
       .end(done)
   })
   describe('crud', () => {
-    const dd = ddbCli()
-    const dbDoc = ddbDoc()
-
     describe('accounts', () => {
-      beforeEach(async () => {
-        try {
-          await dd.createTable({
-            ...AccountsSchema.default,
-            TableName: dbCfg.tables.accounts,
-          })
-          await dd.batchWriteItem({
-            RequestItems: {
-              [dbCfg.tables.accounts]: AccountsDataSeed.default.Accounts,
-            },
-          })
-        } catch (err) {
-          err.message = 'Not able to create and seed accounts taable'
-          console.error(err)
-        }
+      beforeEach(async done => {
+        await setupDatabase(
+          dbCfg.tables.accounts,
+          AccountsSchema.default,
+          AccountsDataSeed.default.Accounts,
+          done
+        )
       })
 
-      afterEach(async () => {
-        try {
-          await dd.deleteTable({ TableName: dbCfg.tables.accounts })
-        } catch (err) {
-          err.message = 'Not able to deletet accounts taable'
-          console.error(err)
-        }
+      afterEach(async done => {
+        await tearDownDatabse(dbCfg.tables.accounts, done)
       })
 
       it('create bookkeeping account account', done => {
@@ -181,31 +199,17 @@ describe('api', () => {
     })
 
     describe('contractors', () => {
-      beforeEach(async () => {
-        try {
-          await dd.createTable({
-            ...ContractorsSchema.default,
-            TableName: dbCfg.tables.contractors,
-          })
-          await dd.batchWriteItem({
-            RequestItems: {
-              [dbCfg.tables.contractors]:
-                ContractorsDataSeed.default.Contractors,
-            },
-          })
-        } catch (err) {
-          err.message = 'Not able to create and seed contractos taable'
-          console.error(err)
-        }
+      beforeEach(async done => {
+        await setupDatabase(
+          dbCfg.tables.contractors,
+          ContractorsSchema.default,
+          ContractorsDataSeed.default.Contractors,
+          done
+        )
       })
 
-      afterEach(async () => {
-        try {
-          await dd.deleteTable({ TableName: dbCfg.tables.contractors })
-        } catch (err) {
-          err.message = 'Not able to delete contractos taable'
-          console.error(err)
-        }
+      afterEach(async done => {
+        await tearDownDatabse(dbCfg.tables.contractors, done)
       })
 
       it('create contractor', done => {
