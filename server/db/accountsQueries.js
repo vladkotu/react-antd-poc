@@ -1,5 +1,5 @@
 import { v1 as uuidv1 } from 'uuid'
-import { logger } from '../logger'
+import { encodeItem, decodeItem } from '../utils'
 import { ddbCli, ddbDoc } from '../db/ddb.js'
 import config from 'config'
 
@@ -17,7 +17,7 @@ export const addAccount = async item => {
     },
   }
   const res = await ddb.put(params)
-  return res.Attributes
+  return encodeItem(res.Attributes)
 }
 
 export const fetchAccounts = async type => {
@@ -31,10 +31,11 @@ export const fetchAccounts = async type => {
     },
   }
   const res = await ddb.query(params)
-  return res
+  return { items: res.Items.map(encodeItem), count: res.Count }
 }
 
-export const fetchSingleAccount = async item => {
+export const fetchSingleAccount = async encoded => {
+  const item = decodeItem(encoded)
   const ddb = ddbDoc()
   const { id, createdDateTime } = item
   const params = {
@@ -42,10 +43,11 @@ export const fetchSingleAccount = async item => {
     Key: { id, createdDateTime },
   }
   const res = await ddb.get(params)
-  return res.Item
+  return encodeItem(res.Item)
 }
 
-export const removeAccount = async item => {
+export const removeAccount = async encoded => {
+  const item = decodeItem(encoded)
   const ddb = ddbDoc()
   const { id, createdDateTime } = item
   const params = {
@@ -55,9 +57,10 @@ export const removeAccount = async item => {
   await ddb.delete(params)
 }
 
-export const updateAccount = async item => {
-  const origItem = await fetchSingleAccount(item)
+export const updateAccount = async encoded => {
+  const item = decodeItem(encoded)
+  const origItem = await fetchSingleAccount(encoded)
   const newItem = { ...origItem, ...item }
-  await removeAccount(item)
+  await removeAccount(encoded)
   return await addAccount(newItem)
 }

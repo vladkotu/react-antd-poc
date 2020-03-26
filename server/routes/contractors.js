@@ -48,19 +48,17 @@ router.get('/', async (req, res, next) => {
 
 router.get(
   '/:id',
-  checkSchema({ ...idValidationSchema, ...createdDateValidationSchema }),
+  checkSchema({ ...idValidationSchema }),
   checkErrors,
   async (req, res, next) => {
     try {
       const id = req.params.id
-      const createdDateTime = req.query.createdDateTime
       const item = await contractorsQueries.fetchSingleContractor({
         id,
-        createdDateTime,
       })
       res.send(item)
     } catch (err) {
-      console.error(err)
+      logger.error(err)
       next(err)
     }
   }
@@ -70,21 +68,18 @@ router.put(
   '/:id',
   checkSchema({
     ...idValidationSchema,
-    ...createdDateValidationSchema,
   }),
   checkErrors,
   async (req, res, next) => {
     try {
       const id = req.params.id
-      const createdDateTime =
-        req.query.createdDateTime || req.body.createdDateTime
       const item = await contractorsQueries.updateContractor({
         id,
-        createdDateTime,
         ...req.body,
       })
       res.send(item)
     } catch (err) {
+      logger.error(err)
       next(err)
     }
   }
@@ -92,18 +87,17 @@ router.put(
 
 router.delete(
   '/:id',
-  checkSchema({ ...idValidationSchema, ...createdDateValidationSchema }),
+  checkSchema({ ...idValidationSchema }),
   checkErrors,
   async (req, res, next) => {
     try {
       const id = req.params.id
-      const createdDateTime = req.query.createdDateTime
       await contractorsQueries.removeContractor({
         id,
-        createdDateTime,
       })
       res.send('')
     } catch (err) {
+      logger.error(err)
       next(err)
     }
   }

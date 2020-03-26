@@ -1,7 +1,6 @@
-
 export const idValidationSchema = {
   id: {
-      in: ['params'],
+    in: ['params'],
     errorMessage: 'Id is must have',
   },
 }

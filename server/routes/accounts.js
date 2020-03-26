@@ -52,6 +52,7 @@ router.post(
       })
       res.send(item)
     } catch (err) {
+      // logger.error('WERRR', JSON.stringify(err, null, ' '))
       next(err)
     }
   }
@@ -70,16 +71,12 @@ router.get('/', checkAccountType, async (req, res, next) => {
 
 router.get(
   '/:id',
-  checkSchema({
-    ...idValidationSchema,
-    ...createdDateValidationSchema,
-  }),
+  checkSchema(idValidationSchema),
   checkErrors,
   async (req, res, next) => {
     try {
       const item = await accountsQueries.fetchSingleAccount({
         id: req.params.id,
-        createdDateTime: req.query.createdDateTime,
       })
       res.send(item)
     } catch (err) {
@@ -90,19 +87,13 @@ router.get(
 
 router.put(
   '/:id',
-  checkSchema({
-    ...idValidationSchema,
-    ...createdDateValidationSchema,
-  }),
+  checkSchema(idValidationSchema),
   checkErrors,
   async (req, res, next) => {
     try {
       const id = req.params.id
-      const createdDateTime =
-        req.query.createdDateTime || req.body.createdDateTime
       const item = await accountsQueries.updateAccount({
         id,
-        createdDateTime,
         ...req.body,
       })
       res.send(item)
@@ -117,17 +108,12 @@ router.delete(
   '/:id',
   checkSchema({
     ...idValidationSchema,
-    ...createdDateValidationSchema,
   }),
   checkErrors,
   async (req, res, next) => {
     try {
       const id = req.params.id
-      const createdDateTime = req.query.createdDateTime
-      await accountsQueries.removeAccount({
-        id,
-        createdDateTime,
-      })
+      await accountsQueries.removeAccount({ id })
       res.send('')
     } catch (err) {
       next(err)

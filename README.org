@@ -517,18 +517,15 @@ Executes server side code watcher in dev mode.
   #+end_src
 
    #+RESULTS: create-account
-   #+begin_example json
-   {
-     "id": "6be54070-6e8a-11ea-966f-79ee4efae916",
-     "createdDateTime": 1585135138295,
-     "accType": "bookkeeping",
-     "accNo": 111,
-     "category": "Purchase",
-     "vatPercent": 11,
-     "vatCategoryS": "P",
-     "accName": "One one one"
-   }
-   #+end_example
+   : {
+   :   "id": "ZmI5N2NiYjAtNmY0NC0xMWVhLTg1ZDQtNWZlNTExZjNjMTJjLDE1ODUyMTUyNjU3NzE%3D",
+   :   "accType": "bookkeeping",
+   :   "accNo": 111,
+   :   "category": "Purchase",
+   :   "vatPercent": 11,
+   :   "vatCategoryS": "P",
+   :   "accName": "One one one"
+   : }
 
 ****** Invalid request
 
@@ -546,7 +543,7 @@ Executes server side code watcher in dev mode.
   Content-Type: application/json; charset=utf-8
   Content-Length: 130
   ETag: W/"82-HHj2rmNjH457Bv9LJ8U88iWD1J8"
-  Date: Wed, 25 Mar 2020 11:19:14 GMT
+  Date: Thu, 26 Mar 2020 09:34:34 GMT
   Connection: keep-alive
   
   {
@@ -571,42 +568,60 @@ Executes server side code watcher in dev mode.
    HTTP/1.1 200 OK
    X-Powered-By: Express
    Content-Type: application/json; charset=utf-8
-   Content-Length: 462
-   ETag: W/"1ce-53pljYKpmW/QIkcNvkL9YUeiaDw"
-   Date: Thu, 19 Mar 2020 15:30:04 GMT
+   Content-Length: 1744
+   ETag: W/"6d0-2mL5pUjB/Fv9kynH8T8rgXyF0aA"
+   Date: Thu, 26 Mar 2020 09:34:43 GMT
    Connection: keep-alive
-  
+   
    {
-     "count": 6,
-     "limit": "2",
      "items": [
        {
-         "accNo": 111,
-         "category": "Purchase",
-         "vatPercent": 111,
+         "id": "ZDgzZmRlMjAtNmQzNS0xMWVhLTlkNzctM2RmZmQ3ZDE4OTM5LDEzMjkyNjI4OTIzMDQ%3D",
          "vatCategoryS": "P",
-         "accName": "One One One",
-         "id": 968
+         "accNo": 93,
+         "accName": "Agp",
+         "comment": "est autem facere",
+         "category": "Purchase",
+         "accType": "bookkeeping",
+         "vatPercent": 73
        },
        {
-         "id": 15,
-         "accNo": 98,
-         "category": "Sales",
-         "vatPercent": 55,
-         "vatCategoryS": "S",
-         "accName": "Senior generate calculate",
-         "extRevenuClass": null,
-         "extTaxCode": null,
-         "comment": null
+         "id": "ZDgzZjQxZTAtNmQzNS0xMWVhLTlkNzctM2RmZmQ3ZDE4OTM5LDE1NTExNzIyMjY0Nzc%3D",
+         "vatCategoryS": "P",
+         "accNo": 66,
+         "accName": "Computer Manat Vanuatu",
+         "comment": "Amet consequatur similique quis nobis nam maxime ut dolor. Vitae sed quo sunt molestias vero tempore minima. Necessitatibus ducimus hic reprehenderit. Hic dolore error animi ut aperiam. Hic inventore sunt ipsa ut recusandae. Sed accusantium et iusto.\n \rUnde neque sequi quidem beatae. Quo repudiandae voluptatem impedit nostrum asperiores nostrum aut magnam odio. At recusandae dolorem sunt debitis sequi totam esse ipsa. Eos repellendus totam aut hic.\n \rConsequatur voluptate sunt ratione est est ad omnis. Debitis animi ut est consequatur. Quos praesentium autem est minus et ea.",
+         "category": "Purchase",
+         "accType": "bookkeeping",
+         "vatPercent": 22
+       },
+       {
+         "id": "ZDgzZmI3MTAtNmQzNS0xMWVhLTlkNzctM2RmZmQ3ZDE4OTM5LDE1NjQ2NjExOTY1MTQ%3D",
+         "vatCategoryS": "P",
+         "accNo": 93,
+         "accName": "Maroon Refined Granite Tuna",
+         "category": "Purchase",
+         "accType": "bookkeeping",
+         "vatPercent": 88
+       },
+       {
+         "id": "ZmI5N2NiYjAtNmY0NC0xMWVhLTg1ZDQtNWZlNTExZjNjMTJjLDE1ODUyMTUyNjU3NzE%3D",
+         "vatCategoryS": "P",
+         "accNo": 111,
+         "accName": "One one one",
+         "accType": "bookkeeping",
+         "category": "Purchase",
+         "vatPercent": 11
        }
-     ]
+     ],
+     "count": 4
    }
    #+end_example
 
 ***** [R2] Get single account  
     #+NAME: get-one-boo-accounts 
     #+begin_src sh :results verbatim :exports both
-      curl -vsi "${API}/accounts/d83f41e0-6d35-11ea-9d77-3dffd7d18939/?createdDateTime=1551172226477&pretty"
+      curl -vsi "${API}/accounts/ZDgzZWYzYzAtNmQzNS0xMWVhLTlkNzctM2RmZmQ3ZDE4OTM5LDE0NDY5NjA5MzQwMjU%3D/?pretty"
    #+end_src
 
    #+RESULTS: get-one-boo-accounts
@@ -614,32 +629,43 @@ Executes server side code watcher in dev mode.
    HTTP/1.1 200 OK
    X-Powered-By: Express
    Content-Type: application/json; charset=utf-8
-   Content-Length: 839
-   ETag: W/"347-8UwvaUyL8Z9gwUbvp+bJFXGOfH4"
-   Date: Wed, 25 Mar 2020 11:58:23 GMT
+   Content-Length: 275
+   ETag: W/"113-8G/9TPw6G+iF1N4VS0htAw7+rJ8"
+   Date: Thu, 26 Mar 2020 09:46:09 GMT
    Connection: keep-alive
    
    {
-     "vatCategoryS": "P",
-     "accNo": 66,
-     "accName": "Computer Manat Vanuatu",
-     "createdDateTime": 1551172226477,
-     "comment": "Amet consequatur similique quis nobis nam maxime ut dolor. Vitae sed quo sunt molestias vero tempore minima. Necessitatibus ducimus hic reprehenderit. Hic dolore error animi ut aperiam. Hic inventore sunt ipsa ut recusandae. Sed accusantium et iusto.\n \rUnde neque sequi quidem beatae. Quo repudiandae voluptatem impedit nostrum asperiores nostrum aut magnam odio. At recusandae dolorem sunt debitis sequi totam esse ipsa. Eos repellendus totam aut hic.\n \rConsequatur voluptate sunt ratione est est ad omnis. Debitis animi ut est consequatur. Quos praesentium autem est minus et ea.",
-     "id": "d83f41e0-6d35-11ea-9d77-3dffd7d18939",
-     "category": "Purchase",
-     "accType": "bookkeeping",
-     "vatPercent": 22
+     "id": "ZDgzZWYzYzAtNmQzNS0xMWVhLTlkNzctM2RmZmQ3ZDE4OTM5LDE0NDY5NjA5MzQwMjU%3D",
+     "vatCategoryS": "S",
+     "accNo": 55,
+     "accName": "Roi Greens Backing Up",
+     "comment": "Facere deleniti blanditiis eum.",
+     "category": "Sales",
+     "accType": "default",
+     "vatPercent": 49
    }
    #+end_example
 ***** [U] Update account
    #+NAME: update-account 
    #+begin_src sh :results verbatim :exports both
-     curl -X PUT -vs "${API}/accounts/d83ef3c0-6d35-11ea-9d77-3dffd7d18939/?pretty" \
+     curl -X PUT -vs "${API}/accounts/ZDgzZWYzYzAtNmQzNS0xMWVhLTlkNzctM2RmZmQ3ZDE4OTM5LDE0NDY5NjA5MzQwMjU%3D/?pretty" \
           -H 'Content-Type: application/json' \
-          -d '{ "createdDateTime": "1446960934025","vatPercent": 111, "accName": "One One One" }'
+          -d '{ "vatPercent": 111, "accName": "One One One" }'
   #+end_src
 
   #+RESULTS: update-account
+  #+begin_example
+  {
+    "id": "ZDgzZWYzYzAtNmQzNS0xMWVhLTlkNzctM2RmZmQ3ZDE4OTM5LDE0NDY5NjA5MzQwMjU%3D",
+    "vatCategoryS": "S",
+    "accNo": 55,
+    "accName": "One One One",
+    "comment": "Facere deleniti blanditiis eum.",
+    "category": "Sales",
+    "accType": "default",
+    "vatPercent": 111
+  }
+  #+end_example
 
 ****** Invalid request
 
@@ -667,8 +693,10 @@ Executes server side code watcher in dev mode.
 ***** [D] Delete account
    #+NAME: delete-account 
    #+begin_src sh :results verbatim :exports both
-     curl -X DELETE -vs "${API}/accounts/d83ef3c0-6d35-11ea-9d77-3dffd7d18939/?createdDateTime=1446960934025&pretty"
+     curl -X DELETE -vs "${API}/accounts/ZDgzZWYzYzAtNmQzNS0xMWVhLTlkNzctM2RmZmQ3ZDE4OTM5LDE0NDY5NjA5MzQwMjU%3D/?pretty"
   #+end_src
+
+  #+RESULTS: delete-account
 
 
   
