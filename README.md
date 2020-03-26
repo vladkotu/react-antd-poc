@@ -1,9 +1,9 @@
 - [Proof of qualification repo](#sec-1)
   - [Start Scripts](#sec-1-1)
   - [React(Hooks) front-end](#sec-1-2)
-    - [<code>[7/9]</code> List:](#sec-1-2-1)
+    - [<code>[7/9]</code> Front-end Todo List:](#sec-1-2-1)
   - [NodeJs backend](#sec-1-3)
-    - [<code>[6/8]</code> List](#sec-1-3-1)
+    - [<code>[6/8]</code> Backend Todo List](#sec-1-3-1)
     - [DynamoDB](#sec-1-3-2)
     - [API docs](#sec-1-3-3)
 
@@ -19,6 +19,12 @@ Start local infrastructure
 
 ```sh
 docker-compose up -d
+```
+
+Create tables and seed with data
+
+```sh
+yarn db:setup
 ```
 
 Start dev server and client code watchers
@@ -43,7 +49,7 @@ Executes server side code watcher in dev mode.
 
 ## React(Hooks) front-end<a id="sec-1-2"></a>
 
-### TODO <code>[7/9]</code> List:<a id="sec-1-2-1"></a>
+### TODO <code>[7/9]</code> Front-end Todo List:<a id="sec-1-2-1"></a>
 
 1.  [X] Use React Hooks for state management
 2.  [X] Use [Ant Design](https://ant.design/components/button/) components library
@@ -57,7 +63,7 @@ Executes server side code watcher in dev mode.
 
 ## NodeJs backend<a id="sec-1-3"></a>
 
-### TODO <code>[6/8]</code> List<a id="sec-1-3-1"></a>
+### TODO <code>[6/8]</code> Backend Todo List<a id="sec-1-3-1"></a>
 
 -   [X] CRUD actions
 -   [X] ES6 syntax for server side code
@@ -98,8 +104,6 @@ Executes server side code watcher in dev mode.
                 dynamodb create-table \
                 --cli-input-json file://${DBPATH}/AccountsSchema.json
             ```
-            
-            <details> </details>
             
             ```sh
             aws --endpoint-url http://localhost:4569 \

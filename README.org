@@ -12,7 +12,12 @@ Start local infrastructure
 #+begin_src sh
 docker-compose up -d
 #+end_src
-  
+
+Create tables and seed with data
+#+begin_src sh
+yarn db:setup
+#+end_src
+
 Start dev server and client code watchers 
 #+begin_src sh
 yarn dev:all
@@ -30,7 +35,7 @@ yarn test --watch
 
 Executes server side code watcher in dev mode.
 ** React(Hooks) front-end
-*** TODO [7/9] List:
+*** TODO [7/9] Front-end Todo List:
     1. [X] Use React Hooks for state management
     2. [X] Use [[https://ant.design/components/button/][Ant Design]]  components library
     3. [X] Implement reusable Editable list component for admin dashboard
@@ -42,7 +47,7 @@ Executes server side code watcher in dev mode.
     9. [ ] Functional(end-to-end) tests with cypress
  
 ** NodeJs backend
-*** TODO [6/8] List
+*** TODO [6/8] Backend Todo List
     - [X] CRUD actions
     - [X] ES6 syntax for server side code
     - [X] Request validation/sanitation
@@ -80,10 +85,8 @@ Executes server side code watcher in dev mode.
          --cli-input-json file://${DBPATH}/AccountsSchema.json
     #+end_src
 
-
-@@html:<details>@@
     #+RESULTS: create-table
-    #+begin_src sh
+    #+begin_src org
     {
         "TableDescription": {
             "TableArn": "arn:aws:dynamodb:us-east-1:000000000000:table/Accounts", 
@@ -152,14 +155,13 @@ Executes server side code watcher in dev mode.
                 }
             ], 
             "ItemCount": 0, 
-            "CreationDateTime": 1585243254.024
+            "CreationDateTime": 1585250695.159
         }
     }
     #+end_src
-@@html:</details>@@
 
     #+RESULTS: create-table
-   #+begin_src sh :results value code :eval never-export :exports code :post attr_wrap(width="5cm")
+   #+begin_src sh :results value code :eval never-export :exports code 
      aws --endpoint-url http://localhost:4569 \
          dynamodb list-tables
    #+end_src
@@ -718,7 +720,7 @@ Executes server side code watcher in dev mode.
 
 ***** [R2] Get single account  
     #+NAME: get-one-boo-accounts 
-    #+begin_src sh :results value code :exports code
+    #+begin_src sh :results value code :exports code :eval never-export 
       curl -vsi "${API}/accounts/ZDgzZWYzYzAtNmQzNS0xMWVhLTlkNzctM2RmZmQ3ZDE4OTM5LDE0NDY5NjA5MzQwMjU%3D/?pretty"
    #+end_src
 
@@ -745,7 +747,7 @@ Executes server side code watcher in dev mode.
    #+end_example
 ***** [U] Update account
    #+NAME: update-account 
-   #+begin_src sh :results value code :exports code
+   #+begin_src sh :results value code :exports code :eval never-export 
      curl -X PUT -vs "${API}/accounts/ZDgzZWYzYzAtNmQzNS0xMWVhLTlkNzctM2RmZmQ3ZDE4OTM5LDE0NDY5NjA5MzQwMjU%3D/?pretty" \
           -H 'Content-Type: application/json' \
           -d '{ "vatPercent": 111, "accName": "One One One" }'
@@ -768,7 +770,7 @@ Executes server side code watcher in dev mode.
 ****** Invalid request
 
    #+NAME: update-account-invalid 
-   #+begin_src sh :results value code :exports code
+   #+begin_src sh :results value code :exports code :eval never-export 
      curl -X PUT -vs "${API}/accounts/?type=bookkeeping&pretty" \
           -H 'Content-Type: application/json' \
           -d '{ "vatPercent": 111, "accName": "One One One" }'
@@ -790,7 +792,7 @@ Executes server side code watcher in dev mode.
 
 ***** [D] Delete account
    #+NAME: delete-account 
-   #+begin_src sh :results value code :exports code
+   #+begin_src sh :results value code :exports code :eval never-export 
      curl -X DELETE -vs "${API}/accounts/ZDgzZWYzYzAtNmQzNS0xMWVhLTlkNzctM2RmZmQ3ZDE4OTM5LDE0NDY5NjA5MzQwMjU%3D/?pretty"
   #+end_src
 

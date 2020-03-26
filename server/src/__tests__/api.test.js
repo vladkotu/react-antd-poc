@@ -1,16 +1,15 @@
 import AWS from 'aws-sdk'
 import request from 'supertest'
-import { encodeId } from '../utils'
+import config from 'config'
+import { encodeId, setupDatabase, tearDownDatabse } from '../utils'
 import { ddbCli } from '../db/ddb'
 import * as AccountsSchema from '../db/AccountsSchema.json'
 import * as AccountsDataSeed from '../db/AccountsDataSeed.json'
 import * as ContractorsSchema from '../db/ContractorsSchema.json'
 import * as ContractorsDataSeed from '../db/ContractorsDataSeed.json'
 import app from '../app'
-import config from 'config'
 
 const dbCfg = config.get('ddb')
-const __debug = false
 
 AWS.config.update({
   region: dbCfg.region,
@@ -28,40 +27,13 @@ const testPostApi = (method, url, payload, expectation) => {
     .then(expectation)
 }
 
-const db = ddbCli()
-
-const setupDatabase = async (tableName, schema, data, done) => {
-  try {
-    await db.createTable({
-      ...schema,
-      TableName: tableName,
-    })
-    __debug && console.log(`'${tableName}' - created`)
-    await db.batchWriteItem({
-      RequestItems: {
-        [tableName]: data,
-      },
-    })
-    __debug && console.log(`'${tableName}' - seeded`)
-    done()
-  } catch (err) {
-    __debug && console.log(`'${tableName}' - create error`, err)
-    done(err)
-  }
-}
-
-const tearDownDatabse = async (tableName, done) => {
-  try {
-    await db.deleteTable({ TableName: tableName })
-    __debug && console.log(`'${tableName}' - removed`)
-    done()
-  } catch (err) {
-    __debug && console.log(`'${tableName}' - remove error`, err)
-    done(err)
-  }
-}
-
 describe('api', () => {
+  let db
+  beforeAll(async done => {
+    db = ddbCli()
+    done()
+  })
+
   it('Not found', done => {
     request(app)
       .get('/not-exits')
@@ -74,6 +46,7 @@ describe('api', () => {
     describe('accounts', () => {
       beforeEach(async done => {
         await setupDatabase(
+          db,
           dbCfg.tables.accounts,
           AccountsSchema.default,
           AccountsDataSeed.default.Accounts,
@@ -82,7 +55,7 @@ describe('api', () => {
       })
 
       afterEach(async done => {
-        await tearDownDatabse(dbCfg.tables.accounts, done)
+        await tearDownDatabse(db, dbCfg.tables.accounts, done)
       })
 
       it('create bookkeeping account account', done => {
@@ -201,6 +174,7 @@ describe('api', () => {
     describe('contractors', () => {
       beforeEach(async done => {
         await setupDatabase(
+          db,
           dbCfg.tables.contractors,
           ContractorsSchema.default,
           ContractorsDataSeed.default.Contractors,
@@ -209,7 +183,7 @@ describe('api', () => {
       })
 
       afterEach(async done => {
-        await tearDownDatabse(dbCfg.tables.contractors, done)
+        await tearDownDatabse(db, dbCfg.tables.contractors, done)
       })
 
       it('create contractor', done => {

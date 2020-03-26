@@ -76,8 +76,45 @@ export const oneOf = opts => () => f.random.arrayElement(opts)
 export const randomDateFrom = (y, m, d) => () =>
   randomDate(new Date(y, m, d), new Date()).getTime()
 
-export function readJson (f){
+export function readJson(f) {
   const fp = path.join(__dirname, f)
   const cnt = fs.readFileSync(fp, 'utf-8')
   return JSON.parse(cnt)
+}
+
+export const setupDatabase = async (
+  db,
+  tableName,
+  schema,
+  data,
+  done = () => {}
+) => {
+  try {
+    await db.createTable({
+      ...schema,
+      TableName: tableName,
+    })
+    // console.log(`'${tableName}' - created`)
+    await db.batchWriteItem({
+      RequestItems: {
+        [tableName]: data,
+      },
+    })
+    // console.log(`'${tableName}' - seeded`)
+    done()
+  } catch (err) {
+    // console.log(`'${tableName}' - create error`, err)
+    done(err)
+  }
+}
+
+export const tearDownDatabse = async (db, tableName, done = () => {}) => {
+  try {
+    await db.deleteTable({ TableName: tableName })
+    // console.log(`'${tableName}' - removed`)
+    done()
+  } catch (err) {
+    // console.log(`'${tableName}' - remove error`, err)
+    done(err)
+  }
 }
