@@ -1,7 +1,7 @@
 - [Proof of qualification repo](#sec-1)
   - [Start Scripts](#sec-1-1)
   - [React(Hooks) front-end](#sec-1-2)
-    - [<code>[6/9]</code> List:](#sec-1-2-1)
+    - [<code>[7/9]</code> List:](#sec-1-2-1)
   - [NodeJs backend](#sec-1-3)
     - [<code>[6/8]</code> List](#sec-1-3-1)
     - [DynamoDB](#sec-1-3-2)
@@ -43,17 +43,17 @@ Executes server side code watcher in dev mode.
 
 ## React(Hooks) front-end<a id="sec-1-2"></a>
 
-### TODO <code>[6/9]</code> List:<a id="sec-1-2-1"></a>
+### TODO <code>[7/9]</code> List:<a id="sec-1-2-1"></a>
 
 1.  [X] Use React Hooks for state management
 2.  [X] Use [Ant Design](https://ant.design/components/button/) components library
 3.  [X] Implement reusable Editable list component for admin dashboard
 4.  [ ] Sass styling
 5.  [X] Mock api calls while developing
-6.  [ ] Integrate BE API
+6.  [X] Integrate BE API
 7.  [X] Mock api data with faker.js
 8.  [X] Unit tests
-9.  [ ] Functional tests
+9.  [ ] Functional(end-to-end) tests with cypress
 
 ## NodeJs backend<a id="sec-1-3"></a>
 
@@ -99,79 +99,10 @@ Executes server side code watcher in dev mode.
                 --cli-input-json file://${DBPATH}/AccountsSchema.json
             ```
             
-            ```org
-            {
-                "TableDescription": {
-                    "TableArn": "arn:aws:dynamodb:us-east-1:000000000000:table/Accounts", 
-                    "AttributeDefinitions": [
-                        {
-                            "AttributeName": "id", 
-                            "AttributeType": "S"
-                        }, 
-                        {
-                            "AttributeName": "accType", 
-                            "AttributeType": "S"
-                        }, 
-                        {
-                            "AttributeName": "createdDateTime", 
-                            "AttributeType": "N"
-                        }
-                    ], 
-                    "GlobalSecondaryIndexes": [
-                        {
-                            "IndexSizeBytes": 0, 
-                            "IndexName": "accType", 
-                            "Projection": {
-                                "ProjectionType": "ALL"
-                            }, 
-                            "ProvisionedThroughput": {
-                                "WriteCapacityUnits": 1, 
-                                "ReadCapacityUnits": 1
-                            }, 
-                            "IndexStatus": "ACTIVE", 
-                            "KeySchema": [
-                                {
-                                    "KeyType": "HASH", 
-                                    "AttributeName": "accType"
-                                }, 
-                                {
-                                    "KeyType": "RANGE", 
-                                    "AttributeName": "createdDateTime"
-                                }
-                            ], 
-                            "IndexArn": "arn:aws:dynamodb:ddblocal:000000000000:table/Accounts/index/accType", 
-                            "ItemCount": 0
-                        }
-                    ], 
-                    "ProvisionedThroughput": {
-                        "NumberOfDecreasesToday": 0, 
-                        "WriteCapacityUnits": 1, 
-                        "LastIncreaseDateTime": 0.0, 
-                        "ReadCapacityUnits": 1, 
-                        "LastDecreaseDateTime": 0.0
-                    }, 
-                    "TableSizeBytes": 0, 
-                    "TableName": "Accounts", 
-                    "BillingModeSummary": {
-                        "LastUpdateToPayPerRequestDateTime": 0.0, 
-                        "BillingMode": "PROVISIONED"
-                    }, 
-                    "TableStatus": "ACTIVE", 
-                    "KeySchema": [
-                        {
-                            "KeyType": "HASH", 
-                            "AttributeName": "id"
-                        }, 
-                        {
-                            "KeyType": "RANGE", 
-                            "AttributeName": "createdDateTime"
-                        }
-                    ], 
-                    "ItemCount": 0, 
-                    "CreationDateTime": 1585223158.465
-                }
-            }
-            ```
+            <div class="json">
+            { "TableDescription": { "TableArn": "arn:aws:dynamodb:us-east-1:000000000000:table/Accounts", "AttributeDefinitions": [ { "AttributeName": "id", "AttributeType": "S" }, { "AttributeName": "accType", "AttributeType": "S" }, { "AttributeName": "createdDateTime", "AttributeType": "N" } ], "GlobalSecondaryIndexes": [ { "IndexSizeBytes": 0, "IndexName": "accType", "Projection": { "ProjectionType": "ALL" }, "ProvisionedThroughput": { "WriteCapacityUnits": 1, "ReadCapacityUnits": 1 }, "IndexStatus": "ACTIVE", "KeySchema": [ { "KeyType": "HASH", "AttributeName": "accType" }, { "KeyType": "RANGE", "AttributeName": "createdDateTime" } ], "IndexArn": "arn:aws:dynamodb:ddblocal:000000000000:table/Accounts/index/accType", "ItemCount": 0 } ], "ProvisionedThroughput": { "NumberOfDecreasesToday": 0, "WriteCapacityUnits": 1, "LastIncreaseDateTime": 0.0, "ReadCapacityUnits": 1, "LastDecreaseDateTime": 0.0 }, "TableSizeBytes": 0, "TableName": "Accounts", "BillingModeSummary": { "LastUpdateToPayPerRequestDateTime": 0.0, "BillingMode": "PROVISIONED" }, "TableStatus": "ACTIVE", "KeySchema": [ { "KeyType": "HASH", "AttributeName": "id" }, { "KeyType": "RANGE", "AttributeName": "createdDateTime" } ], "ItemCount": 0, "CreationDateTime": 1585242674.111 } }
+            
+            </div>
             
             ```sh
             aws --endpoint-url http://localhost:4569 \

@@ -30,16 +30,16 @@ yarn test --watch
 
 Executes server side code watcher in dev mode.
 ** React(Hooks) front-end
-*** TODO [6/9] List:
+*** TODO [7/9] List:
     1. [X] Use React Hooks for state management
     2. [X] Use [[https://ant.design/components/button/][Ant Design]]  components library
     3. [X] Implement reusable Editable list component for admin dashboard
     4. [ ] Sass styling
     5. [X] Mock api calls while developing
-    6. [ ] Integrate BE API
+    6. [X] Integrate BE API
     7. [X] Mock api data with faker.js
     8. [X] Unit tests
-    9. [ ] Functional tests
+    9. [ ] Functional(end-to-end) tests with cypress
  
 ** NodeJs backend
 *** TODO [6/8] List
@@ -74,14 +74,14 @@ Executes server side code watcher in dev mode.
     #+end_src
 
     #+NAME: create-table
-    #+begin_src sh :results output org :eval never-export :exports both
+    #+begin_src sh :results output :wrap json :eval never-export :exports both
      aws --endpoint-url http://localhost:4569 \
          dynamodb create-table \
          --cli-input-json file://${DBPATH}/AccountsSchema.json
     #+end_src
 
     #+RESULTS: create-table
-    #+begin_src org
+    #+begin_json
     {
         "TableDescription": {
             "TableArn": "arn:aws:dynamodb:us-east-1:000000000000:table/Accounts", 
@@ -150,10 +150,10 @@ Executes server side code watcher in dev mode.
                 }
             ], 
             "ItemCount": 0, 
-            "CreationDateTime": 1585223158.465
+            "CreationDateTime": 1585242674.111
         }
     }
-    #+end_src
+    #+end_json
 
 
     #+RESULTS: create-tabl
