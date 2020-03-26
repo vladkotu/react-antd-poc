@@ -99,20 +99,90 @@ Executes server side code watcher in dev mode.
                 --cli-input-json file://${DBPATH}/AccountsSchema.json
             ```
             
-            <div class="json">
-            { "TableDescription": { "TableArn": "arn:aws:dynamodb:us-east-1:000000000000:table/Accounts", "AttributeDefinitions": [ { "AttributeName": "id", "AttributeType": "S" }, { "AttributeName": "accType", "AttributeType": "S" }, { "AttributeName": "createdDateTime", "AttributeType": "N" } ], "GlobalSecondaryIndexes": [ { "IndexSizeBytes": 0, "IndexName": "accType", "Projection": { "ProjectionType": "ALL" }, "ProvisionedThroughput": { "WriteCapacityUnits": 1, "ReadCapacityUnits": 1 }, "IndexStatus": "ACTIVE", "KeySchema": [ { "KeyType": "HASH", "AttributeName": "accType" }, { "KeyType": "RANGE", "AttributeName": "createdDateTime" } ], "IndexArn": "arn:aws:dynamodb:ddblocal:000000000000:table/Accounts/index/accType", "ItemCount": 0 } ], "ProvisionedThroughput": { "NumberOfDecreasesToday": 0, "WriteCapacityUnits": 1, "LastIncreaseDateTime": 0.0, "ReadCapacityUnits": 1, "LastDecreaseDateTime": 0.0 }, "TableSizeBytes": 0, "TableName": "Accounts", "BillingModeSummary": { "LastUpdateToPayPerRequestDateTime": 0.0, "BillingMode": "PROVISIONED" }, "TableStatus": "ACTIVE", "KeySchema": [ { "KeyType": "HASH", "AttributeName": "id" }, { "KeyType": "RANGE", "AttributeName": "createdDateTime" } ], "ItemCount": 0, "CreationDateTime": 1585242674.111 } }
-            
-            </div>
+            ```org
+            {
+                "TableDescription": {
+                    "TableArn": "arn:aws:dynamodb:us-east-1:000000000000:table/Accounts", 
+                    "AttributeDefinitions": [
+                        {
+                            "AttributeName": "id", 
+                            "AttributeType": "S"
+                        }, 
+                        {
+                            "AttributeName": "accType", 
+                            "AttributeType": "S"
+                        }, 
+                        {
+                            "AttributeName": "createdDateTime", 
+                            "AttributeType": "N"
+                        }
+                    ], 
+                    "GlobalSecondaryIndexes": [
+                        {
+                            "IndexSizeBytes": 0, 
+                            "IndexName": "accType", 
+                            "Projection": {
+                                "ProjectionType": "ALL"
+                            }, 
+                            "ProvisionedThroughput": {
+                                "WriteCapacityUnits": 1, 
+                                "ReadCapacityUnits": 1
+                            }, 
+                            "IndexStatus": "ACTIVE", 
+                            "KeySchema": [
+                                {
+                                    "KeyType": "HASH", 
+                                    "AttributeName": "accType"
+                                }, 
+                                {
+                                    "KeyType": "RANGE", 
+                                    "AttributeName": "createdDateTime"
+                                }
+                            ], 
+                            "IndexArn": "arn:aws:dynamodb:ddblocal:000000000000:table/Accounts/index/accType", 
+                            "ItemCount": 0
+                        }
+                    ], 
+                    "ProvisionedThroughput": {
+                        "NumberOfDecreasesToday": 0, 
+                        "WriteCapacityUnits": 1, 
+                        "LastIncreaseDateTime": 0.0, 
+                        "ReadCapacityUnits": 1, 
+                        "LastDecreaseDateTime": 0.0
+                    }, 
+                    "TableSizeBytes": 0, 
+                    "TableName": "Accounts", 
+                    "BillingModeSummary": {
+                        "LastUpdateToPayPerRequestDateTime": 0.0, 
+                        "BillingMode": "PROVISIONED"
+                    }, 
+                    "TableStatus": "ACTIVE", 
+                    "KeySchema": [
+                        {
+                            "KeyType": "HASH", 
+                            "AttributeName": "id"
+                        }, 
+                        {
+                            "KeyType": "RANGE", 
+                            "AttributeName": "createdDateTime"
+                        }
+                    ], 
+                    "ItemCount": 0, 
+                    "CreationDateTime": 1585243254.024
+                }
+            }
+            ```
             
             ```sh
             aws --endpoint-url http://localhost:4569 \
                 dynamodb list-tables
             ```
             
-            ```org
+            ```sh
             {
                 "TableNames": [
-                    "Accounts"
+                    "Accounts", 
+                    "Contractors"
                 ]
             }
             ```
@@ -128,9 +198,11 @@ Executes server side code watcher in dev mode.
                 file://${DBPATH}/AccountsDataSeed.json
             ```
             
-                {
-                    "UnprocessedItems": {}
-                }
+            ```sh
+            {
+                "UnprocessedItems": {}
+            }
+            ```
             
             Unfortunately `batch-write-item` limited to 25 operations
         
@@ -146,42 +218,44 @@ Executes server side code watcher in dev mode.
               --expression-attribute-values  '{":id":{"S": "d83ef3c0-6d35-11ea-9d77-3dffd7d18939"}}'
             ```
             
-                {
-                    "Count": 1, 
-                    "Items": [
-                        {
-                            "comment": {
-                                "S": "Facere deleniti blanditiis eum."
-                            }, 
-                            "category": {
-                                "S": "Sales"
-                            }, 
-                            "createdDateTime": {
-                                "N": "1446960934025"
-                            }, 
-                            "accType": {
-                                "S": "default"
-                            }, 
-                            "vatPercent": {
-                                "N": "49"
-                            }, 
-                            "accName": {
-                                "S": "Roi Greens Backing Up"
-                            }, 
-                            "vatCategoryS": {
-                                "S": "S"
-                            }, 
-                            "id": {
-                                "S": "d83ef3c0-6d35-11ea-9d77-3dffd7d18939"
-                            }, 
-                            "accNo": {
-                                "N": "55"
-                            }
+            ```sh
+            {
+                "Count": 1, 
+                "Items": [
+                    {
+                        "comment": {
+                            "S": "Facere deleniti blanditiis eum."
+                        }, 
+                        "category": {
+                            "S": "Sales"
+                        }, 
+                        "createdDateTime": {
+                            "N": "1446960934025"
+                        }, 
+                        "accType": {
+                            "S": "default"
+                        }, 
+                        "vatPercent": {
+                            "N": "49"
+                        }, 
+                        "accName": {
+                            "S": "Roi Greens Backing Up"
+                        }, 
+                        "vatCategoryS": {
+                            "S": "S"
+                        }, 
+                        "id": {
+                            "S": "d83ef3c0-6d35-11ea-9d77-3dffd7d18939"
+                        }, 
+                        "accNo": {
+                            "N": "55"
                         }
-                    ], 
-                    "ScannedCount": 1, 
-                    "ConsumedCapacity": null
-                }
+                    }
+                ], 
+                "ScannedCount": 1, 
+                "ConsumedCapacity": null
+            }
+            ```
         
         4.  Querying accounts from GSI
         
@@ -196,97 +270,99 @@ Executes server side code watcher in dev mode.
                --expression-attribute-values  '{":accType":{"S":"bookkeeping"}}'
             ```
             
-                {
-                    "Count": 3, 
-                    "Items": [
-                        {
-                            "comment": {
-                                "S": "est autem facere"
-                            }, 
-                            "category": {
-                                "S": "Purchase"
-                            }, 
-                            "createdDateTime": {
-                                "N": "1329262892304"
-                            }, 
-                            "accType": {
-                                "S": "bookkeeping"
-                            }, 
-                            "vatPercent": {
-                                "N": "73"
-                            }, 
-                            "accName": {
-                                "S": "Agp"
-                            }, 
-                            "vatCategoryS": {
-                                "S": "P"
-                            }, 
-                            "id": {
-                                "S": "d83fde20-6d35-11ea-9d77-3dffd7d18939"
-                            }, 
-                            "accNo": {
-                                "N": "93"
-                            }
+            ```sh
+            {
+                "Count": 3, 
+                "Items": [
+                    {
+                        "comment": {
+                            "S": "est autem facere"
                         }, 
-                        {
-                            "comment": {
-                                "S": "Amet consequatur similique quis nobis nam maxime ut dolor. Vitae sed quo sunt molestias vero tempore minima. Necessitatibus ducimus hic reprehenderit. Hic dolore error animi ut aperiam. Hic inventore sunt ipsa ut recusandae. Sed accusantium et iusto.\n \rUnde neque sequi quidem beatae. Quo repudiandae voluptatem impedit nostrum asperiores nostrum aut magnam odio. At recusandae dolorem sunt debitis sequi totam esse ipsa. Eos repellendus totam aut hic.\n \rConsequatur voluptate sunt ratione est est ad omnis. Debitis animi ut est consequatur. Quos praesentium autem est minus et ea."
-                            }, 
-                            "category": {
-                                "S": "Purchase"
-                            }, 
-                            "createdDateTime": {
-                                "N": "1551172226477"
-                            }, 
-                            "accType": {
-                                "S": "bookkeeping"
-                            }, 
-                            "vatPercent": {
-                                "N": "22"
-                            }, 
-                            "accName": {
-                                "S": "Computer Manat Vanuatu"
-                            }, 
-                            "vatCategoryS": {
-                                "S": "P"
-                            }, 
-                            "id": {
-                                "S": "d83f41e0-6d35-11ea-9d77-3dffd7d18939"
-                            }, 
-                            "accNo": {
-                                "N": "66"
-                            }
+                        "category": {
+                            "S": "Purchase"
                         }, 
-                        {
-                            "category": {
-                                "S": "Purchase"
-                            }, 
-                            "createdDateTime": {
-                                "N": "1564661196514"
-                            }, 
-                            "accType": {
-                                "S": "bookkeeping"
-                            }, 
-                            "vatPercent": {
-                                "N": "88"
-                            }, 
-                            "accName": {
-                                "S": "Maroon Refined Granite Tuna"
-                            }, 
-                            "vatCategoryS": {
-                                "S": "P"
-                            }, 
-                            "id": {
-                                "S": "d83fb710-6d35-11ea-9d77-3dffd7d18939"
-                            }, 
-                            "accNo": {
-                                "N": "93"
-                            }
+                        "createdDateTime": {
+                            "N": "1329262892304"
+                        }, 
+                        "accType": {
+                            "S": "bookkeeping"
+                        }, 
+                        "vatPercent": {
+                            "N": "73"
+                        }, 
+                        "accName": {
+                            "S": "Agp"
+                        }, 
+                        "vatCategoryS": {
+                            "S": "P"
+                        }, 
+                        "id": {
+                            "S": "d83fde20-6d35-11ea-9d77-3dffd7d18939"
+                        }, 
+                        "accNo": {
+                            "N": "93"
                         }
-                    ], 
-                    "ScannedCount": 3, 
-                    "ConsumedCapacity": null
-                }
+                    }, 
+                    {
+                        "comment": {
+                            "S": "Amet consequatur similique quis nobis nam maxime ut dolor. Vitae sed quo sunt molestias vero tempore minima. Necessitatibus ducimus hic reprehenderit. Hic dolore error animi ut aperiam. Hic inventore sunt ipsa ut recusandae. Sed accusantium et iusto.\n \rUnde neque sequi quidem beatae. Quo repudiandae voluptatem impedit nostrum asperiores nostrum aut magnam odio. At recusandae dolorem sunt debitis sequi totam esse ipsa. Eos repellendus totam aut hic.\n \rConsequatur voluptate sunt ratione est est ad omnis. Debitis animi ut est consequatur. Quos praesentium autem est minus et ea."
+                        }, 
+                        "category": {
+                            "S": "Purchase"
+                        }, 
+                        "createdDateTime": {
+                            "N": "1551172226477"
+                        }, 
+                        "accType": {
+                            "S": "bookkeeping"
+                        }, 
+                        "vatPercent": {
+                            "N": "22"
+                        }, 
+                        "accName": {
+                            "S": "Computer Manat Vanuatu"
+                        }, 
+                        "vatCategoryS": {
+                            "S": "P"
+                        }, 
+                        "id": {
+                            "S": "d83f41e0-6d35-11ea-9d77-3dffd7d18939"
+                        }, 
+                        "accNo": {
+                            "N": "66"
+                        }
+                    }, 
+                    {
+                        "category": {
+                            "S": "Purchase"
+                        }, 
+                        "createdDateTime": {
+                            "N": "1564661196514"
+                        }, 
+                        "accType": {
+                            "S": "bookkeeping"
+                        }, 
+                        "vatPercent": {
+                            "N": "88"
+                        }, 
+                        "accName": {
+                            "S": "Maroon Refined Granite Tuna"
+                        }, 
+                        "vatCategoryS": {
+                            "S": "P"
+                        }, 
+                        "id": {
+                            "S": "d83fb710-6d35-11ea-9d77-3dffd7d18939"
+                        }, 
+                        "accNo": {
+                            "N": "93"
+                        }
+                    }
+                ], 
+                "ScannedCount": 3, 
+                "ConsumedCapacity": null
+            }
+            ```
             
             Because `createdDateTime` was used as `RANGE` (sorted) key, list of items returned by this query sorted descendant by `createdDateTime`
     
@@ -306,7 +382,7 @@ Executes server side code watcher in dev mode.
                 --cli-input-json file://${DBPATH}/ContractorsSchema.json
             ```
             
-            ```org
+            ```sh
             {
                 "TableDescription": {
                     "TableArn": "arn:aws:dynamodb:us-east-1:000000000000:table/Contractors", 
@@ -345,7 +421,7 @@ Executes server side code watcher in dev mode.
                         }
                     ], 
                     "ItemCount": 0, 
-                    "CreationDateTime": 1585223192.602
+                    "CreationDateTime": 1585243058.528
                 }
             }
             ```
@@ -355,7 +431,7 @@ Executes server side code watcher in dev mode.
                 dynamodb list-tables
             ```
             
-            ```org
+            ```sh
             {
                 "TableNames": [
                     "Accounts", 
@@ -374,9 +450,11 @@ Executes server side code watcher in dev mode.
                 --request-items file://${DBPATH}/ContractorsDataSeed.json
             ```
             
-                {
-                    "UnprocessedItems": {}
-                }
+            ```sh
+            {
+                "UnprocessedItems": {}
+            }
+            ```
         
         3.  Scan all items
         
@@ -388,22 +466,115 @@ Executes server side code watcher in dev mode.
                --table-name Contractors 
             ```
             
-                {
-                    "Count": 25, 
-                    "Items": [
-                        {
-                            "createdDateTime": {"N": "1472427643486"}, 
-                            "id": {"S": "51c19f64-6d26-11ea-b66b-eddefd31ba92"}
+            ```sh
+            {
+                "Count": 5, 
+                "Items": [
+                    {
+                        "salary": {
+                            "N": "73573"
                         }, 
-                        {
-                            "createdDateTime": {"N": "1405647608992"}, 
-                            "id": {"S": "51c19f5c-6d26-11ea-b66b-eddefd31ba92"}
+                        "createdDateTime": {
+                            "N": "1485975663942"
                         }, 
-                        ...
-                    ], 
-                    "ScannedCount": 25, 
-                    "ConsumedCapacity": null
-                }
+                        "lname": {
+                            "S": "Bogan"
+                        }, 
+                        "role": {
+                            "S": "Assistant"
+                        }, 
+                        "fname": {
+                            "S": "Melisa"
+                        }, 
+                        "id": {
+                            "S": "d83fde23-6d35-11ea-9d77-3dffd7d18939"
+                        }
+                    }, 
+                    {
+                        "salary": {
+                            "N": "66464"
+                        }, 
+                        "createdDateTime": {
+                            "N": "1541301126353"
+                        }, 
+                        "lname": {
+                            "S": "Weber"
+                        }, 
+                        "role": {
+                            "S": "Tech Lead"
+                        }, 
+                        "fname": {
+                            "S": "Dixie"
+                        }, 
+                        "id": {
+                            "S": "d83fde22-6d35-11ea-9d77-3dffd7d18939"
+                        }
+                    }, 
+                    {
+                        "salary": {
+                            "N": "87487"
+                        }, 
+                        "createdDateTime": {
+                            "N": "1355210819473"
+                        }, 
+                        "lname": {
+                            "S": "Larkin"
+                        }, 
+                        "role": {
+                            "S": "Assistant"
+                        }, 
+                        "fname": {
+                            "S": "Louisa"
+                        }, 
+                        "id": {
+                            "S": "d83fde21-6d35-11ea-9d77-3dffd7d18939"
+                        }
+                    }, 
+                    {
+                        "salary": {
+                            "N": "76169"
+                        }, 
+                        "createdDateTime": {
+                            "N": "1566826234865"
+                        }, 
+                        "lname": {
+                            "S": "Gerhold"
+                        }, 
+                        "role": {
+                            "S": "Developer"
+                        }, 
+                        "fname": {
+                            "S": "Major"
+                        }, 
+                        "id": {
+                            "S": "d83fde25-6d35-11ea-9d77-3dffd7d18939"
+                        }
+                    }, 
+                    {
+                        "salary": {
+                            "N": "84469"
+                        }, 
+                        "createdDateTime": {
+                            "N": "1548899509818"
+                        }, 
+                        "lname": {
+                            "S": "Kassulke"
+                        }, 
+                        "role": {
+                            "S": "Sales"
+                        }, 
+                        "fname": {
+                            "S": "Estefania"
+                        }, 
+                        "id": {
+                            "S": "d83fde24-6d35-11ea-9d77-3dffd7d18939"
+                        }
+                    }
+                ], 
+                "ScannedCount": 5, 
+                "ConsumedCapacity": null
+            }
+            ```
 
 2.  [WAITING] <code>[4/6]</code> Attempt to create stack from cloud formation config on localstack env
 
@@ -457,15 +628,17 @@ Executes server side code watcher in dev mode.
              -d '{ "accNo": 111, "category": "Purchase", "vatPercent": 11, "vatCategoryS": "P", "accName": "One one one" }'
         ```
         
-            {
-              "id": "ZmI5N2NiYjAtNmY0NC0xMWVhLTg1ZDQtNWZlNTExZjNjMTJjLDE1ODUyMTUyNjU3NzE%3D",
-              "accType": "bookkeeping",
-              "accNo": 111,
-              "category": "Purchase",
-              "vatPercent": 11,
-              "vatCategoryS": "P",
-              "accName": "One one one"
-            }
+        ```sh
+        {
+          "id": "ZDcwNThjNjAtNmY4NS0xMWVhLTkyYWYtOGYyZjgxYjZiODlmLDE1ODUyNDMxMjE3MDI%3D",
+          "accType": "bookkeeping",
+          "accNo": 111,
+          "category": "Purchase",
+          "vatPercent": 11,
+          "vatCategoryS": "P",
+          "accName": "One one one"
+        }
+        ```
         
         1.  Invalid request
         
@@ -475,23 +648,25 @@ Executes server side code watcher in dev mode.
                  -d '{ "category": "Purchase" }'
             ```
             
-                HTTP/1.1 422 Unprocessable Entity
-                X-Powered-By: Express
-                Content-Type: application/json; charset=utf-8
-                Content-Length: 130
-                ETag: W/"82-HHj2rmNjH457Bv9LJ8U88iWD1J8"
-                Date: Thu, 26 Mar 2020 09:34:34 GMT
-                Connection: keep-alive
-                
+            ```sh
+            HTTP/1.1 422 Unprocessable Entity
+            X-Powered-By: Express
+            Content-Type: application/json; charset=utf-8
+            Content-Length: 130
+            ETag: W/"82-HHj2rmNjH457Bv9LJ8U88iWD1J8"
+            Date: Thu, 26 Mar 2020 17:19:16 GMT
+            Connection: keep-alive
+            
+            {
+              "errors": [
                 {
-                  "errors": [
-                    {
-                      "msg": "account number should be number",
-                      "param": "accNo",
-                      "location": "body"
-                    }
-                  ]
+                  "msg": "account number should be number",
+                  "param": "accNo",
+                  "location": "body"
                 }
+              ]
+            }
+            ```
     
     2.  [R1] Get all accounts
     
@@ -499,57 +674,59 @@ Executes server side code watcher in dev mode.
         curl -vsi "${API}/accounts?type=bookkeeping&pretty"
         ```
         
-            HTTP/1.1 200 OK
-            X-Powered-By: Express
-            Content-Type: application/json; charset=utf-8
-            Content-Length: 1744
-            ETag: W/"6d0-2mL5pUjB/Fv9kynH8T8rgXyF0aA"
-            Date: Thu, 26 Mar 2020 09:34:43 GMT
-            Connection: keep-alive
-            
+        ```sh
+        HTTP/1.1 200 OK
+        X-Powered-By: Express
+        Content-Type: application/json; charset=utf-8
+        Content-Length: 1744
+        ETag: W/"6d0-QOCkXK3Pv5QR27cnmBad8f/vVio"
+        Date: Thu, 26 Mar 2020 17:19:25 GMT
+        Connection: keep-alive
+        
+        {
+          "items": [
             {
-              "items": [
-                {
-                  "id": "ZDgzZmRlMjAtNmQzNS0xMWVhLTlkNzctM2RmZmQ3ZDE4OTM5LDEzMjkyNjI4OTIzMDQ%3D",
-                  "vatCategoryS": "P",
-                  "accNo": 93,
-                  "accName": "Agp",
-                  "comment": "est autem facere",
-                  "category": "Purchase",
-                  "accType": "bookkeeping",
-                  "vatPercent": 73
-                },
-                {
-                  "id": "ZDgzZjQxZTAtNmQzNS0xMWVhLTlkNzctM2RmZmQ3ZDE4OTM5LDE1NTExNzIyMjY0Nzc%3D",
-                  "vatCategoryS": "P",
-                  "accNo": 66,
-                  "accName": "Computer Manat Vanuatu",
-                  "comment": "Amet consequatur similique quis nobis nam maxime ut dolor. Vitae sed quo sunt molestias vero tempore minima. Necessitatibus ducimus hic reprehenderit. Hic dolore error animi ut aperiam. Hic inventore sunt ipsa ut recusandae. Sed accusantium et iusto.\n \rUnde neque sequi quidem beatae. Quo repudiandae voluptatem impedit nostrum asperiores nostrum aut magnam odio. At recusandae dolorem sunt debitis sequi totam esse ipsa. Eos repellendus totam aut hic.\n \rConsequatur voluptate sunt ratione est est ad omnis. Debitis animi ut est consequatur. Quos praesentium autem est minus et ea.",
-                  "category": "Purchase",
-                  "accType": "bookkeeping",
-                  "vatPercent": 22
-                },
-                {
-                  "id": "ZDgzZmI3MTAtNmQzNS0xMWVhLTlkNzctM2RmZmQ3ZDE4OTM5LDE1NjQ2NjExOTY1MTQ%3D",
-                  "vatCategoryS": "P",
-                  "accNo": 93,
-                  "accName": "Maroon Refined Granite Tuna",
-                  "category": "Purchase",
-                  "accType": "bookkeeping",
-                  "vatPercent": 88
-                },
-                {
-                  "id": "ZmI5N2NiYjAtNmY0NC0xMWVhLTg1ZDQtNWZlNTExZjNjMTJjLDE1ODUyMTUyNjU3NzE%3D",
-                  "vatCategoryS": "P",
-                  "accNo": 111,
-                  "accName": "One one one",
-                  "accType": "bookkeeping",
-                  "category": "Purchase",
-                  "vatPercent": 11
-                }
-              ],
-              "count": 4
+              "id": "ZDgzZmRlMjAtNmQzNS0xMWVhLTlkNzctM2RmZmQ3ZDE4OTM5LDEzMjkyNjI4OTIzMDQ%3D",
+              "vatCategoryS": "P",
+              "accNo": 93,
+              "accName": "Agp",
+              "comment": "est autem facere",
+              "category": "Purchase",
+              "accType": "bookkeeping",
+              "vatPercent": 73
+            },
+            {
+              "id": "ZDgzZjQxZTAtNmQzNS0xMWVhLTlkNzctM2RmZmQ3ZDE4OTM5LDE1NTExNzIyMjY0Nzc%3D",
+              "vatCategoryS": "P",
+              "accNo": 66,
+              "accName": "Computer Manat Vanuatu",
+              "comment": "Amet consequatur similique quis nobis nam maxime ut dolor. Vitae sed quo sunt molestias vero tempore minima. Necessitatibus ducimus hic reprehenderit. Hic dolore error animi ut aperiam. Hic inventore sunt ipsa ut recusandae. Sed accusantium et iusto.\n \rUnde neque sequi quidem beatae. Quo repudiandae voluptatem impedit nostrum asperiores nostrum aut magnam odio. At recusandae dolorem sunt debitis sequi totam esse ipsa. Eos repellendus totam aut hic.\n \rConsequatur voluptate sunt ratione est est ad omnis. Debitis animi ut est consequatur. Quos praesentium autem est minus et ea.",
+              "category": "Purchase",
+              "accType": "bookkeeping",
+              "vatPercent": 22
+            },
+            {
+              "id": "ZDgzZmI3MTAtNmQzNS0xMWVhLTlkNzctM2RmZmQ3ZDE4OTM5LDE1NjQ2NjExOTY1MTQ%3D",
+              "vatCategoryS": "P",
+              "accNo": 93,
+              "accName": "Maroon Refined Granite Tuna",
+              "category": "Purchase",
+              "accType": "bookkeeping",
+              "vatPercent": 88
+            },
+            {
+              "id": "ZDcwNThjNjAtNmY4NS0xMWVhLTkyYWYtOGYyZjgxYjZiODlmLDE1ODUyNDMxMjE3MDI%3D",
+              "vatCategoryS": "P",
+              "accNo": 111,
+              "accName": "One one one",
+              "accType": "bookkeeping",
+              "category": "Purchase",
+              "vatPercent": 11
             }
+          ],
+          "count": 4
+        }
+        ```
     
     3.  [R2] Get single account
     

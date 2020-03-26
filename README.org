@@ -62,7 +62,7 @@ Executes server side code watcher in dev mode.
 ***** Accounts table
 ****** Create accounts table
        Generate json shema for DynamoDB table:
-    #+begin_src sh :results output :eval never-export :exports both
+    #+begin_src sh :results value code :eval never-export :exports both
       aws dynamodb create-table --generate-cli-skeleton > ./server/db/table-shema-example.json
     #+end_src
 
@@ -74,14 +74,14 @@ Executes server side code watcher in dev mode.
     #+end_src
 
     #+NAME: create-table
-    #+begin_src sh :results output :wrap json :eval never-export :exports both
+    #+begin_src sh :results value org :eval never-export :exports both
      aws --endpoint-url http://localhost:4569 \
          dynamodb create-table \
          --cli-input-json file://${DBPATH}/AccountsSchema.json
     #+end_src
 
     #+RESULTS: create-table
-    #+begin_json
+    #+begin_src sh
     {
         "TableDescription": {
             "TableArn": "arn:aws:dynamodb:us-east-1:000000000000:table/Accounts", 
@@ -150,30 +150,30 @@ Executes server side code watcher in dev mode.
                 }
             ], 
             "ItemCount": 0, 
-            "CreationDateTime": 1585242674.111
+            "CreationDateTime": 1585243254.024
         }
     }
-    #+end_json
+    #+end_src
 
-
-    #+RESULTS: create-tabl
-   #+begin_src sh :results output org :eval never-export :exports both
+    #+RESULTS: create-table
+   #+begin_src sh :results value code :eval never-export :exports both
      aws --endpoint-url http://localhost:4569 \
          dynamodb list-tables
    #+end_src
 
    #+RESULTS:
-   #+begin_src org
+   #+begin_src sh
    {
        "TableNames": [
-           "Accounts"
+           "Accounts", 
+           "Contractors"
        ]
    }
    #+end_src
 ****** Seed accounts with test data
 
   #NAME: seed-accounts
-  #+begin_src sh :results output :eval never-export :exports both
+  #+begin_src sh :results value code :eval never-export :exports both
      aws --endpoint-url http://localhost:4569 \
          dynamodb batch-write-item \
          --request-items   \
@@ -181,15 +181,17 @@ Executes server side code watcher in dev mode.
   #+end_src
 
   #+RESULTS:
-  : {
-  :     "UnprocessedItems": {}
-  : }
+  #+begin_src sh
+  {
+      "UnprocessedItems": {}
+  }
+  #+end_src
 
   Unfortunately =batch-write-item= limited to 25 operations
 ****** Quering single item
 
  #NAME: query-account-by-type
- #+begin_src sh :results output :eval never-export :exports both
+ #+begin_src sh :results value code :eval never-export :exports both
    aws --endpoint-url http://localhost:4569 \
      dynamodb query \
      --table-name Accounts \
@@ -198,7 +200,7 @@ Executes server side code watcher in dev mode.
  #+end_src
 
  #+RESULTS:
- #+begin_example json
+ #+begin_src sh
  {
      "Count": 1, 
      "Items": [
@@ -235,10 +237,10 @@ Executes server side code watcher in dev mode.
      "ScannedCount": 1, 
      "ConsumedCapacity": null
  }
- #+end_example
+ #+end_src
 ****** Querying accounts from GSI
  #NAME: query-account-by-type
- #+begin_src sh :results output :eval never-export :exports both
+ #+begin_src sh :results value code :eval never-export :exports both
      aws --endpoint-url http://localhost:4569 \
          dynamodb query \
         --table-name Accounts \
@@ -248,7 +250,7 @@ Executes server side code watcher in dev mode.
  #+end_src
 
  #+RESULTS:
- #+begin_example
+ #+begin_src sh
  {
      "Count": 3, 
      "Items": [
@@ -340,7 +342,7 @@ Executes server side code watcher in dev mode.
      "ScannedCount": 3, 
      "ConsumedCapacity": null
  }
- #+end_example
+ #+end_src
 
  Because =createdDateTime= was used as =RANGE= (sorted) key, list of items returned by this query
  sorted descendant by =createdDateTime=
@@ -355,14 +357,14 @@ Executes server side code watcher in dev mode.
     #+end_src
 
     #+NAME: create-contractors-table
-    #+begin_src sh :results output org :eval never-export :exports both
+    #+begin_src sh :results value code :eval never-export :exports both
      aws --endpoint-url http://localhost:4569 \
          dynamodb create-table \
          --cli-input-json file://${DBPATH}/ContractorsSchema.json
     #+end_src
 
     #+RESULTS: create-contractors-table
-    #+begin_src org
+    #+begin_src sh
     {
         "TableDescription": {
             "TableArn": "arn:aws:dynamodb:us-east-1:000000000000:table/Contractors", 
@@ -401,18 +403,18 @@ Executes server side code watcher in dev mode.
                 }
             ], 
             "ItemCount": 0, 
-            "CreationDateTime": 1585223192.602
+            "CreationDateTime": 1585243058.528
         }
     }
     #+end_src
 
-   #+begin_src sh :results output org :eval never-export :exports both
+   #+begin_src sh :results value code :eval never-export :exports both
      aws --endpoint-url http://localhost:4569 \
          dynamodb list-tables
    #+end_src
 
    #+RESULTS:
-   #+begin_src org
+   #+begin_src sh
    {
        "TableNames": [
            "Accounts", 
@@ -423,44 +425,137 @@ Executes server side code watcher in dev mode.
 ****** Seed accounts with test data
 
   #NAME: seed-accounts
-  #+begin_src sh :results output :eval never-export :exports both
+  #+begin_src sh :results value code :eval never-export :exports both
      aws --endpoint-url http://localhost:4569 \
          dynamodb batch-write-item \
          --request-items file://${DBPATH}/ContractorsDataSeed.json
   #+end_src
 
   #+RESULTS:
-  : {
-  :     "UnprocessedItems": {}
-  : }
+  #+begin_src sh
+  {
+      "UnprocessedItems": {}
+  }
+  #+end_src
 ****** Scan all items
 
  #NAME: scan-all-items
- #+begin_src sh :results output :eval never-export :exports both
+ #+begin_src sh :results value code :eval never-export :exports both
      aws --endpoint-url http://localhost:4569 \
          dynamodb scan \
         --table-name Contractors 
  #+end_src
 
  #+RESULTS:
- #+begin_example json
+ #+begin_src sh
  {
-     "Count": 25, 
+     "Count": 5, 
      "Items": [
          {
-             "createdDateTime": {"N": "1472427643486"}, 
-             "id": {"S": "51c19f64-6d26-11ea-b66b-eddefd31ba92"}
+             "salary": {
+                 "N": "73573"
+             }, 
+             "createdDateTime": {
+                 "N": "1485975663942"
+             }, 
+             "lname": {
+                 "S": "Bogan"
+             }, 
+             "role": {
+                 "S": "Assistant"
+             }, 
+             "fname": {
+                 "S": "Melisa"
+             }, 
+             "id": {
+                 "S": "d83fde23-6d35-11ea-9d77-3dffd7d18939"
+             }
          }, 
          {
-             "createdDateTime": {"N": "1405647608992"}, 
-             "id": {"S": "51c19f5c-6d26-11ea-b66b-eddefd31ba92"}
+             "salary": {
+                 "N": "66464"
+             }, 
+             "createdDateTime": {
+                 "N": "1541301126353"
+             }, 
+             "lname": {
+                 "S": "Weber"
+             }, 
+             "role": {
+                 "S": "Tech Lead"
+             }, 
+             "fname": {
+                 "S": "Dixie"
+             }, 
+             "id": {
+                 "S": "d83fde22-6d35-11ea-9d77-3dffd7d18939"
+             }
          }, 
-         ...
+         {
+             "salary": {
+                 "N": "87487"
+             }, 
+             "createdDateTime": {
+                 "N": "1355210819473"
+             }, 
+             "lname": {
+                 "S": "Larkin"
+             }, 
+             "role": {
+                 "S": "Assistant"
+             }, 
+             "fname": {
+                 "S": "Louisa"
+             }, 
+             "id": {
+                 "S": "d83fde21-6d35-11ea-9d77-3dffd7d18939"
+             }
+         }, 
+         {
+             "salary": {
+                 "N": "76169"
+             }, 
+             "createdDateTime": {
+                 "N": "1566826234865"
+             }, 
+             "lname": {
+                 "S": "Gerhold"
+             }, 
+             "role": {
+                 "S": "Developer"
+             }, 
+             "fname": {
+                 "S": "Major"
+             }, 
+             "id": {
+                 "S": "d83fde25-6d35-11ea-9d77-3dffd7d18939"
+             }
+         }, 
+         {
+             "salary": {
+                 "N": "84469"
+             }, 
+             "createdDateTime": {
+                 "N": "1548899509818"
+             }, 
+             "lname": {
+                 "S": "Kassulke"
+             }, 
+             "role": {
+                 "S": "Sales"
+             }, 
+             "fname": {
+                 "S": "Estefania"
+             }, 
+             "id": {
+                 "S": "d83fde24-6d35-11ea-9d77-3dffd7d18939"
+             }
+         }
      ], 
-     "ScannedCount": 25, 
+     "ScannedCount": 5, 
      "ConsumedCapacity": null
  }
- #+end_example
+ #+end_src
 
 **** [WAITING] [4/6] Attempt to create stack from cloud formation config on localstack env
      - [X] Use aws-serverless-express custom server for lambda env
@@ -474,7 +569,7 @@ Executes server side code watcher in dev mode.
 
   List of cloud formation stacks
   #+NAME: end-point-list
-  #+begin_src sh :results output :eval never-export :exports both
+  #+begin_src sh :results value code :eval never-export :exports both
     aws --endpoint-url=http://localhost:4581 cloudformation list-stacks
   #+end_src
 
@@ -484,7 +579,7 @@ Executes server side code watcher in dev mode.
   :     "StackSummaries": []
   : }
 
-  #+begin_src sh :results output :eval never-export :exports both
+  #+begin_src sh :results value code :eval never-export :exports both
   aws cloudformation create-stack \
       --template-body file://cloudformation.yml \
       --stack-name web-stack \
@@ -509,40 +604,42 @@ Executes server side code watcher in dev mode.
      All accounts tested for "bookkeeping" type
 ***** [C] Create account
    #+NAME: create-account 
-   #+begin_src sh :results verbatim :exports both
+   #+begin_src sh :results value code :exports both :eval never-export
      curl -X POST -vs "${API}/accounts?type=bookkeeping&pretty" \
           -H 'Content-Type: application/json' \
           -d '{ "accNo": 111, "category": "Purchase", "vatPercent": 11, "vatCategoryS": "P", "accName": "One one one" }'
   #+end_src
 
    #+RESULTS: create-account
-   : {
-   :   "id": "ZmI5N2NiYjAtNmY0NC0xMWVhLTg1ZDQtNWZlNTExZjNjMTJjLDE1ODUyMTUyNjU3NzE%3D",
-   :   "accType": "bookkeeping",
-   :   "accNo": 111,
-   :   "category": "Purchase",
-   :   "vatPercent": 11,
-   :   "vatCategoryS": "P",
-   :   "accName": "One one one"
-   : }
+   #+begin_src sh
+   {
+     "id": "ZDcwNThjNjAtNmY4NS0xMWVhLTkyYWYtOGYyZjgxYjZiODlmLDE1ODUyNDMxMjE3MDI%3D",
+     "accType": "bookkeeping",
+     "accNo": 111,
+     "category": "Purchase",
+     "vatPercent": 11,
+     "vatCategoryS": "P",
+     "accName": "One one one"
+   }
+   #+end_src
 
 ****** Invalid request
 
    #+NAME: create-account-invalid
-   #+begin_src sh :results verbatim :exports both
+   #+begin_src sh :results value code :exports both :eval never-export
      curl -X POST -vsi "${API}/accounts?type=bookkeeping&pretty" \
           -H 'Content-Type: application/json' \
           -d '{ "category": "Purchase" }'
   #+end_src
 
   #+RESULTS: create-account-invalid
-  #+begin_example
+  #+begin_src sh
   HTTP/1.1 422 Unprocessable Entity
   X-Powered-By: Express
   Content-Type: application/json; charset=utf-8
   Content-Length: 130
   ETag: W/"82-HHj2rmNjH457Bv9LJ8U88iWD1J8"
-  Date: Thu, 26 Mar 2020 09:34:34 GMT
+  Date: Thu, 26 Mar 2020 17:19:16 GMT
   Connection: keep-alive
   
   {
@@ -554,22 +651,22 @@ Executes server side code watcher in dev mode.
       }
     ]
   }
-  #+end_example
+  #+end_src
 
 ***** [R1] Get all accounts 
     #+NAME: get-all-boo-accounts 
-    #+begin_src sh :results verbatim :exports both
+    #+begin_src sh :results value code :exports both :eval never-export
       curl -vsi "${API}/accounts?type=bookkeeping&pretty"
    #+end_src
 
    #+RESULTS: get-all-boo-accounts
-   #+begin_example
+   #+begin_src sh
    HTTP/1.1 200 OK
    X-Powered-By: Express
    Content-Type: application/json; charset=utf-8
    Content-Length: 1744
-   ETag: W/"6d0-2mL5pUjB/Fv9kynH8T8rgXyF0aA"
-   Date: Thu, 26 Mar 2020 09:34:43 GMT
+   ETag: W/"6d0-QOCkXK3Pv5QR27cnmBad8f/vVio"
+   Date: Thu, 26 Mar 2020 17:19:25 GMT
    Connection: keep-alive
    
    {
@@ -604,7 +701,7 @@ Executes server side code watcher in dev mode.
          "vatPercent": 88
        },
        {
-         "id": "ZmI5N2NiYjAtNmY0NC0xMWVhLTg1ZDQtNWZlNTExZjNjMTJjLDE1ODUyMTUyNjU3NzE%3D",
+         "id": "ZDcwNThjNjAtNmY4NS0xMWVhLTkyYWYtOGYyZjgxYjZiODlmLDE1ODUyNDMxMjE3MDI%3D",
          "vatCategoryS": "P",
          "accNo": 111,
          "accName": "One one one",
@@ -615,11 +712,11 @@ Executes server side code watcher in dev mode.
      ],
      "count": 4
    }
-   #+end_example
+   #+end_src
 
 ***** [R2] Get single account  
     #+NAME: get-one-boo-accounts 
-    #+begin_src sh :results verbatim :exports both
+    #+begin_src sh :results value code :exports both
       curl -vsi "${API}/accounts/ZDgzZWYzYzAtNmQzNS0xMWVhLTlkNzctM2RmZmQ3ZDE4OTM5LDE0NDY5NjA5MzQwMjU%3D/?pretty"
    #+end_src
 
@@ -646,7 +743,7 @@ Executes server side code watcher in dev mode.
    #+end_example
 ***** [U] Update account
    #+NAME: update-account 
-   #+begin_src sh :results verbatim :exports both
+   #+begin_src sh :results value code :exports both
      curl -X PUT -vs "${API}/accounts/ZDgzZWYzYzAtNmQzNS0xMWVhLTlkNzctM2RmZmQ3ZDE4OTM5LDE0NDY5NjA5MzQwMjU%3D/?pretty" \
           -H 'Content-Type: application/json' \
           -d '{ "vatPercent": 111, "accName": "One One One" }'
@@ -669,7 +766,7 @@ Executes server side code watcher in dev mode.
 ****** Invalid request
 
    #+NAME: update-account-invalid 
-   #+begin_src sh :results verbatim :exports both
+   #+begin_src sh :results value code :exports both
      curl -X PUT -vs "${API}/accounts/?type=bookkeeping&pretty" \
           -H 'Content-Type: application/json' \
           -d '{ "vatPercent": 111, "accName": "One One One" }'
@@ -691,7 +788,7 @@ Executes server side code watcher in dev mode.
 
 ***** [D] Delete account
    #+NAME: delete-account 
-   #+begin_src sh :results verbatim :exports both
+   #+begin_src sh :results value code :exports both
      curl -X DELETE -vs "${API}/accounts/ZDgzZWYzYzAtNmQzNS0xMWVhLTlkNzctM2RmZmQ3ZDE4OTM5LDE0NDY5NjA5MzQwMjU%3D/?pretty"
   #+end_src
 
