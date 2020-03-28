@@ -1,6 +1,12 @@
 import React from 'react'
 import { Layout, Menu } from 'antd'
-import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom'
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Link,
+  Redirect,
+} from 'react-router-dom'
 import { BOOKEE, DEFACC, CONTRA } from '../../constants'
 import accountsApi from '../../api/accounts'
 import contractorsApi from '../../api/contractors'
@@ -61,6 +67,9 @@ function Accounts() {
 
       <Content className='App-content'>
         <Switch>
+          <Route exact path='/'>
+            <Redirect exact from='/' to={navigation[BOOKEE].uri} />
+          </Route>
           {Object.entries(navigation).map(([key, { uri }]) => (
             <Route key={key} path={uri}>
               <EditableList {...navigation[key]} />
