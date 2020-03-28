@@ -13,9 +13,11 @@ Start local infrastructure
 docker-compose up -d
 #+end_src
 
-Create tables and seed with data
+Create tables in localstack and seed with data.
+Configure aws with secret keys
+Change to =production= to create and seed real aws database
 #+begin_src sh
-yarn db:setup
+NODE_ENV=development yarn db:setup
 #+end_src
 
 Start dev server and client code watchers 

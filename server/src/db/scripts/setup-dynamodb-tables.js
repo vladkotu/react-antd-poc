@@ -2,6 +2,7 @@ import AWS from 'aws-sdk'
 import config from 'config'
 import { ddbCli, ddbDoc } from '../ddb'
 import { setupDatabase, tearDownDatabse } from '../../utils'
+import { logger } from '../../logger'
 import * as AccountsSchema from '../AccountsSchema.json'
 import * as AccountsDataSeed from '../AccountsDataSeed.json'
 import * as ContractorsSchema from '../ContractorsSchema.json'
@@ -18,44 +19,32 @@ AWS.config.update({
 const db = ddbCli()
 const dbDoc = ddbDoc()
 
-;(async function main() {
-  if ('--reset' === action) {
-    let tableName = dbCfg.tables.accounts
-    try {
-      await tearDownDatabse(db, tableName)
-    } catch (err) {
-      console.log(`Cannot remove '${tableName} table'`, err)
-    }
-    tableName = dbCfg.tables.contractors
-    try {
-      await tearDownDatabse(db, tableName)
-    } catch (err) {
-      console.log(`Cannot remove '${tableName} table'`, err)
-    }
-  }
-  try {
-    console.log('Settling up Accounts table')
-    await setupDatabase(
-      db,
-      dbCfg.tables.accounts,
-      AccountsSchema.default,
-      AccountsDataSeed.default.Accounts,
-      () => console.log('Done!')
-    )
-  } catch (err) {
-    console.log(`Cannot create 'Accounts' table`)
-  }
+const tables = [
+  {
+    TableName: dbCfg.tables.accounts,
+    Schema: AccountsSchema.default,
+    Data: AccountsDataSeed.default.Accounts,
+  },
+  {
+    TableName: dbCfg.tables.contractors,
+    Schema: ContractorsSchema.default,
+    Data: ContractorsDataSeed.default.Contractors,
+  },
+]
 
+;(async function main() {
   try {
-    console.log('Settling up Contractors table')
-    await setupDatabase(
-      db,
-      dbCfg.tables.contractors,
-      ContractorsSchema.default,
-      ContractorsDataSeed.default.Contractors,
-      () => console.log('Done!')
-    )
+    logger.info(`DB Setup region:'${dbCfg.region}' host:'${dbCfg.endpoint}'`)
+    for (let { TableName, Schema, Data } of tables) {
+      logger.info(`Remove '${TableName}' START`)
+      await tearDownDatabse(db, TableName)
+      logger.info(`Remove '${TableName}' END`)
+
+      logger.info(`Create table ${TableName} START`)
+      await setupDatabase(db, TableName, Schema, Data)
+      logger.info(`Create table ${TableName} END`)
+    }
   } catch (err) {
-    console.log(`Cannot create 'Contractors' table`)
+    logger.error(err)
   }
 })()

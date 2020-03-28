@@ -2,6 +2,7 @@ import * as fs from 'fs'
 import * as path from 'path'
 import f from 'faker'
 import { validationResult } from 'express-validator'
+import { logger } from './logger'
 
 const sep = ','
 export function encodeId({ id, createdDateTime }) {
@@ -82,10 +83,10 @@ export function readJson(f) {
   return JSON.parse(cnt)
 }
 
-const logger = {
-  // log: () => {},
-  log: console.log,
-}
+// const logger = {
+//   // log: () => {},
+//   log: logger.debug,
+// }
 
 const isTableExists = async (db, tableName) => {
   try {
@@ -104,10 +105,10 @@ const isTableExists = async (db, tableName) => {
 const isTableActiveStatus = async (db, tableName) => {
   try {
     const result = await db.describeTable({ TableName: tableName })
-    console.log(result.Table.TableStatus)
+    logger.debug(`status: ${result.Table.TableStatus}`)
     return result.Table.TableStatus === 'ACTIVE'
   } catch (err) {
-    console.log(err)
+    logger.debug(err)
     return false
   }
 }
@@ -147,24 +148,24 @@ export const setupDatabase = async (db, tableName, schema, data) => {
   try {
     const isExists = await isTableExists(db, tableName)
     if (isExists) {
-      logger.log(`${tableName} table already exists, consider removing it`)
+      logger.debug(`${tableName} table already exists, consider removing it`)
       return false
     }
     await db.createTable({
       ...schema,
       TableName: tableName,
     })
-    logger.log(`'${tableName}' - created, wait till active`)
+    logger.debug(`'${tableName}' - created, wait till active`)
     await waitTableActive(db, tableName, 10, 3000)
-    logger.log(`${tableName} is active`)
+    logger.debug(`${tableName} is active`)
     await db.batchWriteItem({
       RequestItems: {
         [tableName]: data,
       },
     })
-    logger.log(`'${tableName}' - seeded`)
+    logger.debug(`'${tableName}' - seeded`)
   } catch (err) {
-    logger.log(`'${tableName}' - create error`, err)
+    logger.debug(`'${tableName}' - create error`, err)
   }
 }
 
@@ -172,15 +173,15 @@ export const tearDownDatabse = async (db, tableName) => {
   try {
     const isExists = await isTableExists(db, tableName)
     if (!isExists) {
-      logger.log(`'${tableName}' would not be removed cause not exists`)
-      logger.log('...skipping')
+      logger.debug(`'${tableName}' would not be removed cause not exists`)
+      logger.debug('...skipping')
       return false
     }
     await db.deleteTable({ TableName: tableName })
-    logger.log(`${tableName} table removed, ...waiting`)
+    logger.debug(`${tableName} table removed, ...waiting`)
     await waitTableNotExists(db, tableName, 10, 800)
-    logger.log(`Done, ${tableName} table removed`)
+    logger.debug(`Done, ${tableName} table removed`)
   } catch (err) {
-    logger.log(`${tableName} no luck`, err)
+    logger.debug(`${tableName} no luck`, err)
   }
 }

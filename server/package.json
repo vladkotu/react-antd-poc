@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "db:tables":"node ./build/db/scripts/setup-dynamodb-tables.js --reset" ,
+    "db:tables":"node ./build/db/scripts/setup-dynamodb-tables.js" ,
     "db:setup": "npm-run-all build db:tables",
     "test": "NODE_ENV=test jest",
     "lint": "eslint ./src",
