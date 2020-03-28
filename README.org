@@ -37,16 +37,17 @@ yarn test --watch
 
 Executes server side code watcher in dev mode.
 ** React(Hooks) front-end
-*** TODO [7/9] Front-end Todo List:
+*** TODO [8/10] Front-end Todo List:
     1. [X] Use React Hooks for state management
     2. [X] Use [[https://ant.design/components/button/][Ant Design]]  components library
     3. [X] Implement reusable Editable list component for admin dashboard
-    4. [ ] Sass styling
-    5. [X] Mock api calls while developing
-    6. [X] Integrate BE API
-    7. [X] Mock api data with faker.js
-    8. [X] Unit tests
+    4. [X] Mock api calls while developing
+    5. [X] Integrate BE API
+    6. [X] Mock api data with faker.js
+    7. [X] Unit tests
+    8. [X] React Router
     9. [ ] Functional(end-to-end) tests with cypress
+    10. [ ] Sass styling
  
 ** NodeJs backend
 *** TODO [6/8] Backend Todo List
