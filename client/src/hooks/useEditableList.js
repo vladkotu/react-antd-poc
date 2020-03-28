@@ -18,16 +18,21 @@ function useEditableList(api) {
   validateInput(api)
   const { addItem, fetchItems, updateItem, removeItem } = api
   const [currentItem, setCurrentItem] = useState(null)
+  const [isItemsLoading, setIsItemsLoading] = useState(false)
   const [items, setItems] = useState([])
 
-  const getItems = async () => setItems(await fetchItems())
+  const getItems = async () => {
+    setItems(await fetchItems())
+  }
 
   function commonActions(action) {
     return async item => {
       try {
+        setIsItemsLoading(true)
         await action(item)
         await getItems()
         setCurrentItem(null)
+        setIsItemsLoading(false)
       } catch (err) {
         console.error(err)
       }
@@ -39,10 +44,15 @@ function useEditableList(api) {
     items,
     setCurrentItem,
     setItems,
-    getItems,
+    getItems: async () => {
+      setIsItemsLoading(true)
+      await getItems()
+      setIsItemsLoading(false)
+    },
     addItem: commonActions(addItem),
     updateItem: commonActions(updateItem),
     removeItem: commonActions(removeItem),
+    isItemsLoading: isItemsLoading,
   }
 }
 

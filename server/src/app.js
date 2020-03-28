@@ -15,6 +15,9 @@ app.use(cookieParser())
 app.use(express.static(path.join(__dirname, '../client/build')))
 app.use(log4js.connectLogger(logger))
 
+// intentionally delay all responses
+// app.use(function(req, res, next) {setTimeout(next, 1000)})
+
 app.use('/api', indexRouter)
 
 app.use(function(req, res, next) {

@@ -11,6 +11,7 @@ function EditableList({
   itemTitleComponent = () => {},
   onBeforeSubmit = v => v,
   currentItem,
+  isItemsLoading,
   setCurrentItem,
   items = [],
   // setItems,
@@ -49,7 +50,8 @@ function EditableList({
           />
         )}
         <List
-          dataSource={items}
+          loading={isItemsLoading}
+          dataSource={isItemsLoading ? [] : items}
           pagination={items.length > 10}
           renderItem={item => (
             <List.Item>
