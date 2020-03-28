@@ -1,2 +1,9 @@
 server:
   port: 8080
+  logLevel: error
+ddb:
+  endpoint: https://dynamodb.eu-central-1.amazonaws.com
+  region: 'eu-central-1'
+  tables:
+    accounts: Accounts
+    contractors: Contractors

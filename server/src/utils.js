@@ -82,39 +82,105 @@ export function readJson(f) {
   return JSON.parse(cnt)
 }
 
-export const setupDatabase = async (
-  db,
-  tableName,
-  schema,
-  data,
-  done = () => {}
-) => {
+const logger = {
+  // log: () => {},
+  log: console.log,
+}
+
+const isTableExists = async (db, tableName) => {
   try {
+    await db.describeTable({ TableName: tableName })
+    return true
+  } catch (err) {
+    const notFoundCode = 'ResourceNotFoundException'
+    if (err.code === notFoundCode) {
+      return false
+    } else {
+      throw err
+    }
+  }
+}
+
+const isTableActiveStatus = async (db, tableName) => {
+  try {
+    const result = await db.describeTable({ TableName: tableName })
+    console.log(result.Table.TableStatus)
+    return result.Table.TableStatus === 'ACTIVE'
+  } catch (err) {
+    console.log(err)
+    return false
+  }
+}
+
+const delay = async ms =>
+  new Promise(resolve => {
+    setTimeout(resolve, ms)
+  })
+
+const waitTableActive = async (db, tableName, retries = 5, ms = 1000) => {
+  const isActive = await isTableActiveStatus(db, tableName)
+  if (isActive) {
+    return true
+  } else if (retries === 0) {
+    throw new Error('Timeout')
+  } else {
+    await delay(ms)
+    return await waitTableActive(db, tableName, retries - 1)
+  }
+}
+
+
+const waitTableNotExists = async (db, tableName, retries = 5, ms = 1000) => {
+  const isExists = await isTableExists(db, tableName)
+  if (!isExists) {
+    return true
+  } else if (retries === 0) {
+    throw new Error('Timeout')
+  } else {
+    await delay(ms)
+    return await waitTableNotExists(db, tableName, retries - 1)
+  }
+}
+
+
+export const setupDatabase = async (db, tableName, schema, data) => {
+  try {
+    const isExists = await isTableExists(db, tableName)
+    if (isExists) {
+      logger.log(`${tableName} table already exists, consider removing it`)
+      return false
+    }
     await db.createTable({
       ...schema,
       TableName: tableName,
     })
-    // console.log(`'${tableName}' - created`)
+    logger.log(`'${tableName}' - created, wait till active`)
+    await waitTableActive(db, tableName, 10, 3000)
+    logger.log(`${tableName} is active`)
     await db.batchWriteItem({
       RequestItems: {
         [tableName]: data,
       },
     })
-    // console.log(`'${tableName}' - seeded`)
-    done()
+    logger.log(`'${tableName}' - seeded`)
   } catch (err) {
-    // console.log(`'${tableName}' - create error`, err)
-    done(err)
+    logger.log(`'${tableName}' - create error`, err)
   }
 }
 
-export const tearDownDatabse = async (db, tableName, done = () => {}) => {
+export const tearDownDatabse = async (db, tableName) => {
   try {
+    const isExists = await isTableExists(db, tableName)
+    if (!isExists) {
+      logger.log(`'${tableName}' would not be removed cause not exists`)
+      logger.log('...skipping')
+      return false
+    }
     await db.deleteTable({ TableName: tableName })
-    // console.log(`'${tableName}' - removed`)
-    done()
+    logger.log(`${tableName} table removed, ...waiting`)
+    await waitTableNotExists(db, tableName, 10, 800)
+    logger.log(`Done, ${tableName} table removed`)
   } catch (err) {
-    // console.log(`'${tableName}' - remove error`, err)
-    done(err)
+    logger.log(`${tableName} no luck`, err)
   }
 }

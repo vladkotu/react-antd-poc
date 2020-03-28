@@ -18,17 +18,20 @@ AWS.config.update({
 const db = ddbCli()
 const dbDoc = ddbDoc()
 
-;(async function() {
+;(async function main() {
   if ('--reset' === action) {
-    const tables = Object.values(dbCfg.tables)
-    tables.forEach(async tableName => {
-      try {
-        await db.deleteTable({ TableName: tableName })
-        console.log(`'${tableName}' table removed`)
-      } catch (err) {
-        console.log(`Cannot remove '${tableName} table'`)
-      }
-    })
+    let tableName = dbCfg.tables.accounts
+    try {
+      await tearDownDatabse(db, tableName)
+    } catch (err) {
+      console.log(`Cannot remove '${tableName} table'`, err)
+    }
+    tableName = dbCfg.tables.contractors
+    try {
+      await tearDownDatabse(db, tableName)
+    } catch (err) {
+      console.log(`Cannot remove '${tableName} table'`, err)
+    }
   }
   try {
     console.log('Settling up Accounts table')

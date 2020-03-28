@@ -41,6 +41,7 @@ export function ddbCli() {
     'deleteTable',
     'batchGetItem',
     'batchWriteItem',
+    'describeTable',
   ])
   return ddbInstance
 }

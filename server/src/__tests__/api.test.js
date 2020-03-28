@@ -43,19 +43,38 @@ describe('api', () => {
       .end(done)
   })
   describe('crud', () => {
+    beforeAll(async done => {
+      try {
+        await tearDownDatabse(db, dbCfg.tables.accounts)
+        await tearDownDatabse(db, dbCfg.tables.contractors)
+        done()
+      } catch (err) {
+        done(err)
+      }
+    })
+
     describe('accounts', () => {
       beforeEach(async done => {
-        await setupDatabase(
-          db,
-          dbCfg.tables.accounts,
-          AccountsSchema.default,
-          AccountsDataSeed.default.Accounts,
-          done
-        )
+        try {
+          await setupDatabase(
+            db,
+            dbCfg.tables.accounts,
+            AccountsSchema.default,
+            AccountsDataSeed.default.Accounts
+          )
+          done()
+        } catch (err) {
+          done(err)
+        }
       })
 
       afterEach(async done => {
-        await tearDownDatabse(db, dbCfg.tables.accounts, done)
+        try {
+          await tearDownDatabse(db, dbCfg.tables.accounts)
+          done()
+        } catch (err) {
+          done(err)
+        }
       })
 
       it('create bookkeeping account account', done => {
@@ -173,17 +192,26 @@ describe('api', () => {
 
     describe('contractors', () => {
       beforeEach(async done => {
-        await setupDatabase(
-          db,
-          dbCfg.tables.contractors,
-          ContractorsSchema.default,
-          ContractorsDataSeed.default.Contractors,
-          done
-        )
+        try {
+          await setupDatabase(
+            db,
+            dbCfg.tables.contractors,
+            ContractorsSchema.default,
+            ContractorsDataSeed.default.Contractors
+          )
+          done()
+        } catch (err) {
+          done(err)
+        }
       })
 
       afterEach(async done => {
-        await tearDownDatabse(db, dbCfg.tables.contractors, done)
+        try {
+          await tearDownDatabse(db, dbCfg.tables.contractors, done)
+          done()
+        } catch (err) {
+          done(err)
+        }
       })
 
       it('create contractor', done => {
