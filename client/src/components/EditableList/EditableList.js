@@ -19,8 +19,13 @@ function EditableList({
   updateItem,
   removeItem,
 }) {
+  // component did mount
   useEffect(() => {
     getItems()
+    // component will unmount
+    return () => {
+      setCurrentItem(null)
+    }
   }, [])
 
   const newItemTmpId = '0'
