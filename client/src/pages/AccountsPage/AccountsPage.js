@@ -1,9 +1,9 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { Layout, Menu } from 'antd'
+import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom'
 import { BOOKEE, DEFACC, CONTRA } from '../../constants'
 import accountsApi from '../../api/accounts'
 import contractorsApi from '../../api/contractors'
-import { preventAndCall } from '../../utils'
 import useEditableList from '../../hooks/useEditableList'
 import { EditableList, titles } from '../../components'
 import formsConfig from './formsConfig'
@@ -19,54 +19,56 @@ function handleFilishSuccess(values) {
 }
 
 function Accounts() {
-  const [currentNav, setNav] = useState(BOOKEE)
-
   const navigation = {
     [BOOKEE]: {
       title: 'Bookkeeping Accounts',
       headActionTitle: 'Add account',
+      uri: '/bookkeeping',
       ...useEditableList(accountsApi[BOOKEE]),
       formFields: formsConfig[BOOKEE],
       onBeforeSubmit: handleFilishSuccess,
-      itemTitleComponent: item => <AccTitle {...item}></AccTitle>,
+      itemTitleComponent: AccTitle,
     },
 
     [DEFACC]: {
       title: 'Default Accounts',
       headActionTitle: 'Add account',
+      uri: '/default',
       ...useEditableList(accountsApi[DEFACC]),
       formFields: formsConfig[DEFACC],
-      itemTitleComponent: item => <AccTitle {...item}></AccTitle>,
+      itemTitleComponent: AccTitle,
     },
 
     [CONTRA]: {
       title: 'Contractors',
       headActionTitle: 'Add contractor',
+      uri: '/contractors',
       ...useEditableList(contractorsApi),
       formFields: formsConfig[CONTRA],
-      itemTitleComponent: item => <ContractorTitle {...item}></ContractorTitle>,
+      itemTitleComponent: ContractorTitle,
     },
   }
 
   return (
-    <>
+    <Router>
       <Menu mode='horizontal' defaultSelectedKeys={BOOKEE}>
-        {Object.entries(navigation).map(([key, { title }]) => (
+        {Object.entries(navigation).map(([key, { title, uri }]) => (
           <Menu.Item key={key}>
-            <a onClick={preventAndCall(setNav, key)} href='/#'>
-              {title}
-            </a>
+            <Link to={uri}> {title} </Link>
           </Menu.Item>
         ))}
       </Menu>
 
       <Content className='App-content'>
-        <EditableList
-          key={navigation[currentNav].title}
-          {...navigation[currentNav]}
-        />
+        <Switch>
+          {Object.entries(navigation).map(([key, { uri }]) => (
+            <Route key={key} path={uri}>
+              <EditableList {...navigation[key]} />
+            </Route>
+          ))}
+        </Switch>
       </Content>
-    </>
+    </Router>
   )
 }
 
