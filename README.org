@@ -1,5 +1,5 @@
 
-* Proof of qualification repo
+* Portfolio repo
     :PROPERTIES:
     :header-args: :var DBPATH="server/src/db"
     :END:
@@ -69,19 +69,19 @@ Executes server side code watcher in dev mode.
 ***** Accounts table
 ****** Create accounts table
        Generate json shema for DynamoDB table:
-    #+begin_src sh :results value code :eval never-export :exports code
+    #+begin_src sh :results value code :eval never-export :exports both
       aws dynamodb create-table --generate-cli-skeleton > ./server/db/table-shema-example.json
     #+end_src
 
     #+NAME: delete-accounts-table
-    #+begin_src sh :results silent :eval never-export :exports code
+    #+begin_src sh :results silent :eval never-export :exports both
      aws --endpoint-url http://localhost:4569 \
          dynamodb delete-table \
          --table-name Accounts
     #+end_src
 
     #+NAME: create-table
-    #+begin_src sh :results value org :eval never-export :exports code
+    #+begin_src sh :results value org :eval never-export :exports both
      aws --endpoint-url http://localhost:4569 \
          dynamodb create-table \
          --cli-input-json file://${DBPATH}/AccountsSchema.json
@@ -163,7 +163,7 @@ Executes server side code watcher in dev mode.
     #+end_src
 
     #+RESULTS: create-table
-   #+begin_src sh :results value code :eval never-export :exports code 
+   #+begin_src sh :results value code :eval never-export :exports both 
      aws --endpoint-url http://localhost:4569 \
          dynamodb list-tables
    #+end_src
@@ -179,7 +179,7 @@ Executes server side code watcher in dev mode.
 ****** Seed accounts with test data
 
   #NAME: seed-accounts
-  #+begin_src sh :results value code :eval never-export :exports code
+  #+begin_src sh :results value code :eval never-export :exports both
      aws --endpoint-url http://localhost:4569 \
          dynamodb batch-write-item \
          --request-items   \
@@ -197,7 +197,7 @@ Executes server side code watcher in dev mode.
 ****** Quering single item
 
  #NAME: query-account-by-type
- #+begin_src sh :results value code :eval never-export :exports code
+ #+begin_src sh :results value code :eval never-export :exports both
    aws --endpoint-url http://localhost:4569 \
      dynamodb query \
      --table-name Accounts \
@@ -246,7 +246,7 @@ Executes server side code watcher in dev mode.
  #+end_src
 ****** Querying accounts from GSI
  #NAME: query-account-by-type
- #+begin_src sh :results value code :eval never-export :exports code
+ #+begin_src sh :results value code :eval never-export :exports both
      aws --endpoint-url http://localhost:4569 \
          dynamodb query \
         --table-name Accounts \
@@ -356,14 +356,14 @@ Executes server side code watcher in dev mode.
 ***** Contractors table
 ****** Create table
     #+NAME: delete-contractors-table
-    #+begin_src sh :results silent :eval never-export :exports code
+    #+begin_src sh :results silent :eval never-export :exports both
      aws --endpoint-url http://localhost:4569 \
          dynamodb delete-table \
          --table-name Contractors
     #+end_src
 
     #+NAME: create-contractors-table
-    #+begin_src sh :results value code :eval never-export :exports code
+    #+begin_src sh :results value code :eval never-export :exports both
      aws --endpoint-url http://localhost:4569 \
          dynamodb create-table \
          --cli-input-json file://${DBPATH}/ContractorsSchema.json
@@ -414,7 +414,7 @@ Executes server side code watcher in dev mode.
     }
     #+end_src
 
-   #+begin_src sh :results value code :eval never-export :exports code
+   #+begin_src sh :results value code :eval never-export :exports both
      aws --endpoint-url http://localhost:4569 \
          dynamodb list-tables
    #+end_src
@@ -431,7 +431,7 @@ Executes server side code watcher in dev mode.
 ****** Seed accounts with test data
 
   #NAME: seed-accounts
-  #+begin_src sh :results value code :eval never-export :exports code
+  #+begin_src sh :results value code :eval never-export :exports both
      aws --endpoint-url http://localhost:4569 \
          dynamodb batch-write-item \
          --request-items file://${DBPATH}/ContractorsDataSeed.json
@@ -446,7 +446,7 @@ Executes server side code watcher in dev mode.
 ****** Scan all items
 
  #NAME: scan-all-items
- #+begin_src sh :results value code :eval never-export :exports code
+ #+begin_src sh :results value code :eval never-export :exports both
      aws --endpoint-url http://localhost:4569 \
          dynamodb scan \
         --table-name Contractors 
@@ -575,7 +575,7 @@ Executes server side code watcher in dev mode.
 
   List of cloud formation stacks
   #+NAME: end-point-list
-  #+begin_src sh :results value code :eval never-export :exports code
+  #+begin_src sh :results value code :eval never-export :exports both
     aws --endpoint-url=http://localhost:4581 cloudformation list-stacks
   #+end_src
 
@@ -585,7 +585,7 @@ Executes server side code watcher in dev mode.
   :     "StackSummaries": []
   : }
 
-  #+begin_src sh :results value code :eval never-export :exports code
+  #+begin_src sh :results value code :eval never-export :exports both
   aws cloudformation create-stack \
       --template-body file://cloudformation.yml \
       --stack-name web-stack \
@@ -610,7 +610,7 @@ Executes server side code watcher in dev mode.
      All accounts tested for "bookkeeping" type
 ***** [C] Create account
    #+NAME: create-account 
-   #+begin_src sh :results value code :exports code :eval never-export
+   #+begin_src sh :results value code :exports both :eval never-export
      curl -X POST -vs "${API}/accounts?type=bookkeeping&pretty" \
           -H 'Content-Type: application/json' \
           -d '{ "accNo": 111, "category": "Purchase", "vatPercent": 11, "vatCategoryS": "P", "accName": "One one one" }'
@@ -632,7 +632,7 @@ Executes server side code watcher in dev mode.
 ****** Invalid request
 
    #+NAME: create-account-invalid
-   #+begin_src sh :results value code :exports code :eval never-export
+   #+begin_src sh :results value code :exports both :eval never-export
      curl -X POST -vsi "${API}/accounts?type=bookkeeping&pretty" \
           -H 'Content-Type: application/json' \
           -d '{ "category": "Purchase" }'
@@ -661,7 +661,7 @@ Executes server side code watcher in dev mode.
 
 ***** [R1] Get all accounts 
     #+NAME: get-all-boo-accounts 
-    #+begin_src sh :results value code :exports code :eval never-export
+    #+begin_src sh :results value code :exports both :eval never-export
       curl -vsi "${API}/accounts?type=bookkeeping&pretty"
    #+end_src
 
@@ -722,7 +722,7 @@ Executes server side code watcher in dev mode.
 
 ***** [R2] Get single account  
     #+NAME: get-one-boo-accounts 
-    #+begin_src sh :results value code :exports code :eval never-export 
+    #+begin_src sh :results value code :exports both :eval never-export 
       curl -vsi "${API}/accounts/ZDgzZWYzYzAtNmQzNS0xMWVhLTlkNzctM2RmZmQ3ZDE4OTM5LDE0NDY5NjA5MzQwMjU%3D/?pretty"
    #+end_src
 
@@ -749,7 +749,7 @@ Executes server side code watcher in dev mode.
    #+end_example
 ***** [U] Update account
    #+NAME: update-account 
-   #+begin_src sh :results value code :exports code :eval never-export 
+   #+begin_src sh :results value code :exports both :eval never-export 
      curl -X PUT -vs "${API}/accounts/ZDgzZWYzYzAtNmQzNS0xMWVhLTlkNzctM2RmZmQ3ZDE4OTM5LDE0NDY5NjA5MzQwMjU%3D/?pretty" \
           -H 'Content-Type: application/json' \
           -d '{ "vatPercent": 111, "accName": "One One One" }'
@@ -772,7 +772,7 @@ Executes server side code watcher in dev mode.
 ****** Invalid request
 
    #+NAME: update-account-invalid 
-   #+begin_src sh :results value code :exports code :eval never-export 
+   #+begin_src sh :results value code :exports both :eval never-export 
      curl -X PUT -vs "${API}/accounts/?type=bookkeeping&pretty" \
           -H 'Content-Type: application/json' \
           -d '{ "vatPercent": 111, "accName": "One One One" }'
@@ -794,7 +794,7 @@ Executes server side code watcher in dev mode.
 
 ***** [D] Delete account
    #+NAME: delete-account 
-   #+begin_src sh :results value code :exports code :eval never-export 
+   #+begin_src sh :results value code :exports both :eval never-export 
      curl -X DELETE -vs "${API}/accounts/ZDgzZWYzYzAtNmQzNS0xMWVhLTlkNzctM2RmZmQ3ZDE4OTM5LDE0NDY5NjA5MzQwMjU%3D/?pretty"
   #+end_src
 
