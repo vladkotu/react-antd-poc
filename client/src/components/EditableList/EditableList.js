@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react'
+import PropTypes from 'prop-types'
 import { Row, Card, List } from 'antd'
 import { Link, ItemForm } from '../'
 import './styles.css'
@@ -6,16 +7,17 @@ import './styles.css'
 function EditableList({
   title,
   headActionTitle,
-  currentItem,
-  items = [],
   formFields = [],
-  itemTitleComponent = () => null,
+  itemTitleComponent = () => {},
   onBeforeSubmit = v => v,
+  currentItem,
   setCurrentItem,
+  items = [],
+  // setItems,
+  getItems,
   addItem,
   updateItem,
   removeItem,
-  getItems,
 }) {
   useEffect(() => {
     getItems()
@@ -67,4 +69,21 @@ function EditableList({
     </div>
   )
 }
+
+EditableList.propTypes = {
+  title: PropTypes.string,
+  headActionTitle: PropTypes.string,
+  formFields: PropTypes.array,
+  itemTitleComponent: PropTypes.func,
+  onBeforeSubmit: PropTypes.func,
+  currentItem: PropTypes.object,
+  setCurrentItem: PropTypes.func,
+  items: PropTypes.array,
+  setItems: PropTypes.func,
+  getItems: PropTypes.func,
+  addItem: PropTypes.func,
+  updateItem: PropTypes.func,
+  removeItem: PropTypes.func,
+}
+
 export default EditableList
