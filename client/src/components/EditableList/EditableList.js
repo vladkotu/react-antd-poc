@@ -23,10 +23,11 @@ function EditableList({
     getItems()
   }, [])
 
+  const newItemTmpId = '0'
   const cardProps = {
     title,
     extra: headActionTitle ? (
-      <Link add onClick={() => setCurrentItem(0)}>
+      <Link add onClick={() => setCurrentItem(newItemTmpId)}>
         {headActionTitle}
       </Link>
     ) : null,
@@ -35,7 +36,7 @@ function EditableList({
   return (
     <div className='EditableList'>
       <Card {...cardProps}>
-        {0 === currentItem && (
+        {newItemTmpId === currentItem && (
           <ItemForm
             fields={formFields}
             onCancel={() => setCurrentItem(null)}
@@ -76,7 +77,7 @@ EditableList.propTypes = {
   formFields: PropTypes.array,
   itemTitleComponent: PropTypes.func,
   onBeforeSubmit: PropTypes.func,
-  currentItem: PropTypes.object,
+  currentItem: PropTypes.string,
   setCurrentItem: PropTypes.func,
   items: PropTypes.array,
   setItems: PropTypes.func,
