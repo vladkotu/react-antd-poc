@@ -1,14 +1,15 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import { Form, InputNumber, Button } from 'antd'
 import './styles.css'
 
 const layout = {
   labelCol: { xs: { span: 16 }, sm: { span: 8 } },
-  wrapperCol: { span: 16 },
+  wrapperCol: { span: 12 },
 }
 
 const tailLayout = {
-  wrapperCol: { xs: { span: 16, offset: 0 }, sm: { span: 24, offset: 0 } },
+  wrapperCol: { xs: { span: 16, offset: 0 }, sm: { span: 16, offset: 8 } },
 }
 
 function ItemForm({
@@ -49,6 +50,15 @@ function ItemForm({
       </Form.Item>
     </Form>
   )
+}
+
+ItemForm.propTypes = {
+  name: PropTypes.string,
+  currentItem: PropTypes.object,
+  fields: PropTypes.array,
+  onCancel: PropTypes.func,
+  onFinish: PropTypes.func,
+  onRemove: PropTypes.func,
 }
 
 export default ItemForm

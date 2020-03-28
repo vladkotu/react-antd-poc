@@ -36,7 +36,7 @@ function EditableList({
   return (
     <div className='EditableList'>
       <Card {...cardProps}>
-        {newItemTmpId === currentItem && (
+        {currentItem === newItemTmpId && (
           <ItemForm
             fields={formFields}
             onCancel={() => setCurrentItem(null)}
@@ -48,7 +48,7 @@ function EditableList({
           pagination={items.length > 10}
           renderItem={item => (
             <List.Item>
-              <Row>
+              <Row className='item-title'>
                 {itemTitleComponent(item)}
                 <Link edit onClick={() => setCurrentItem(item.id)}>
                   Edit
