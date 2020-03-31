@@ -50,7 +50,7 @@ Executes server side code watcher in dev mode.
     10. [ ] Sass styling
  
 ** NodeJs backend
-*** TODO [6/8] Backend Todo List
+*** TODO [6/9] Backend Todo List
     - [X] CRUD actions
     - [X] ES6 syntax for server side code
     - [X] Request validation/sanitation
@@ -64,6 +64,66 @@ Executes server side code watcher in dev mode.
       - [X] Wtite end-to-end tests
     - [X] Migrate app to DynamoDB as main DB
     - [ ] [WAITING] Deploy to AWS lambda (localstack)
+*** Upload and host SPA with s3 and CloudFront
+**** Create s3 bucket and upload static resources
+ Create bucket
+ #+begin_src sh :results value code :exports both :eval never-export
+ aws s3 mb s3://s3spa.vladkotu.react-antd-poc
+ #+end_src
+
+ #+RESULTS:
+ #+begin_src sh
+ make_bucket: s3spa.vladkotu.react-antd-poc
+ #+end_src
+    
+ #+begin_src sh :results value code :exports both :eval never-export
+ aws s3 ls
+ #+end_src
+
+ #+RESULTS:
+ #+begin_src sh
+ 2020-03-29 11:29:48 s3spa.vladkotu.react-antd-poc
+ #+end_src
+
+ Build and upload FE to s3 bucket:
+ #+begin_src sh :results silent :exports code :eval never-export
+   cd ./client
+   yarn build
+ #+end_src
+
+ #+begin_src sh :results value code :exports both :eval never-export
+ aws s3 sync ./client/build s3://s3spa.vladkotu.react-antd-poc/site
+ #+end_src
+
+ #+RESULTS:
+ #+begin_src sh
+ Completed 2.2 KiB/10.4 MiB (13.3 KiB/s) with 21 file(s) remainingupload: client/build/index.html to s3://s3spa.vladkotu.react-antd-poc/site/index.html
+ Completed 2.2 KiB/10.4 MiB (13.3 KiB/s) with 20 file(s) remainingCompleted 3.4 KiB/10.4 MiB (12.3 KiB/s) with 20 file(s) remainingupload: client/build/static/css/main.234802d7.chunk.css to s3://s3spa.vladkotu.react-antd-poc/site/static/css/main.234802d7.chunk.css
+ Completed 3.4 KiB/10.4 MiB (12.3 KiB/s) with 19 file(s) remainingCompleted 3.7 KiB/10.4 MiB (11.5 KiB/s) with 19 file(s) remainingCompleted 4.8 KiB/10.4 MiB (15.0 KiB/s) with 19 file(s) remainingupload: client/build/manifest.json to s3://s3spa.vladkotu.react-antd-poc/site/manifest.json
+ Completed 4.8 KiB/10.4 MiB (15.0 KiB/s) with 18 file(s) remainingupload: client/build/favicon.ico to s3://s3spa.vladkotu.react-antd-poc/site/favicon.ico
+ Completed 4.8 KiB/10.4 MiB (15.0 KiB/s) with 17 file(s) remainingCompleted 4.9 KiB/10.4 MiB (14.9 KiB/s) with 17 file(s) remainingupload: client/build/robots.txt to s3://s3spa.vladkotu.react-antd-poc/site/robots.txt
+ Completed 4.9 KiB/10.4 MiB (14.9 KiB/s) with 16 file(s) remainingCompleted 6.2 KiB/10.4 MiB (18.8 KiB/s) with 16 file(s) remainingupload: client/build/asset-manifest.json to s3://s3spa.vladkotu.react-antd-poc/site/asset-manifest.json
+ Completed 6.2 KiB/10.4 MiB (18.8 KiB/s) with 15 file(s) remainingCompleted 7.4 KiB/10.4 MiB (22.2 KiB/s) with 15 file(s) remainingCompleted 8.3 KiB/10.4 MiB (24.9 KiB/s) with 15 file(s) remainingupload: client/build/precache-manifest.b6cd4f8eec56a1a77a0a222c8ec9c154.js to s3://s3spa.vladkotu.react-antd-poc/site/precache-manifest.b6cd4f8eec56a1a77a0a222c8ec9c154.js
+ Completed 8.3 KiB/10.4 MiB (24.9 KiB/s) with 14 file(s) remainingupload: client/build/service-worker.js to s3://s3spa.vladkotu.react-antd-poc/site/service-worker.js
+ Completed 8.3 KiB/10.4 MiB (24.9 KiB/s) with 13 file(s) remainingCompleted 14.3 KiB/10.4 MiB (39.7 KiB/s) with 13 file(s) remainingupload: client/build/.DS_Store to s3://s3spa.vladkotu.react-antd-poc/site/.DS_Store
+ Completed 14.3 KiB/10.4 MiB (39.7 KiB/s) with 12 file(s) remainingCompleted 16.2 KiB/10.4 MiB (36.0 KiB/s) with 12 file(s) remainingupload: client/build/static/css/main.234802d7.chunk.css.map to s3://s3spa.vladkotu.react-antd-poc/site/static/css/main.234802d7.chunk.css.map
+ Completed 16.2 KiB/10.4 MiB (36.0 KiB/s) with 11 file(s) remainingCompleted 18.5 KiB/10.4 MiB (40.7 KiB/s) with 11 file(s) remainingupload: client/build/static/js/2.6f3781dd.chunk.js.LICENSE.txt to s3://s3spa.vladkotu.react-antd-poc/site/static/js/2.6f3781dd.chunk.js.LICENSE.txt
+ Completed 18.5 KiB/10.4 MiB (40.7 KiB/s) with 10 file(s) remainingCompleted 20.0 KiB/10.4 MiB (40.7 KiB/s) with 10 file(s) remainingupload: client/build/static/js/runtime-main.ced319b4.js to s3://s3spa.vladkotu.react-antd-poc/site/static/js/runtime-main.ced319b4.js
+ Completed 20.0 KiB/10.4 MiB (40.7 KiB/s) with 9 file(s) remainingCompleted 28.1 KiB/10.4 MiB (50.7 KiB/s) with 9 file(s) remainingupload: client/build/static/js/runtime-main.ced319b4.js.map to s3://s3spa.vladkotu.react-antd-poc/site/static/js/runtime-main.ced319b4.js.map
+ Completed 28.1 KiB/10.4 MiB (50.7 KiB/s) with 8 file(s) remainingCompleted 28.5 KiB/10.4 MiB (51.1 KiB/s) with 8 file(s) remainingupload: client/build/static/media/ReadMe.6ea4de03.md to s3://s3spa.vladkotu.react-antd-poc/site/static/media/ReadMe.6ea4de03.md
+ Completed 28.5 KiB/10.4 MiB (51.1 KiB/s) with 7 file(s) remainingCompleted 43.1 KiB/10.4 MiB (66.2 KiB/s) with 7 file(s) remainingupload: client/build/static/js/main.cb9cec13.chunk.js to s3://s3spa.vladkotu.react-antd-poc/site/static/js/main.cb9cec13.chunk.js
+ Completed 43.1 KiB/10.4 MiB (66.2 KiB/s) with 6 file(s) remainingCompleted 80.7 KiB/10.4 MiB (86.1 KiB/s) with 6 file(s) remainingupload: client/build/static/js/main.cb9cec13.chunk.js.map to s3://s3spa.vladkotu.react-antd-poc/site/static/js/main.cb9cec13.chunk.js.map
+ Completed 80.7 KiB/10.4 MiB (86.1 KiB/s) with 5 file(s) remainingCompleted 127.0 KiB/10.4 MiB (121.1 KiB/s) with 5 file(s) remainingupload: client/build/static/media/logo.64f55a65.svg to s3://s3spa.vladkotu.react-antd-poc/site/static/media/logo.64f55a65.svg
+ Completed 127.0 KiB/10.4 MiB (121.1 KiB/s) with 4 file(s) remainingCompleted 383.0 KiB/10.4 MiB (275.7 KiB/s) with 4 file(s) remainingCompleted 639.0 KiB/10.4 MiB (450.8 KiB/s) with 4 file(s) remainingCompleted 895.0 KiB/10.4 MiB (623.8 KiB/s) with 4 file(s) remainingCompleted 1.1 MiB/10.4 MiB (731.1 KiB/s) with 4 file(s) remaining  Completed 1.4 MiB/10.4 MiB (423.0 KiB/s) with 4 file(s) remaining  Completed 1.6 MiB/10.4 MiB (486.5 KiB/s) with 4 file(s) remaining  Completed 1.9 MiB/10.4 MiB (553.5 KiB/s) with 4 file(s) remaining  Completed 2.1 MiB/10.4 MiB (597.1 KiB/s) with 4 file(s) remaining  Completed 2.2 MiB/10.4 MiB (512.0 KiB/s) with 4 file(s) remaining  upload: client/build/static/css/2.1bd2ab2f.chunk.css to s3://s3spa.vladkotu.react-antd-poc/site/static/css/2.1bd2ab2f.chunk.css
+ Completed 2.2 MiB/10.4 MiB (512.0 KiB/s) with 3 file(s) remainingCompleted 2.4 MiB/10.4 MiB (552.7 KiB/s) with 3 file(s) remainingCompleted 2.7 MiB/10.4 MiB (572.3 KiB/s) with 3 file(s) remainingCompleted 2.9 MiB/10.4 MiB (596.1 KiB/s) with 3 file(s) remainingCompleted 3.2 MiB/10.4 MiB (618.6 KiB/s) with 3 file(s) remainingCompleted 3.4 MiB/10.4 MiB (641.3 KiB/s) with 3 file(s) remainingCompleted 3.7 MiB/10.4 MiB (678.7 KiB/s) with 3 file(s) remainingCompleted 3.9 MiB/10.4 MiB (714.0 KiB/s) with 3 file(s) remainingCompleted 4.2 MiB/10.4 MiB (733.2 KiB/s) with 3 file(s) remainingCompleted 4.4 MiB/10.4 MiB (764.8 KiB/s) with 3 file(s) remainingCompleted 4.7 MiB/10.4 MiB (807.1 KiB/s) with 3 file(s) remainingCompleted 4.7 MiB/10.4 MiB (780.9 KiB/s) with 3 file(s) remainingupload: client/build/static/css/2.1bd2ab2f.chunk.css.map to s3://s3spa.vladkotu.react-antd-poc/site/static/css/2.1bd2ab2f.chunk.css.map
+ Completed 4.7 MiB/10.4 MiB (780.9 KiB/s) with 2 file(s) remainingCompleted 5.0 MiB/10.4 MiB (819.6 KiB/s) with 2 file(s) remainingCompleted 5.2 MiB/10.4 MiB (854.1 KiB/s) with 2 file(s) remainingCompleted 5.5 MiB/10.4 MiB (866.9 KiB/s) with 2 file(s) remainingCompleted 5.7 MiB/10.4 MiB (894.3 KiB/s) with 2 file(s) remainingCompleted 6.0 MiB/10.4 MiB (915.5 KiB/s) with 2 file(s) remainingCompleted 6.2 MiB/10.4 MiB (939.9 KiB/s) with 2 file(s) remainingCompleted 6.5 MiB/10.4 MiB (966.5 KiB/s) with 2 file(s) remainingCompleted 6.7 MiB/10.4 MiB (982.6 KiB/s) with 2 file(s) remainingCompleted 6.8 MiB/10.4 MiB (986.4 KiB/s) with 2 file(s) remainingupload: client/build/static/js/2.6f3781dd.chunk.js to s3://s3spa.vladkotu.react-antd-poc/site/static/js/2.6f3781dd.chunk.js
+ Completed 6.8 MiB/10.4 MiB (986.4 KiB/s) with 1 file(s) remainingCompleted 7.1 MiB/10.4 MiB (1004.8 KiB/s) with 1 file(s) remainingCompleted 7.3 MiB/10.4 MiB (1016.6 KiB/s) with 1 file(s) remainingCompleted 7.6 MiB/10.4 MiB (1.0 MiB/s) with 1 file(s) remaining   Completed 7.8 MiB/10.4 MiB (1.0 MiB/s) with 1 file(s) remaining   Completed 8.1 MiB/10.4 MiB (1.0 MiB/s) with 1 file(s) remaining   Completed 8.3 MiB/10.4 MiB (1.0 MiB/s) with 1 file(s) remaining   Completed 8.6 MiB/10.4 MiB (1.1 MiB/s) with 1 file(s) remaining   Completed 8.8 MiB/10.4 MiB (1.1 MiB/s) with 1 file(s) remaining   Completed 9.1 MiB/10.4 MiB (1.1 MiB/s) with 1 file(s) remaining   Completed 9.3 MiB/10.4 MiB (1.1 MiB/s) with 1 file(s) remaining   Completed 9.6 MiB/10.4 MiB (1.1 MiB/s) with 1 file(s) remaining   Completed 9.8 MiB/10.4 MiB (1.1 MiB/s) with 1 file(s) remaining   Completed 10.1 MiB/10.4 MiB (1.1 MiB/s) with 1 file(s) remaining  Completed 10.3 MiB/10.4 MiB (1.2 MiB/s) with 1 file(s) remaining  Completed 10.4 MiB/10.4 MiB (1.1 MiB/s) with 1 file(s) remaining  upload: client/build/static/js/2.6f3781dd.chunk.js.map to s3://s3spa.vladkotu.react-antd-poc/site/static/js/2.6f3781dd.chunk.js.map
+ #+end_src
+
+
+ #+begin_src sh :results value code :exports both :eval never-export
+ aws s3 sync ./client/build s3://s3spa.vladkotu.react-antd-poc/site
+ #+end_src
 
 *** DynamoDB
 **** Create and seed with data tables
