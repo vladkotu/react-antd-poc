@@ -50,20 +50,23 @@ Executes server side code watcher in dev mode.
     10. [ ] Sass styling
  
 ** NodeJs backend
-*** TODO [6/9] Backend Todo List
+*** TODO [6/8] Backend Todo List
     - [X] CRUD actions
     - [X] ES6 syntax for server side code
     - [X] Request validation/sanitation
       - [X] Single route validation
       - [X] Custom validation middleware
     - [X] Error handling
-    - [ ] Unit tests
     - [X] End-to-end API testing
       - [X] Scripts for reseting/seeding database with test data
       - [X] Run docker localstack image before tests
       - [X] Wtite end-to-end tests
     - [X] Migrate app to DynamoDB as main DB
-    - [ ] [WAITING] Deploy to AWS lambda (localstack)
+    - [ ] Swagger API
+    - [1/3] Deploy to AWS lambda
+      - [X] Deploy Front-end to s3 + CloudFront
+      - [ ] Upload Backend to amazon lambda
+      - [ ] Setup API Gateway
 *** Upload and host SPA with s3 and CloudFront
 **** Create s3 bucket and upload static resources
  Create bucket
